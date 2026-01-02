@@ -2,7 +2,7 @@
 
 _Learn the wild plants growing around you._
 
-![Urban Forager Screenshot](https://raw.githubusercontent.com/michaelsboost/Urban-Forager/main/screenshot.jpeg)
+![Urban Forager Screenshot](https://github.com/michaelsboost/Urban-Forager/blob/main/imgs/screenshot.jpeg?raw=true)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Stars](https://img.shields.io/github/stars/michaelsboost/Urban-Forager)](https://github.com/michaelsboost/Urban-Forager/stargazers) [![Issues](https://img.shields.io/github/issues/michaelsboost/Urban-Forager)](https://github.com/michaelsboost/Urban-Forager/issues)
 
