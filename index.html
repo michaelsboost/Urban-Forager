@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <title>Urban Forager - Comprehensive Plant Identification</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, interactive-widget=resizes-content">
+    <meta name="description" content="Discover edible, medicinal, and nutritional uses of common wild plants. Learn to identify weeds with quizzes and a full plant library.">
+    <meta name="author" content="Michael Schwartz">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Urban Forager - Comprehensive Plant Identification">
+    <meta name="theme-color" content="#13171f">
+    <meta name="apple-mobile-web-app-title" content="Urban Forager - Comprehensive Plant Identification">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="./index.html">
+    <meta name="msapplication-navbutton-color" content="#13171f">
+    <meta property="og:url" content="https://michaelsboost.com/UrbanForager" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Urban Forager - Comprehensive Plant Identification" />
+    <meta property="og:description" content="Discover edible, medicinal, and nutritional uses of common wild plants. Learn to identify weeds with quizzes and a full plant library." />
+    <link rel="shortcut icon" type="image/x-icon" href="imgs/logo.svg">
+    <link rel="icon" type="image/svg+xml" href="imgs/logo.svg" />
+    <link rel="apple-touch-icon" href="imgs/logo.svg">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="dist/bundle.css">
+  </head>
+  <body>
+    <div x-data="weedGame()" class="container mx-auto min-h-screen py-8 px-4">
+      <!-- Home Screen -->
+      <div x-show="screen === 'home'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
+        <!-- Hero Section -->
+        <div class="relative rounded-3xl bg-gradient-to-r from-emerald-600 to-green-600 p-8 mb-10 shadow-xl">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
+          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between">
+            <div class="md:w-2/3">
+              <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
+                <i class="fas fa-seedling text-white"></i>
+                <span class="text-white text-sm font-medium">Urban Foraging Guide</span>
+              </div>
+              <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">Discover Nature's<br><span class="text-yellow-300">Hidden Pantry</span></h1>
+              <p class="text-emerald-100 text-lg md:text-xl mb-6 max-w-2xl">Learn about <span x-text="weeds.length + '+'"></span> common weeds, their edible uses, medicinal properties, and nutritional benefits.</p>
+              <div class="flex flex-wrap gap-3">
+                <button @click="screen = 'library'" class="bg-white text-emerald-700 hover:bg-emerald-50 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                  <i class="fas fa-book-open mr-2"></i>Explore Library
+                </button>
+                <div class="relative group">
+                  <button @click="startGame('identification')" class="bg-emerald-800/50 hover:bg-emerald-800/70 text-white border-2 border-emerald-300/50 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm flex items-center">
+                    <i class="fas fa-play mr-2"></i>Start Quiz
+                    <i class="fas fa-chevron-down ml-2 text-sm"></i>
+                  </button>
+                  <!-- Quiz Type Dropdown -->
+                  <div class="absolute hidden group-hover:block top-full mt-2 left-0 bg-white rounded-xl shadow-2xl border border-gray-200 z-10 min-w-[280px] animate-fadeIn">
+                    <div class="p-2 space-y-1">
+                      <button @click="startGame('identification')" class="w-full text-left px-4 py-3 hover:bg-emerald-50 rounded-lg flex items-center gap-3 group">
+                        <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200">
+                          <i class="fas fa-search text-emerald-600 text-sm"></i>
+                        </div>
+                        <div>
+                          <p class="font-medium text-gray-800">Identification Quiz</p>
+                          <p class="text-xs text-gray-500">Recognize common weeds</p>
+                        </div>
+                      </button>
+                      <button @click="startGame('edible')" class="w-full text-left px-4 py-3 hover:bg-amber-50 rounded-lg flex items-center gap-3 group">
+                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200">
+                          <i class="fas fa-utensils text-amber-600 text-sm"></i>
+                        </div>
+                        <div>
+                          <p class="font-medium text-gray-800">Edible Uses Quiz</p>
+                          <p class="text-xs text-gray-500">Nutritional properties</p>
+                        </div>
+                      </button>
+                      <button @click="startGame('medicinal')" class="w-full text-left px-4 py-3 hover:bg-blue-50 rounded-lg flex items-center gap-3 group">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200">
+                          <i class="fas fa-heart text-blue-600 text-sm"></i>
+                        </div>
+                        <div>
+                          <p class="font-medium text-gray-800">Medicinal Uses Quiz</p>
+                          <p class="text-xs text-gray-500">Healing properties</p>
+                        </div>
+                      </button>
+                      <button @click="startGame('toxic')" class="w-full text-left px-4 py-3 hover:bg-red-50 rounded-lg flex items-center gap-3 group">
+                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200">
+                          <i class="fas fa-skull-crossbones text-red-600 text-sm"></i>
+                        </div>
+                        <div>
+                          <p class="font-medium text-gray-800">Toxic &amp; Safety Quiz</p>
+                          <p class="text-xs text-gray-500">Safety precautions</p>
+                        </div>
+                      </button>
+                      <button @click="startGame('lookalikes')" class="w-full text-left px-4 py-3 hover:bg-orange-50 rounded-lg flex items-center gap-3 group">
+                        <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200">
+                          <i class="fas fa-exclamation-triangle text-orange-600 text-sm"></i>
+                        </div>
+                        <div>
+                          <p class="font-medium text-gray-800">Look-Alikes Quiz</p>
+                          <p class="text-xs text-gray-500">Dangerous doppelgängers</p>
+                        </div>
+                      </button>
+                      <button @click="startGame('habitat')" class="w-full text-left px-4 py-3 hover:bg-teal-50 rounded-lg flex items-center gap-3 group">
+                        <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200">
+                          <i class="fas fa-mountain text-teal-600 text-sm"></i>
+                        </div>
+                        <div>
+                          <p class="font-medium text-gray-800">Habitat Quiz</p>
+                          <p class="text-xs text-gray-500">Where to find plants</p>
+                        </div>
+                      </button>
+                      <button @click="startGame('preparation')" class="w-full text-left px-4 py-3 hover:bg-purple-50 rounded-lg flex items-center gap-3 group">
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200">
+                          <i class="fas fa-fire text-purple-600 text-sm"></i>
+                        </div>
+                        <div>
+                          <p class="font-medium text-gray-800">Preparation Quiz</p>
+                          <p class="text-xs text-gray-500">Processing techniques</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-8 md:mt-0">
+              <div class="relative">
+                <div class="w-64 h-64 bg-gradient-to-br from-yellow-400 to-emerald-400 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow">
+                  <i class="fas fa-leaf text-white text-8xl"></i>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-24 h-24 bg-amber-500 rounded-full flex items-center justify-center shadow-lg">
+                  <span class="text-white font-bold text-xl" x-text="weeds.length"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-7 gap-4 mb-12">
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-emerald-100">
+            <div class="flex items-center justify-between mb-4">
+              <i class="fas fa-search text-emerald-600 text-2xl"></i>
+              <span class="text-3xl font-bold text-emerald-700">20+</span>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Plants</h3>
+            <p class="text-gray-600 text-sm">Common weeds database</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-amber-100">
+            <div class="flex items-center justify-between mb-4">
+              <i class="fas fa-utensils text-amber-600 text-2xl"></i>
+              <span class="text-3xl font-bold text-amber-700">7</span>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Quiz Types</h3>
+            <p class="text-gray-600 text-sm">Interactive categories</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-100">
+            <div class="flex items-center justify-between mb-4">
+              <i class="fas fa-heart text-blue-600 text-2xl"></i>
+              <span class="text-3xl font-bold text-blue-700">200+</span>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Questions</h3>
+            <p class="text-gray-600 text-sm">Total quiz content</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-red-100">
+            <div class="flex items-center justify-between mb-4">
+              <i class="fas fa-skull-crossbones text-red-600 text-2xl"></i>
+              <span class="text-3xl font-bold text-red-700">100%</span>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Safety Focused</h3>
+            <p class="text-gray-600 text-sm">Accurate information</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-orange-100">
+            <div class="flex items-center justify-between mb-4">
+              <i class="fas fa-exclamation-triangle text-orange-600 text-2xl"></i>
+              <span class="text-3xl font-bold text-orange-700">50+</span>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Look-Alikes</h3>
+            <p class="text-gray-600 text-sm">Danger identification</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-teal-100">
+            <div class="flex items-center justify-between mb-4">
+              <i class="fas fa-mountain text-teal-600 text-2xl"></i>
+              <span class="text-3xl font-bold text-teal-700">25+</span>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Habitats</h3>
+            <p class="text-gray-600 text-sm">Growth environments</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-purple-100">
+            <div class="flex items-center justify-between mb-4">
+              <i class="fas fa-fire text-purple-600 text-2xl"></i>
+              <span class="text-3xl font-bold text-purple-700">30+</span>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Prep Methods</h3>
+            <p class="text-gray-600 text-sm">Cooking techniques</p>
+          </div>
+        </div>
+
+        <!-- Quiz Categories -->
+        <div class="mb-12">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-3xl font-bold text-gray-800">Interactive Quizzes</h2>
+            <span class="text-emerald-600 font-semibold">200+ Questions</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <button @click="startGame('identification')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-emerald-500">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                  <i class="fas fa-search text-emerald-600 text-xl"></i>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-gray-800">Identification</h3>
+                  <p class="text-sm text-gray-600">Recognize common weeds</p>
+                </div>
+              </div>
+            </button>
+            
+            <button @click="startGame('edible')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-amber-500">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+                  <i class="fas fa-utensils text-amber-600 text-xl"></i>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-gray-800">Edible Uses</h3>
+                  <p class="text-sm text-gray-600">Nutritional properties</p>
+                </div>
+              </div>
+            </button>
+            
+            <button @click="startGame('medicinal')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-blue-500">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                  <i class="fas fa-heart text-blue-600 text-xl"></i>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-gray-800">Medicinal</h3>
+                  <p class="text-sm text-gray-600">Healing properties</p>
+                </div>
+              </div>
+            </button>
+            
+            <button @click="startGame('toxic')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-red-500">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                  <i class="fas fa-skull-crossbones text-red-600 text-xl"></i>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-gray-800">Toxic &amp; Safety</h3>
+                  <p class="text-sm text-gray-600">Safety precautions</p>
+                </div>
+              </div>
+            </button>
+            
+            <!-- Look-Alikes Quiz -->
+            <button @click="startGame('lookalikes')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-orange-500">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition-colors">
+                  <i class="fas fa-exclamation-triangle text-orange-600 text-xl"></i>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-gray-800">Look-Alikes</h3>
+                  <p class="text-sm text-gray-600">Dangerous doppelgängers</p>
+                </div>
+              </div>
+            </button>
+            
+            <!-- Habitat Quiz -->
+            <button @click="startGame('habitat')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-teal-500">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition-colors">
+                  <i class="fas fa-mountain text-teal-600 text-xl"></i>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-gray-800">Habitat</h3>
+                  <p class="text-sm text-gray-600">Where to find plants</p>
+                </div>
+              </div>
+            </button>
+            
+            <!-- Preparation & Processing Quiz -->
+            <button @click="startGame('preparation')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-purple-500">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                  <i class="fas fa-fire text-purple-600 text-xl"></i>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-gray-800">Preparation</h3>
+                  <p class="text-sm text-gray-600">Processing techniques</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Featured Weeds with Photo Carousels -->
+        <div class="mb-12">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-3xl font-bold text-gray-800">Featured Plants</h2>
+            <button @click="screen = 'library'" class="text-emerald-600 hover:text-emerald-700 font-semibold flex items-center gap-2">
+              View All <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <template x-for="weed in featuredWeeds" :key="weed.id">
+              <div @click="viewWeedDetails(weed)" x-init="initCarousel(weed.id); startAutoplay(weed.id)" @mouseenter="stopAutoplay(weed.id)" @mouseleave="startAutoplay(weed.id)" class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+                
+                <!-- Photo Carousel -->
+                <div class="relative h-48 overflow-hidden bg-gray-100">
+                  <template x-if="weed.images &amp;&amp; weed.images.length &gt; 0">
+                    <div class="relative w-full h-full">
+                      <!-- Main Image -->
+                      <img :src="weed.images[carouselState[weed.id]?.currentIndex || 0]" :alt="weed.commonName + ' identification photo'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                      
+                      <!-- Image Counter -->
+                      <div class="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+                        <span x-text="(carouselState[weed.id]?.currentIndex || 0) + 1"></span>/<span x-text="weed.images.length"></span>
+                      </div>
+                      
+                      <!-- Navigation Arrows -->
+                      <div class="absolute inset-0 flex items-center justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button @click.stop="prevImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
+                          <i class="fas fa-chevron-left text-gray-800"></i>
+                        </button>
+                        <button @click.stop="nextImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
+                          <i class="fas fa-chevron-right text-gray-800"></i>
+                        </button>
+                      </div>
+                      
+                      <!-- Image Indicators -->
+                      <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1.5">
+                        <template x-for="(img, index) in weed.images" :key="index">
+                          <button @click.stop="goToImage(weed.id, index)" class="w-2 h-2 rounded-full transition-all duration-300" :class="{
+                              'bg-white w-4': (carouselState[weed.id]?.currentIndex || 0) === index, 
+                              'bg-white/50': (carouselState[weed.id]?.currentIndex || 0) !== index
+                            }">
+                          </button>
+                        </template>
+                      </div>
+                      
+                      <!-- Difficulty Badge -->
+                      <div class="absolute top-2 left-2">
+                        <span class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
+                      </div>
+                    </div>
+                  </template>
+                  
+                  <!-- Fallback to emoji if no images -->
+                  <template x-if="!weed.images || weed.images.length === 0">
+                    <div class="w-full h-full bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
+                      <span class="emoji-icon text-4xl" x-text="weed.emoji"></span>
+                      <div class="absolute top-2 left-2">
+                        <span class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                
+                <!-- Plant Info -->
+                <div class="p-5">
+                  <h3 class="font-bold text-lg text-gray-800 mb-1 group-hover:text-emerald-700 transition-colors" x-text="weed.commonName"></h3>
+                  <p class="text-sm text-gray-600 italic mb-3" x-text="weed.scientificName"></p>
+                  <div class="flex flex-wrap gap-1.5 mb-4">
+                    <template x-for="tag in weed.tags.slice(0, 2)" :key="tag">
+                      <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full" x-text="tag"></span>
+                    </template>
+                    <span x-show="weed.tags.length &gt; 2" class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">+<span x-text="weed.tags.length - 2"></span></span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center gap-1 text-gray-500">
+                      <i class="far fa-calendar"></i>
+                      <span x-text="weed.season"></span>
+                    </div>
+                    <span class="text-emerald-600 font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                      Explore <i class="fas fa-arrow-right text-xs"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plant Library with Photo Carousels -->
+      <div x-show="screen === 'library'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
+        <div class="sticky top-0 z-20 bg-gradient-to-r from-emerald-600 to-green-600 p-6 rounded-2xl mb-8 shadow-lg">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <button @click="screen = 'home'" class="inline-flex items-center gap-2 text-white hover:text-emerald-100 mb-2">
+                <i class="fas fa-arrow-left"></i> Back
+              </button>
+              <h1 class="text-3xl font-bold text-white">Plant Library</h1>
+              <p class="text-emerald-100">Browse and learn about all plants in our database</p>
+            </div>
+            <div class="relative md:w-96">
+              <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              <input type="text" x-model="searchQuery" placeholder="Search plants by name, tag, or property..." class="w-full pl-11 pr-4 py-3 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white placeholder-emerald-100 focus:outline-none focus:border-white/40 focus:bg-white/20 transition-all">
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="text-sm font-medium text-gray-600 mr-2">Filter by:</span>
+          <template x-for="tag in getUniqueTags()" :key="tag">
+            <button @click="toggleTagFilter(tag)" :class="{'bg-emerald-100 text-emerald-700': tagFilter.includes(tag), 'bg-gray-100 text-gray-600 hover:bg-gray-200': !tagFilter.includes(tag)}" class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors">
+              <span x-text="tag"></span>
+            </button>
+          </template>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <template x-for="weed in filteredWeeds" :key="weed.id">
+            <div @click="viewWeedDetails(weed)" x-init="initCarousel(weed.id); startAutoplay(weed.id)" @mouseenter="stopAutoplay(weed.id)" @mouseleave="startAutoplay(weed.id)" class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border border-gray-100">
+              
+              <!-- Photo Carousel -->
+              <div class="relative h-56 overflow-hidden bg-gray-100">
+                <template x-if="weed.images &amp;&amp; weed.images.length &gt; 0">
+                  <div class="relative w-full h-full">
+                    <!-- Main Image -->
+                    <img :src="weed.images[carouselState[weed.id]?.currentIndex || 0]" :alt="weed.commonName + ' identification photo'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    
+                    <!-- Image Counter -->
+                    <div class="absolute top-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+                      <span x-text="(carouselState[weed.id]?.currentIndex || 0) + 1"></span>/<span x-text="weed.images.length"></span>
+                    </div>
+                    
+                    <!-- Navigation Arrows -->
+                    <div class="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <button @click.stop="prevImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-chevron-left text-gray-800"></i>
+                      </button>
+                      <button @click.stop="nextImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-chevron-right text-gray-800"></i>
+                      </button>
+                    </div>
+                    
+                    <!-- Image Indicators -->
+                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                      <template x-for="(img, index) in weed.images" :key="index">
+                        <button @click.stop="goToImage(weed.id, index)" class="w-2 h-2 rounded-full transition-all duration-300" :class="{
+                            'bg-white w-4': (carouselState[weed.id]?.currentIndex || 0) === index, 
+                            'bg-white/50': (carouselState[weed.id]?.currentIndex || 0) !== index
+                          }">
+                        </button>
+                      </template>
+                    </div>
+                    
+                    <!-- Badges -->
+                    <div class="absolute top-4 left-4">
+                      <div class="flex flex-wrap gap-2">
+                        <span class="bg-white/80 backdrop-blur-sm text-emerald-700 text-xs font-bold px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
+                        <span class="bg-white/80 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
+                          <i class="far fa-calendar text-xs"></i>
+                          <span x-text="weed.season"></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                
+                <!-- Fallback to emoji if no images -->
+                <template x-if="!weed.images || weed.images.length === 0">
+                  <div class="w-full h-full bg-gradient-to-br from-emerald-50 to-green-50 p-6">
+                    <div class="emoji-icon text-7xl absolute bottom-6 right-6 group-hover:scale-110 transition-transform duration-300" x-text="weed.emoji"></div>
+                    <div class="absolute top-6 left-6">
+                      <div class="flex flex-wrap gap-2">
+                        <span class="bg-white/80 backdrop-blur-sm text-emerald-700 text-xs font-bold px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
+                        <span class="bg-white/80 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
+                          <i class="far fa-calendar text-xs"></i>
+                          <span x-text="weed.season"></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              
+              <!-- Plant Info -->
+              <div class="p-6">
+                <h3 class="font-bold text-xl text-gray-800 mb-1 group-hover:text-emerald-700 transition-colors" x-text="weed.commonName"></h3>
+                <p class="text-sm text-gray-600 italic mb-4" x-text="weed.scientificName"></p>
+                <p class="text-gray-600 text-sm mb-4 line-clamp-2" x-text="weed.description"></p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <template x-for="tag in weed.tags.slice(0, 3)" :key="tag">
+                    <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full" x-text="tag"></span>
+                  </template>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-500" x-text="weed.family"></span>
+                  <span class="inline-flex items-center gap-2 text-emerald-600 font-medium group-hover:gap-3 transition-all">
+                    View details <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Weed Details with Enhanced Photo Carousel -->
+      <div x-show="screen === 'details'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
+        <div x-show="currentWeed" class="space-y-6">
+          <!-- Header -->
+          <div class="sticky top-0 z-20 bg-gradient-to-r from-emerald-600 to-green-600 p-6 rounded-2xl shadow-lg">
+            <div class="flex items-center justify-between">
+              <button @click="screen = 'library'" class="inline-flex items-center gap-2 text-white hover:text-emerald-100">
+                <i class="fas fa-arrow-left"></i> Back to Library
+              </button>
+              <div class="flex items-center gap-4">
+                <span class="text-white font-medium hidden md:inline" x-text="currentWeed.family"></span>
+                <button @click="bookmarkWeed(currentWeed)" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
+                  <i :class="{'fas': isBookmarked(currentWeed), 'far': !isBookmarked(currentWeed)}" class="fa-bookmark text-white"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Content -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column -->
+            <div class="lg:col-span-2 space-y-8">
+              <!-- Plant Overview -->
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <div class="flex flex-col md:flex-row items-start gap-8">
+                  <!-- Photo Carousel for Details Page -->
+                  <div x-init="initCarousel(currentWeed.id); startAutoplay(currentWeed.id)" @mouseenter="stopAutoplay(currentWeed.id)" @mouseleave="startAutoplay(currentWeed.id)" class="md:w-1/3">
+                    <div class="relative h-64 md:h-96 rounded-xl bg-gray-100 overflow-hidden shadow-inner">
+                      <template x-if="currentWeed.images &amp;&amp; currentWeed.images.length &gt; 0">
+                        <div class="relative w-full h-full">
+                          <!-- Main Image -->
+                          <img :src="currentWeed.images[carouselState[currentWeed.id]?.currentIndex || 0]" :alt="currentWeed.commonName + ' identification photo'" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                          
+                          <!-- Image Counter -->
+                          <div class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1 rounded-full">
+                            <span x-text="(carouselState[currentWeed.id]?.currentIndex || 0) + 1"></span>/<span x-text="currentWeed.images.length"></span>
+                          </div>
+                          
+                          <!-- Navigation Arrows -->
+                          <div class="absolute inset-0 flex items-center justify-between px-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                            <button @click="prevImage(currentWeed.id)" class="w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl">
+                              <i class="fas fa-chevron-left text-gray-800 text-lg"></i>
+                            </button>
+                            <button @click="nextImage(currentWeed.id)" class="w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl">
+                              <i class="fas fa-chevron-right text-gray-800 text-lg"></i>
+                            </button>
+                          </div>
+                          
+                          <!-- Thumbnail Strip -->
+                          <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 max-w-full px-4 overflow-x-auto thumbnail-strip">
+                            <template x-for="(img, index) in currentWeed.images" :key="index">
+                              <button @click="goToImage(currentWeed.id, index)" class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300" :class="{
+                                  'border-emerald-500 scale-105': (carouselState[currentWeed.id]?.currentIndex || 0) === index, 
+                                  'border-transparent hover:border-emerald-300': (carouselState[currentWeed.id]?.currentIndex || 0) !== index
+                                }">
+                                <img :src="img" :alt="'Thumbnail ' + (index + 1)" class="w-full h-full object-cover">
+                              </button>
+                            </template>
+                          </div>
+                          
+                          <!-- Fullscreen Button -->
+                          <button @click="openFullscreen(currentWeed.id, carouselState[currentWeed.id]?.currentIndex || 0)" class="absolute top-4 left-4 bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors">
+                            <i class="fas fa-expand"></i>
+                          </button>
+                          
+                          <!-- Plant Type Badge -->
+                          <div class="absolute bottom-4 right-4">
+                            <span class="bg-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-full" x-text="currentWeed.difficulty"></span>
+                          </div>
+                        </div>
+                      </template>
+                      
+                      <!-- Fallback to emoji if no images -->
+                      <template x-if="!currentWeed.images || currentWeed.images.length === 0">
+                        <div class="w-full h-full bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
+                          <span class="emoji-icon text-8xl" x-text="currentWeed.emoji"></span>
+                          <div class="absolute bottom-4 right-4">
+                            <span class="bg-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-full" x-text="currentWeed.difficulty"></span>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                    
+                    <!-- Image Source Info -->
+                    <div class="mt-2 text-xs text-gray-500 text-center">
+                      <i class="fas fa-camera mr-1"></i>
+                      <span x-text="currentWeed.images?.length || 0"></span> identification photos
+                    </div>
+                  </div>
+                  
+                  <div class="md:w-2/3">
+                    <h1 class="text-4xl font-bold text-gray-800 mb-2" x-text="currentWeed.commonName"></h1>
+                    <p class="text-xl text-gray-600 italic mb-6" x-text="currentWeed.scientificName"></p>
+                    <p class="text-gray-700 mb-6 text-lg" x-text="currentWeed.description"></p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                      <div class="space-y-2">
+                        <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tree text-emerald-600"></i>
+                          </div>
+                          <div>
+                            <p class="text-sm text-gray-500">Family</p>
+                            <p class="font-semibold" x-text="currentWeed.family"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="space-y-2">
+                        <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <i class="far fa-calendar text-amber-600"></i>
+                          </div>
+                          <div>
+                            <p class="text-sm text-gray-500">Season</p>
+                            <p class="font-semibold" x-text="currentWeed.season"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="space-y-2">
+                        <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-mountain text-blue-600"></i>
+                          </div>
+                          <div>
+                            <p class="text-sm text-gray-500">Habitat</p>
+                            <p class="font-semibold" x-text="currentWeed.habitat"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="space-y-2">
+                        <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tag text-purple-600"></i>
+                          </div>
+                          <div>
+                            <p class="text-sm text-gray-500">Type</p>
+                            <p class="font-semibold" x-text="currentWeed.type"></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                      <template x-for="tag in currentWeed.tags" :key="tag">
+                        <span class="text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full font-medium" x-text="tag"></span>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabs -->
+              <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="border-b border-gray-200">
+                  <div class="flex overflow-x-auto">
+                    <button @click="activeTab = 'identification'" :class="{'tab-active': activeTab === 'identification'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
+                      <i class="fas fa-search mr-3"></i> Identification
+                    </button>
+                    <button @click="activeTab = 'edible'" :class="{'tab-active': activeTab === 'edible'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
+                      <i class="fas fa-utensils mr-3"></i> Edible Uses
+                    </button>
+                    <button @click="activeTab = 'medicinal'" :class="{'tab-active': activeTab === 'medicinal'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
+                      <i class="fas fa-heart mr-3"></i> Medicinal
+                    </button>
+                    <button @click="activeTab = 'nutrients'" :class="{'tab-active': activeTab === 'nutrients'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
+                      <i class="fas fa-vial mr-3"></i> Nutrients
+                    </button>
+                  </div>
+                </div>
+
+                <div class="p-8">
+                  <!-- Identification Tab -->
+                  <div x-show="activeTab === 'identification'" x-transition="">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Identifying Features</h3>
+                        <div class="space-y-4">
+                          <template x-for="feature in currentWeed.identifyingFeatures" :key="feature">
+                            <div class="flex items-start gap-3">
+                              <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
+                                <i class="fas fa-check text-emerald-600 text-xs"></i>
+                              </div>
+                              <p class="text-gray-700" x-text="feature"></p>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                      <div class="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-amber-800 mb-3">⚠️ Look-Alikes &amp; Cautions</h3>
+                        <p class="text-amber-700 mb-4" x-text="currentWeed.lookAlikes"></p>
+                        <div class="flex items-center gap-2 text-sm text-amber-600">
+                          <i class="fas fa-exclamation-triangle"></i>
+                          <span>Always verify identification before consumption</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Edible Tab -->
+                  <div x-show="activeTab === 'edible'" x-transition="">
+                    <div class="space-y-6">
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Edible Parts</h3>
+                        <div class="flex flex-wrap gap-3">
+                          <template x-for="part in currentWeed.edibleParts" :key="part">
+                            <span class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full font-medium flex items-center gap-2">
+                              <i class="fas fa-leaf text-sm"></i>
+                              <span x-text="part"></span>
+                            </span>
+                          </template>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Harvesting &amp; Preparation</h3>
+                        <div class="bg-gray-50 rounded-xl p-6">
+                          <p class="text-gray-700" x-text="currentWeed.harvestingNotes"></p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Culinary Uses</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <template x-for="use in currentWeed.culinaryUses" :key="use">
+                            <div class="bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 transition-colors">
+                              <div class="flex items-center gap-3 mb-2">
+                                <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                                  <i class="fas fa-fire text-amber-600"></i>
+                                </div>
+                                <p class="font-medium text-gray-800" x-text="use"></p>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Medicinal Tab -->
+                  <div x-show="activeTab === 'medicinal'" x-transition="">
+                    <div class="space-y-6">
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Traditional Medicinal Uses</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <template x-for="use in currentWeed.medicinalUses" :key="use">
+                            <div class="flex items-start gap-3">
+                              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mt-1 flex-shrink-0">
+                                <i class="fas fa-heart text-blue-600"></i>
+                              </div>
+                              <p class="text-gray-700" x-text="use"></p>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Preparation Methods</h3>
+                        <div class="flex flex-wrap gap-3">
+                          <template x-for="method in currentWeed.preparationMethods" :key="method">
+                            <span class="bg-blue-50 text-blue-800 px-4 py-2 rounded-full font-medium">
+                              <span x-text="method"></span>
+                            </span>
+                          </template>
+                        </div>
+                      </div>
+
+                      <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                        <div class="flex items-start gap-3">
+                          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-exclamation-circle text-blue-600"></i>
+                          </div>
+                          <div>
+                            <h3 class="text-lg font-bold text-blue-800 mb-2">Safety Notes</h3>
+                            <p class="text-blue-700" x-text="currentWeed.safetyNotes"></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Nutrients Tab -->
+                  <div x-show="activeTab === 'nutrients'" x-transition="">
+                    <div class="space-y-6">
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Nutritional Profile</h3>
+                        <div class="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-6">
+                          <p class="text-gray-700 text-lg" x-text="currentWeed.nutritionalSummary"></p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Vitamins &amp; Minerals</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <template x-for="nutrient in currentWeed.nutrients" :key="nutrient.name">
+                            <div class="bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 transition-colors group">
+                              <div class="text-center">
+                                <div class="w-12 h-12 mx-auto mb-3 bg-emerald-100 rounded-full flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                                  <i class="fas fa-apple-alt text-emerald-600"></i>
+                                </div>
+                                <p class="font-bold text-gray-800 mb-1" x-text="nutrient.name"></p>
+                                <p class="text-sm text-emerald-600 font-semibold" x-text="nutrient.amount"></p>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Health Benefits</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <template x-for="benefit in currentWeed.healthBenefits" :key="benefit">
+                            <div class="flex items-start gap-3 bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 transition-colors">
+                              <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mt-1 flex-shrink-0">
+                                <i class="fas fa-check text-green-600"></i>
+                              </div>
+                              <p class="text-gray-700" x-text="benefit"></p>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-8">
+              <!-- Quick Facts -->
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Quick Facts</h3>
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Plant Type</span>
+                    <span class="font-semibold" x-text="currentWeed.type"></span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Growth Pattern</span>
+                    <span class="font-semibold" x-text="currentWeed.growthPattern"></span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Flowering Season</span>
+                    <span class="font-semibold" x-text="currentWeed.floweringSeason"></span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Height Range</span>
+                    <span class="font-semibold" x-text="currentWeed.heightRange"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quiz Actions -->
+              <div class="bg-gradient-to-br from-emerald-600 to-green-600 rounded-2xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold text-white mb-4">Test Your Knowledge</h3>
+                <p class="text-emerald-100 mb-6">Take a quiz about this plant</p>
+                <div class="space-y-3">
+                  <button @click="startSpecificQuiz('identification', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-emerald-100/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-search text-white"></i>
+                      </div>
+                      <span>Identification Quiz</span>
+                    </div>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                  <button @click="startSpecificQuiz('edible', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-amber-100/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-utensils text-white"></i>
+                      </div>
+                      <span>Edible Uses Quiz</span>
+                    </div>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                  <button @click="startSpecificQuiz('medicinal', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-blue-100/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-heart text-white"></i>
+                      </div>
+                      <span>Medicinal Uses Quiz</span>
+                    </div>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                  <button @click="startSpecificQuiz('toxic', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-red-100/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-skull-crossbones text-white"></i>
+                      </div>
+                      <span>Toxic &amp; Safety Quiz</span>
+                    </div>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                  <button @click="startSpecificQuiz('lookalikes', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-orange-100/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-white"></i>
+                      </div>
+                      <span>Look-Alikes Quiz</span>
+                    </div>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                  <button @click="startSpecificQuiz('habitat', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-teal-100/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-mountain text-white"></i>
+                      </div>
+                      <span>Habitat Quiz</span>
+                    </div>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                  <button @click="startSpecificQuiz('preparation', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 bg-purple-100/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-fire text-white"></i>
+                      </div>
+                      <span>Preparation Quiz</span>
+                    </div>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Related Plants -->
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Similar Plants</h3>
+                <div class="space-y-4">
+                  <template x-for="related in getRelatedPlants(currentWeed)" :key="related.id">
+                    <div @click="viewWeedDetails(related)" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition-colors">
+                      <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <span class="text-2xl" x-text="related.emoji"></span>
+                      </div>
+                      <div>
+                        <p class="font-medium text-gray-800" x-text="related.commonName"></p>
+                        <p class="text-sm text-gray-500" x-text="related.scientificName"></p>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Screen -->
+      <div x-show="screen === 'game'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <!-- Game Header -->
+          <div class="bg-gradient-to-r from-emerald-600 to-green-600 p-8">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h2 class="text-3xl font-bold text-white" x-text="gameModeTitle"></h2>
+                <p class="text-emerald-100">Test your foraging knowledge</p>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                  <span class="text-white font-bold text-lg" x-text="score"></span>
+                  <span class="text-emerald-100 text-sm ml-1">points</span>
+                </div>
+                <button @click="exitGame()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
+                  <i class="fas fa-times text-white"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="mb-2">
+              <div class="flex justify-between text-sm text-emerald-100 mb-2">
+                <span>Question <span x-text="currentQuestionIndex + 1"></span> of <span x-text="totalQuestions"></span></span>
+                <span x-text="Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100) + '%'"></span>
+              </div>
+              <div class="w-full bg-white/20 rounded-full h-3">
+                <div class="bg-white h-3 rounded-full transition-all duration-700 ease-out" :style="`width: ${((currentQuestionIndex + 1) / totalQuestions) * 100}%`"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question Area -->
+          <div class="p-8" x-show="!showResults">
+            <!-- Question -->
+            <div class="mb-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-question text-emerald-600 text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800" x-text="currentQuestion.text"></h3>
+              </div>
+
+              <!-- Options -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <template x-for="(option, index) in currentQuestion.options" :key="index">
+                  <button @click="selectAnswer(option)" :disabled="selectedAnswer" class="option-btn group p-6 bg-white border-2 border-gray-200 rounded-2xl text-left transition-all duration-300 hover:border-emerald-300 hover:shadow-lg" :class="{
+                    'border-emerald-500 bg-emerald-50 scale-105': selectedAnswer &amp;&amp; option === currentQuestion.correctAnswer,
+                    'border-red-500 bg-red-50': selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option === selectedAnswer,
+                    'border-gray-200 opacity-50': selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option !== selectedAnswer
+                  }">
+                    <div class="flex items-center gap-4">
+                      <div class="flex-shrink-0 w-10 h-10 rounded-xl border-2 border-gray-300 group-hover:border-emerald-300 flex items-center justify-center font-bold text-gray-600 group-hover:text-emerald-600 transition-colors" :class="{
+                        'bg-emerald-500 text-white border-emerald-500': selectedAnswer &amp;&amp; option === currentQuestion.correctAnswer,
+                        'bg-red-500 text-white border-red-500': selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option === selectedAnswer
+                      }" x-text="String.fromCharCode(65 + index)"></div>
+                      <div class="flex-1">
+                        <span class="text-lg font-medium text-gray-800" x-text="option"></span>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <span x-show="selectedAnswer &amp;&amp; option === currentQuestion.correctAnswer" class="text-emerald-600">
+                          <i class="fas fa-check-circle text-2xl"></i>
+                        </span>
+                        <span x-show="selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option === selectedAnswer" class="text-red-600">
+                          <i class="fas fa-times-circle text-2xl"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                </template>
+              </div>
+            </div>
+
+            <!-- Feedback -->
+            <div x-show="selectedAnswer" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+              <div class="mb-6 p-6 rounded-2xl" :class="isCorrect ? 'bg-emerald-50 border border-emerald-200' : 'bg-red-50 border border-red-200'">
+                <div class="flex items-start gap-4">
+                  <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" :class="isCorrect ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'">
+                    <i :class="isCorrect ? 'fas fa-check' : 'fas fa-times'" class="text-xl"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-lg mb-2" :class="isCorrect ? 'text-emerald-800' : 'text-red-800'" x-text="isCorrect ? 'Correct! 🎉' : 'Not quite right.'"></h4>
+                    <p class="text-gray-700" x-text="currentQuestion.explanation"></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-between">
+                <button @click="showHelp = true" class="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium flex items-center gap-2">
+                  <i class="fas fa-question-circle"></i>
+                  <span>Need help?</span>
+                </button>
+                <button @click="nextQuestion()" class="btn-primary px-8 py-3 text-lg rounded-full flex items-center gap-3 group">
+                  <span x-text="currentQuestionIndex &lt; totalQuestions - 1 ? 'Next Question' : 'See Results'"></span>
+                  <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results Screen -->
+          <div x-show="showResults" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="p-8">
+            <div class="text-center py-12">
+              <!-- Animated Trophy -->
+              <div class="relative w-32 h-32 mx-auto mb-8">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full animate-pulse"></div>
+                <div class="absolute inset-4 bg-gradient-to-br from-yellow-300 to-amber-400 rounded-full flex items-center justify-center">
+                  <i class="fas fa-trophy text-white text-4xl"></i>
+                </div>
+              </div>
+
+              <h2 class="text-4xl font-bold text-gray-800 mb-4">Quiz Complete!</h2>
+              <div class="inline-flex items-center gap-4 mb-6">
+                <span class="text-5xl font-bold" :class="score &gt;= 7 ? 'text-emerald-600' : score &gt;= 4 ? 'text-amber-600' : 'text-red-600'" x-text="score"></span>
+                <span class="text-2xl text-gray-400">/</span>
+                <span class="text-3xl text-gray-600" x-text="totalQuestions"></span>
+              </div>
+              
+              <p class="text-xl mb-2" :class="score &gt;= 7 ? 'text-emerald-600' : score &gt;= 4 ? 'text-amber-600' : 'text-red-600'" x-text="getResultMessage()"></p>
+              <p class="text-gray-600 mb-8 max-w-md mx-auto" x-text="getResultDescription()"></p>
+
+              <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button @click="restartGame()" class="btn-primary px-8 py-4 text-lg rounded-full flex items-center gap-3">
+                  <i class="fas fa-redo"></i>
+                  Play Again
+                </button>
+                <button @click="screen = 'home'" class="bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-8 py-4 text-lg rounded-full font-semibold transition-colors flex items-center gap-3">
+                  <i class="fas fa-home"></i>
+                  Back to Home
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Modal -->
+      <div x-show="showHelp" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div @click.outside="showHelp = false" class="bg-white rounded-3xl shadow-2xl max-w-md w-full transform transition-all duration-300 scale-100">
+          <div class="p-8">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-bold text-gray-800">How to Play</h3>
+              <button @click="showHelp = false" class="w-10 h-10 hover:bg-gray-100 rounded-full flex items-center justify-center transition-colors">
+                <i class="fas fa-times text-xl text-gray-500"></i>
+              </button>
+            </div>
+            
+            <div class="space-y-6">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-lightbulb text-emerald-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 mb-2">Read Carefully</h4>
+                  <p class="text-gray-600">Take your time to understand each question before answering.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-check-circle text-blue-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 mb-2">Learn from Feedback</h4>
+                  <p class="text-gray-600">Each answer includes detailed explanations to help you learn.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-trophy text-amber-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 mb-2">Track Progress</h4>
+                  <p class="text-gray-600">Your score improves with correct answers. Aim for perfection!</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200">
+              <button @click="showHelp = false" class="w-full btn-primary py-3 rounded-xl text-lg">
+                Got it, let's play!
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullscreen Image Viewer -->
+      <div x-show="fullscreenImage?.show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4" @keydown.escape="closeFullscreen()" @click.self="closeFullscreen()">
+        
+        <div class="relative max-w-6xl max-h-[90vh]">
+          <!-- Close Button -->
+          <button @click="closeFullscreen()" class="absolute top-4 right-4 z-20 text-white hover:text-gray-300">
+            <i class="fas fa-times text-3xl"></i>
+          </button>
+          
+          <!-- Navigation -->
+          <button @click.stop="prevFullscreenImage()" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300">
+            <i class="fas fa-chevron-left text-3xl"></i>
+          </button>
+          
+          <button @click.stop="nextFullscreenImage()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300">
+            <i class="fas fa-chevron-right text-3xl"></i>
+          </button>
+          
+          <!-- Image -->
+          <img :src="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.images[fullscreenImage?.currentIndex || 0]" :alt="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.commonName + ' identification photo'" class="max-w-full max-h-[80vh] object-contain rounded-lg">
+          
+          <!-- Image Info -->
+          <div class="mt-4 text-center text-white">
+            <p class="font-semibold" x-text="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.commonName"></p>
+            <p class="text-sm text-gray-300">
+              Photo <span x-text="(fullscreenImage?.currentIndex || 0) + 1"></span> of 
+              <span x-text="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.images?.length"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="libraries/tailwind-mod.min.js"></script>
+    <script src="src/script.js"></script>
+    <script src="https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-sw.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          reg.addEventListener('updatefound', () => {
+            const newSW = reg.installing;
+            newSW.addEventListener('statechange', () => {
+              if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+                // Notify the user and reload if they confirm
+                if (confirm('A new version is available. Reload now?')) {
+                  window.location.reload();
+                }
+              }
+            });
+          });
+        });
+
+        // Ensure immediate activation of a new service worker
+        navigator.serviceWorker.ready.then(registration => {
+          registration.active.postMessage({ type: 'SKIP_WAITING' });
+        });
+      }
+    </script>
+  </body>
+</html>
