@@ -6,7 +6,7 @@
   "lang": "en-US",
   "name": "Urban Forager",
   "short_name": "Urban Forager",
-  "description": "Discover edible, medicinal, and nutritional uses of common wild plants. Learn to identify weeds with quizzes and a full plant library.",
+  "description": "Reconnect with wild plants and fungi through 75 evidence-structured dossiers covering identification, food, nutrition, ethnobotany, safety, stewardship, and field learning.",
   "icons": [
     {
       "src": "./imgs/logo-192x192.png",
@@ -32,5 +32,10 @@
       "type": "image/png",
       "purpose": "any"
     }
-  ]
+  ],
+  "categories": [
+    "education",
+    "reference"
+  ],
+  "scope": "./"
 }

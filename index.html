@@ -1,1190 +1,429 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
   <head>
-    <title>Urban Forager - Comprehensive Plant Identification</title>
+    <title>Urban Forager - Field Reference & Ethnobotany Guide</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, interactive-widget=resizes-content">
-    <meta name="description" content="Discover edible, medicinal, and nutritional uses of common wild plants. Learn to identify weeds with quizzes and a full plant library.">
+    <meta name="description" content="Search 95 wild plant and fungi dossiers by identification, edibility, nutrition, medicinal information, safety, history, Indigenous uses, stewardship, and modern uses.">
     <meta name="author" content="Michael Schwartz">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Urban Forager - Comprehensive Plant Identification">
+    <meta name="application-name" content="Urban Forager - Field Reference & Ethnobotany Guide">
     <meta name="theme-color" content="#13171f">
-    <meta name="apple-mobile-web-app-title" content="Urban Forager - Comprehensive Plant Identification">
+    <meta name="apple-mobile-web-app-title" content="Urban Forager - Field Reference & Ethnobotany Guide">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="msapplication-starturl" content="./index.html">
     <meta name="msapplication-navbutton-color" content="#13171f">
     <meta property="og:url" content="https://michaelsboost.com/UrbanForager" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Urban Forager - Comprehensive Plant Identification" />
-    <meta property="og:description" content="Discover edible, medicinal, and nutritional uses of common wild plants. Learn to identify weeds with quizzes and a full plant library." />
+    <meta property="og:title" content="Urban Forager - Field Reference & Ethnobotany Guide" />
+    <meta property="og:description" content="Search 95 wild plant and fungi dossiers by identification, edibility, nutrition, medicinal information, safety, history, Indigenous uses, stewardship, and modern uses." />
     <link rel="shortcut icon" type="image/x-icon" href="imgs/logo.svg">
     <link rel="icon" type="image/svg+xml" href="imgs/logo.svg" />
     <link rel="apple-touch-icon" href="imgs/logo.svg">
+    <link rel="manifest" href="manifest.json">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="dist/bundle.css">
-  </head>
-  <body>
-    <div x-data="weedGame()" class="container mx-auto min-h-screen py-8 px-4">
-      <!-- Home Screen -->
-      <div x-show="screen === 'home'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
-        <!-- Hero Section -->
-        <div class="relative rounded-3xl bg-gradient-to-r from-emerald-600 to-green-600 p-8 mb-10 shadow-xl">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
-          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between">
-            <div class="md:w-2/3">
-              <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
-                <i class="fas fa-seedling text-white"></i>
-                <span class="text-white text-sm font-medium">Urban Foraging Guide</span>
-              </div>
-              <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">Discover Nature's<br><span class="text-yellow-300">Hidden Pantry</span></h1>
-              <p class="text-emerald-100 text-lg md:text-xl mb-6 max-w-2xl">Learn about <span x-text="weeds.length + '+'"></span> common weeds, their edible uses, medicinal properties, and nutritional benefits.</p>
-              <div class="flex flex-wrap gap-3">
-                <button @click="screen = 'library'" class="bg-white text-emerald-700 hover:bg-emerald-50 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
-                  <i class="fas fa-book-open mr-2"></i>Explore Library
-                </button>
-                <div class="relative group">
-                  <button @click="startGame('identification')" class="bg-emerald-800/50 hover:bg-emerald-800/70 text-white border-2 border-emerald-300/50 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm flex items-center">
-                    <i class="fas fa-play mr-2"></i>Start Quiz
-                    <i class="fas fa-chevron-down ml-2 text-sm"></i>
-                  </button>
-                  <!-- Quiz Type Dropdown -->
-                  <div class="absolute hidden group-hover:block top-full mt-2 left-0 bg-white rounded-xl shadow-2xl border border-gray-200 z-10 min-w-[280px] animate-fadeIn">
-                    <div class="p-2 space-y-1">
-                      <button @click="startGame('identification')" class="w-full text-left px-4 py-3 hover:bg-emerald-50 rounded-lg flex items-center gap-3 group">
-                        <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200">
-                          <i class="fas fa-search text-emerald-600 text-sm"></i>
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-800">Identification Quiz</p>
-                          <p class="text-xs text-gray-500">Recognize common weeds</p>
-                        </div>
-                      </button>
-                      <button @click="startGame('edible')" class="w-full text-left px-4 py-3 hover:bg-amber-50 rounded-lg flex items-center gap-3 group">
-                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200">
-                          <i class="fas fa-utensils text-amber-600 text-sm"></i>
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-800">Edible Uses Quiz</p>
-                          <p class="text-xs text-gray-500">Nutritional properties</p>
-                        </div>
-                      </button>
-                      <button @click="startGame('medicinal')" class="w-full text-left px-4 py-3 hover:bg-blue-50 rounded-lg flex items-center gap-3 group">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200">
-                          <i class="fas fa-heart text-blue-600 text-sm"></i>
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-800">Medicinal Uses Quiz</p>
-                          <p class="text-xs text-gray-500">Healing properties</p>
-                        </div>
-                      </button>
-                      <button @click="startGame('toxic')" class="w-full text-left px-4 py-3 hover:bg-red-50 rounded-lg flex items-center gap-3 group">
-                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200">
-                          <i class="fas fa-skull-crossbones text-red-600 text-sm"></i>
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-800">Toxic &amp; Safety Quiz</p>
-                          <p class="text-xs text-gray-500">Safety precautions</p>
-                        </div>
-                      </button>
-                      <button @click="startGame('lookalikes')" class="w-full text-left px-4 py-3 hover:bg-orange-50 rounded-lg flex items-center gap-3 group">
-                        <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200">
-                          <i class="fas fa-exclamation-triangle text-orange-600 text-sm"></i>
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-800">Look-Alikes Quiz</p>
-                          <p class="text-xs text-gray-500">Dangerous doppelgängers</p>
-                        </div>
-                      </button>
-                      <button @click="startGame('habitat')" class="w-full text-left px-4 py-3 hover:bg-teal-50 rounded-lg flex items-center gap-3 group">
-                        <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200">
-                          <i class="fas fa-mountain text-teal-600 text-sm"></i>
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-800">Habitat Quiz</p>
-                          <p class="text-xs text-gray-500">Where to find plants</p>
-                        </div>
-                      </button>
-                      <button @click="startGame('preparation')" class="w-full text-left px-4 py-3 hover:bg-purple-50 rounded-lg flex items-center gap-3 group">
-                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200">
-                          <i class="fas fa-fire text-purple-600 text-sm"></i>
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-800">Preparation Quiz</p>
-                          <p class="text-xs text-gray-500">Processing techniques</p>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="mt-8 md:mt-0">
-              <div class="relative">
-                <div class="w-64 h-64 bg-gradient-to-br from-yellow-400 to-emerald-400 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow">
-                  <i class="fas fa-leaf text-white text-8xl"></i>
-                </div>
-                <div class="absolute -bottom-2 -right-2 w-24 h-24 bg-amber-500 rounded-full flex items-center justify-center shadow-lg">
-                  <span class="text-white font-bold text-xl" x-text="weeds.length"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-7 gap-4 mb-12">
-          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-emerald-100">
-            <div class="flex items-center justify-between mb-4">
-              <i class="fas fa-search text-emerald-600 text-2xl"></i>
-              <span class="text-3xl font-bold text-emerald-700">20+</span>
-            </div>
-            <h3 class="font-bold text-gray-800 mb-2">Plants</h3>
-            <p class="text-gray-600 text-sm">Common weeds database</p>
-          </div>
-          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-amber-100">
-            <div class="flex items-center justify-between mb-4">
-              <i class="fas fa-utensils text-amber-600 text-2xl"></i>
-              <span class="text-3xl font-bold text-amber-700">7</span>
-            </div>
-            <h3 class="font-bold text-gray-800 mb-2">Quiz Types</h3>
-            <p class="text-gray-600 text-sm">Interactive categories</p>
-          </div>
-          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-100">
-            <div class="flex items-center justify-between mb-4">
-              <i class="fas fa-heart text-blue-600 text-2xl"></i>
-              <span class="text-3xl font-bold text-blue-700">200+</span>
-            </div>
-            <h3 class="font-bold text-gray-800 mb-2">Questions</h3>
-            <p class="text-gray-600 text-sm">Total quiz content</p>
-          </div>
-          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-red-100">
-            <div class="flex items-center justify-between mb-4">
-              <i class="fas fa-skull-crossbones text-red-600 text-2xl"></i>
-              <span class="text-3xl font-bold text-red-700">100%</span>
-            </div>
-            <h3 class="font-bold text-gray-800 mb-2">Safety Focused</h3>
-            <p class="text-gray-600 text-sm">Accurate information</p>
-          </div>
-          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-orange-100">
-            <div class="flex items-center justify-between mb-4">
-              <i class="fas fa-exclamation-triangle text-orange-600 text-2xl"></i>
-              <span class="text-3xl font-bold text-orange-700">50+</span>
-            </div>
-            <h3 class="font-bold text-gray-800 mb-2">Look-Alikes</h3>
-            <p class="text-gray-600 text-sm">Danger identification</p>
-          </div>
-          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-teal-100">
-            <div class="flex items-center justify-between mb-4">
-              <i class="fas fa-mountain text-teal-600 text-2xl"></i>
-              <span class="text-3xl font-bold text-teal-700">25+</span>
-            </div>
-            <h3 class="font-bold text-gray-800 mb-2">Habitats</h3>
-            <p class="text-gray-600 text-sm">Growth environments</p>
-          </div>
-          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-purple-100">
-            <div class="flex items-center justify-between mb-4">
-              <i class="fas fa-fire text-purple-600 text-2xl"></i>
-              <span class="text-3xl font-bold text-purple-700">30+</span>
-            </div>
-            <h3 class="font-bold text-gray-800 mb-2">Prep Methods</h3>
-            <p class="text-gray-600 text-sm">Cooking techniques</p>
-          </div>
-        </div>
-
-        <!-- Quiz Categories -->
-        <div class="mb-12">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-3xl font-bold text-gray-800">Interactive Quizzes</h2>
-            <span class="text-emerald-600 font-semibold">200+ Questions</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <button @click="startGame('identification')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-emerald-500">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                  <i class="fas fa-search text-emerald-600 text-xl"></i>
-                </div>
-                <div class="text-left">
-                  <h3 class="font-bold text-gray-800">Identification</h3>
-                  <p class="text-sm text-gray-600">Recognize common weeds</p>
-                </div>
-              </div>
-            </button>
-            
-            <button @click="startGame('edible')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-amber-500">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
-                  <i class="fas fa-utensils text-amber-600 text-xl"></i>
-                </div>
-                <div class="text-left">
-                  <h3 class="font-bold text-gray-800">Edible Uses</h3>
-                  <p class="text-sm text-gray-600">Nutritional properties</p>
-                </div>
-              </div>
-            </button>
-            
-            <button @click="startGame('medicinal')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-blue-500">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                  <i class="fas fa-heart text-blue-600 text-xl"></i>
-                </div>
-                <div class="text-left">
-                  <h3 class="font-bold text-gray-800">Medicinal</h3>
-                  <p class="text-sm text-gray-600">Healing properties</p>
-                </div>
-              </div>
-            </button>
-            
-            <button @click="startGame('toxic')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-red-500">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                  <i class="fas fa-skull-crossbones text-red-600 text-xl"></i>
-                </div>
-                <div class="text-left">
-                  <h3 class="font-bold text-gray-800">Toxic &amp; Safety</h3>
-                  <p class="text-sm text-gray-600">Safety precautions</p>
-                </div>
-              </div>
-            </button>
-            
-            <!-- Look-Alikes Quiz -->
-            <button @click="startGame('lookalikes')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-orange-500">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition-colors">
-                  <i class="fas fa-exclamation-triangle text-orange-600 text-xl"></i>
-                </div>
-                <div class="text-left">
-                  <h3 class="font-bold text-gray-800">Look-Alikes</h3>
-                  <p class="text-sm text-gray-600">Dangerous doppelgängers</p>
-                </div>
-              </div>
-            </button>
-            
-            <!-- Habitat Quiz -->
-            <button @click="startGame('habitat')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-teal-500">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition-colors">
-                  <i class="fas fa-mountain text-teal-600 text-xl"></i>
-                </div>
-                <div class="text-left">
-                  <h3 class="font-bold text-gray-800">Habitat</h3>
-                  <p class="text-sm text-gray-600">Where to find plants</p>
-                </div>
-              </div>
-            </button>
-            
-            <!-- Preparation & Processing Quiz -->
-            <button @click="startGame('preparation')" class="quiz-category group bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-purple-500">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                  <i class="fas fa-fire text-purple-600 text-xl"></i>
-                </div>
-                <div class="text-left">
-                  <h3 class="font-bold text-gray-800">Preparation</h3>
-                  <p class="text-sm text-gray-600">Processing techniques</p>
-                </div>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Featured Weeds with Photo Carousels -->
-        <div class="mb-12">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-3xl font-bold text-gray-800">Featured Plants</h2>
-            <button @click="screen = 'library'" class="text-emerald-600 hover:text-emerald-700 font-semibold flex items-center gap-2">
-              View All <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <template x-for="weed in featuredWeeds" :key="weed.id">
-              <div @click="viewWeedDetails(weed)" x-init="initCarousel(weed.id); startAutoplay(weed.id)" @mouseenter="stopAutoplay(weed.id)" @mouseleave="startAutoplay(weed.id)" class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
-                
-                <!-- Photo Carousel -->
-                <div class="relative h-48 overflow-hidden bg-gray-100">
-                  <template x-if="weed.images &amp;&amp; weed.images.length &gt; 0">
-                    <div class="relative w-full h-full">
-                      <!-- Main Image -->
-                      <img :src="weed.images[carouselState[weed.id]?.currentIndex || 0]" :alt="weed.commonName + ' identification photo'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                      
-                      <!-- Image Counter -->
-                      <div class="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
-                        <span x-text="(carouselState[weed.id]?.currentIndex || 0) + 1"></span>/<span x-text="weed.images.length"></span>
-                      </div>
-                      
-                      <!-- Navigation Arrows -->
-                      <div class="absolute inset-0 flex items-center justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button @click.stop="prevImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
-                          <i class="fas fa-chevron-left text-gray-800"></i>
-                        </button>
-                        <button @click.stop="nextImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
-                          <i class="fas fa-chevron-right text-gray-800"></i>
-                        </button>
-                      </div>
-                      
-                      <!-- Image Indicators -->
-                      <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1.5">
-                        <template x-for="(img, index) in weed.images" :key="index">
-                          <button @click.stop="goToImage(weed.id, index)" class="w-2 h-2 rounded-full transition-all duration-300" :class="{
-                              'bg-white w-4': (carouselState[weed.id]?.currentIndex || 0) === index, 
-                              'bg-white/50': (carouselState[weed.id]?.currentIndex || 0) !== index
-                            }">
-                          </button>
-                        </template>
-                      </div>
-                      
-                      <!-- Difficulty Badge -->
-                      <div class="absolute top-2 left-2">
-                        <span class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
-                      </div>
-                    </div>
-                  </template>
-                  
-                  <!-- Fallback to emoji if no images -->
-                  <template x-if="!weed.images || weed.images.length === 0">
-                    <div class="w-full h-full bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
-                      <span class="emoji-icon text-4xl" x-text="weed.emoji"></span>
-                      <div class="absolute top-2 left-2">
-                        <span class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-                
-                <!-- Plant Info -->
-                <div class="p-5">
-                  <h3 class="font-bold text-lg text-gray-800 mb-1 group-hover:text-emerald-700 transition-colors" x-text="weed.commonName"></h3>
-                  <p class="text-sm text-gray-600 italic mb-3" x-text="weed.scientificName"></p>
-                  <div class="flex flex-wrap gap-1.5 mb-4">
-                    <template x-for="tag in weed.tags.slice(0, 2)" :key="tag">
-                      <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full" x-text="tag"></span>
-                    </template>
-                    <span x-show="weed.tags.length &gt; 2" class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">+<span x-text="weed.tags.length - 2"></span></span>
-                  </div>
-                  <div class="flex items-center justify-between text-sm">
-                    <div class="flex items-center gap-1 text-gray-500">
-                      <i class="far fa-calendar"></i>
-                      <span x-text="weed.season"></span>
-                    </div>
-                    <span class="text-emerald-600 font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                      Explore <i class="fas fa-arrow-right text-xs"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
-
-      <!-- Plant Library with Photo Carousels -->
-      <div x-show="screen === 'library'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
-        <div class="sticky top-0 z-20 bg-gradient-to-r from-emerald-600 to-green-600 p-6 rounded-2xl mb-8 shadow-lg">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <button @click="screen = 'home'" class="inline-flex items-center gap-2 text-white hover:text-emerald-100 mb-2">
-                <i class="fas fa-arrow-left"></i> Back
-              </button>
-              <h1 class="text-3xl font-bold text-white">Plant Library</h1>
-              <p class="text-emerald-100">Browse and learn about all plants in our database</p>
-            </div>
-            <div class="relative md:w-96">
-              <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-              <input type="text" x-model="searchQuery" placeholder="Search plants by name, tag, or property..." class="w-full pl-11 pr-4 py-3 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white placeholder-emerald-100 focus:outline-none focus:border-white/40 focus:bg-white/20 transition-all">
-            </div>
-          </div>
-        </div>
-
-        <!-- Filter Tags -->
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="text-sm font-medium text-gray-600 mr-2">Filter by:</span>
-          <template x-for="tag in getUniqueTags()" :key="tag">
-            <button @click="toggleTagFilter(tag)" :class="{'bg-emerald-100 text-emerald-700': tagFilter.includes(tag), 'bg-gray-100 text-gray-600 hover:bg-gray-200': !tagFilter.includes(tag)}" class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors">
-              <span x-text="tag"></span>
-            </button>
-          </template>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <template x-for="weed in filteredWeeds" :key="weed.id">
-            <div @click="viewWeedDetails(weed)" x-init="initCarousel(weed.id); startAutoplay(weed.id)" @mouseenter="stopAutoplay(weed.id)" @mouseleave="startAutoplay(weed.id)" class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border border-gray-100">
-              
-              <!-- Photo Carousel -->
-              <div class="relative h-56 overflow-hidden bg-gray-100">
-                <template x-if="weed.images &amp;&amp; weed.images.length &gt; 0">
-                  <div class="relative w-full h-full">
-                    <!-- Main Image -->
-                    <img :src="weed.images[carouselState[weed.id]?.currentIndex || 0]" :alt="weed.commonName + ' identification photo'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    
-                    <!-- Image Counter -->
-                    <div class="absolute top-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
-                      <span x-text="(carouselState[weed.id]?.currentIndex || 0) + 1"></span>/<span x-text="weed.images.length"></span>
-                    </div>
-                    
-                    <!-- Navigation Arrows -->
-                    <div class="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button @click.stop="prevImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
-                        <i class="fas fa-chevron-left text-gray-800"></i>
-                      </button>
-                      <button @click.stop="nextImage(weed.id)" class="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg">
-                        <i class="fas fa-chevron-right text-gray-800"></i>
-                      </button>
-                    </div>
-                    
-                    <!-- Image Indicators -->
-                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                      <template x-for="(img, index) in weed.images" :key="index">
-                        <button @click.stop="goToImage(weed.id, index)" class="w-2 h-2 rounded-full transition-all duration-300" :class="{
-                            'bg-white w-4': (carouselState[weed.id]?.currentIndex || 0) === index, 
-                            'bg-white/50': (carouselState[weed.id]?.currentIndex || 0) !== index
-                          }">
-                        </button>
-                      </template>
-                    </div>
-                    
-                    <!-- Badges -->
-                    <div class="absolute top-4 left-4">
-                      <div class="flex flex-wrap gap-2">
-                        <span class="bg-white/80 backdrop-blur-sm text-emerald-700 text-xs font-bold px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
-                        <span class="bg-white/80 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
-                          <i class="far fa-calendar text-xs"></i>
-                          <span x-text="weed.season"></span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                
-                <!-- Fallback to emoji if no images -->
-                <template x-if="!weed.images || weed.images.length === 0">
-                  <div class="w-full h-full bg-gradient-to-br from-emerald-50 to-green-50 p-6">
-                    <div class="emoji-icon text-7xl absolute bottom-6 right-6 group-hover:scale-110 transition-transform duration-300" x-text="weed.emoji"></div>
-                    <div class="absolute top-6 left-6">
-                      <div class="flex flex-wrap gap-2">
-                        <span class="bg-white/80 backdrop-blur-sm text-emerald-700 text-xs font-bold px-3 py-1 rounded-full" x-text="weed.difficulty"></span>
-                        <span class="bg-white/80 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
-                          <i class="far fa-calendar text-xs"></i>
-                          <span x-text="weed.season"></span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-              </div>
-              
-              <!-- Plant Info -->
-              <div class="p-6">
-                <h3 class="font-bold text-xl text-gray-800 mb-1 group-hover:text-emerald-700 transition-colors" x-text="weed.commonName"></h3>
-                <p class="text-sm text-gray-600 italic mb-4" x-text="weed.scientificName"></p>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-2" x-text="weed.description"></p>
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <template x-for="tag in weed.tags.slice(0, 3)" :key="tag">
-                    <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full" x-text="tag"></span>
-                  </template>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-sm text-gray-500" x-text="weed.family"></span>
-                  <span class="inline-flex items-center gap-2 text-emerald-600 font-medium group-hover:gap-3 transition-all">
-                    View details <i class="fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-
-      <!-- Weed Details with Enhanced Photo Carousel -->
-      <div x-show="screen === 'details'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
-        <div x-show="currentWeed" class="space-y-6">
-          <!-- Header -->
-          <div class="sticky top-0 z-20 bg-gradient-to-r from-emerald-600 to-green-600 p-6 rounded-2xl shadow-lg">
-            <div class="flex items-center justify-between">
-              <button @click="screen = 'library'" class="inline-flex items-center gap-2 text-white hover:text-emerald-100">
-                <i class="fas fa-arrow-left"></i> Back to Library
-              </button>
-              <div class="flex items-center gap-4">
-                <span class="text-white font-medium hidden md:inline" x-text="currentWeed.family"></span>
-                <button @click="bookmarkWeed(currentWeed)" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
-                  <i :class="{'fas': isBookmarked(currentWeed), 'far': !isBookmarked(currentWeed)}" class="fa-bookmark text-white"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Main Content -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column -->
-            <div class="lg:col-span-2 space-y-8">
-              <!-- Plant Overview -->
-              <div class="bg-white rounded-2xl p-8 shadow-lg">
-                <div class="flex flex-col md:flex-row items-start gap-8">
-                  <!-- Photo Carousel for Details Page -->
-                  <div x-init="initCarousel(currentWeed.id); startAutoplay(currentWeed.id)" @mouseenter="stopAutoplay(currentWeed.id)" @mouseleave="startAutoplay(currentWeed.id)" class="md:w-1/3">
-                    <div class="relative h-64 md:h-96 rounded-xl bg-gray-100 overflow-hidden shadow-inner">
-                      <template x-if="currentWeed.images &amp;&amp; currentWeed.images.length &gt; 0">
-                        <div class="relative w-full h-full">
-                          <!-- Main Image -->
-                          <img :src="currentWeed.images[carouselState[currentWeed.id]?.currentIndex || 0]" :alt="currentWeed.commonName + ' identification photo'" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                          
-                          <!-- Image Counter -->
-                          <div class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1 rounded-full">
-                            <span x-text="(carouselState[currentWeed.id]?.currentIndex || 0) + 1"></span>/<span x-text="currentWeed.images.length"></span>
-                          </div>
-                          
-                          <!-- Navigation Arrows -->
-                          <div class="absolute inset-0 flex items-center justify-between px-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
-                            <button @click="prevImage(currentWeed.id)" class="w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl">
-                              <i class="fas fa-chevron-left text-gray-800 text-lg"></i>
-                            </button>
-                            <button @click="nextImage(currentWeed.id)" class="w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl">
-                              <i class="fas fa-chevron-right text-gray-800 text-lg"></i>
-                            </button>
-                          </div>
-                          
-                          <!-- Thumbnail Strip -->
-                          <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 max-w-full px-4 overflow-x-auto thumbnail-strip">
-                            <template x-for="(img, index) in currentWeed.images" :key="index">
-                              <button @click="goToImage(currentWeed.id, index)" class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300" :class="{
-                                  'border-emerald-500 scale-105': (carouselState[currentWeed.id]?.currentIndex || 0) === index, 
-                                  'border-transparent hover:border-emerald-300': (carouselState[currentWeed.id]?.currentIndex || 0) !== index
-                                }">
-                                <img :src="img" :alt="'Thumbnail ' + (index + 1)" class="w-full h-full object-cover">
-                              </button>
-                            </template>
-                          </div>
-                          
-                          <!-- Fullscreen Button -->
-                          <button @click="openFullscreen(currentWeed.id, carouselState[currentWeed.id]?.currentIndex || 0)" class="absolute top-4 left-4 bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors">
-                            <i class="fas fa-expand"></i>
-                          </button>
-                          
-                          <!-- Plant Type Badge -->
-                          <div class="absolute bottom-4 right-4">
-                            <span class="bg-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-full" x-text="currentWeed.difficulty"></span>
-                          </div>
-                        </div>
-                      </template>
-                      
-                      <!-- Fallback to emoji if no images -->
-                      <template x-if="!currentWeed.images || currentWeed.images.length === 0">
-                        <div class="w-full h-full bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
-                          <span class="emoji-icon text-8xl" x-text="currentWeed.emoji"></span>
-                          <div class="absolute bottom-4 right-4">
-                            <span class="bg-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-full" x-text="currentWeed.difficulty"></span>
-                          </div>
-                        </div>
-                      </template>
-                    </div>
-                    
-                    <!-- Image Source Info -->
-                    <div class="mt-2 text-xs text-gray-500 text-center">
-                      <i class="fas fa-camera mr-1"></i>
-                      <span x-text="currentWeed.images?.length || 0"></span> identification photos
-                    </div>
-                  </div>
-                  
-                  <div class="md:w-2/3">
-                    <h1 class="text-4xl font-bold text-gray-800 mb-2" x-text="currentWeed.commonName"></h1>
-                    <p class="text-xl text-gray-600 italic mb-6" x-text="currentWeed.scientificName"></p>
-                    <p class="text-gray-700 mb-6 text-lg" x-text="currentWeed.description"></p>
-                    
-                    <div class="grid grid-cols-2 gap-6 mb-6">
-                      <div class="space-y-2">
-                        <div class="flex items-center gap-3">
-                          <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-tree text-emerald-600"></i>
-                          </div>
-                          <div>
-                            <p class="text-sm text-gray-500">Family</p>
-                            <p class="font-semibold" x-text="currentWeed.family"></p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="space-y-2">
-                        <div class="flex items-center gap-3">
-                          <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                            <i class="far fa-calendar text-amber-600"></i>
-                          </div>
-                          <div>
-                            <p class="text-sm text-gray-500">Season</p>
-                            <p class="font-semibold" x-text="currentWeed.season"></p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="space-y-2">
-                        <div class="flex items-center gap-3">
-                          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-mountain text-blue-600"></i>
-                          </div>
-                          <div>
-                            <p class="text-sm text-gray-500">Habitat</p>
-                            <p class="font-semibold" x-text="currentWeed.habitat"></p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="space-y-2">
-                        <div class="flex items-center gap-3">
-                          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-tag text-purple-600"></i>
-                          </div>
-                          <div>
-                            <p class="text-sm text-gray-500">Type</p>
-                            <p class="font-semibold" x-text="currentWeed.type"></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2">
-                      <template x-for="tag in currentWeed.tags" :key="tag">
-                        <span class="text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full font-medium" x-text="tag"></span>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Tabs -->
-              <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div class="border-b border-gray-200">
-                  <div class="flex overflow-x-auto">
-                    <button @click="activeTab = 'identification'" :class="{'tab-active': activeTab === 'identification'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
-                      <i class="fas fa-search mr-3"></i> Identification
-                    </button>
-                    <button @click="activeTab = 'edible'" :class="{'tab-active': activeTab === 'edible'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
-                      <i class="fas fa-utensils mr-3"></i> Edible Uses
-                    </button>
-                    <button @click="activeTab = 'medicinal'" :class="{'tab-active': activeTab === 'medicinal'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
-                      <i class="fas fa-heart mr-3"></i> Medicinal
-                    </button>
-                    <button @click="activeTab = 'nutrients'" :class="{'tab-active': activeTab === 'nutrients'}" class="flex-shrink-0 px-8 py-4 font-medium text-gray-600 hover:text-emerald-700 border-b-2 transition-colors">
-                      <i class="fas fa-vial mr-3"></i> Nutrients
-                    </button>
-                  </div>
-                </div>
-
-                <div class="p-8">
-                  <!-- Identification Tab -->
-                  <div x-show="activeTab === 'identification'" x-transition="">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Identifying Features</h3>
-                        <div class="space-y-4">
-                          <template x-for="feature in currentWeed.identifyingFeatures" :key="feature">
-                            <div class="flex items-start gap-3">
-                              <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
-                                <i class="fas fa-check text-emerald-600 text-xs"></i>
-                              </div>
-                              <p class="text-gray-700" x-text="feature"></p>
-                            </div>
-                          </template>
-                        </div>
-                      </div>
-                      <div class="bg-amber-50 border border-amber-200 rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-amber-800 mb-3">⚠️ Look-Alikes &amp; Cautions</h3>
-                        <p class="text-amber-700 mb-4" x-text="currentWeed.lookAlikes"></p>
-                        <div class="flex items-center gap-2 text-sm text-amber-600">
-                          <i class="fas fa-exclamation-triangle"></i>
-                          <span>Always verify identification before consumption</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Edible Tab -->
-                  <div x-show="activeTab === 'edible'" x-transition="">
-                    <div class="space-y-6">
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Edible Parts</h3>
-                        <div class="flex flex-wrap gap-3">
-                          <template x-for="part in currentWeed.edibleParts" :key="part">
-                            <span class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full font-medium flex items-center gap-2">
-                              <i class="fas fa-leaf text-sm"></i>
-                              <span x-text="part"></span>
-                            </span>
-                          </template>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Harvesting &amp; Preparation</h3>
-                        <div class="bg-gray-50 rounded-xl p-6">
-                          <p class="text-gray-700" x-text="currentWeed.harvestingNotes"></p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Culinary Uses</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <template x-for="use in currentWeed.culinaryUses" :key="use">
-                            <div class="bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 transition-colors">
-                              <div class="flex items-center gap-3 mb-2">
-                                <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                                  <i class="fas fa-fire text-amber-600"></i>
-                                </div>
-                                <p class="font-medium text-gray-800" x-text="use"></p>
-                              </div>
-                            </div>
-                          </template>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Medicinal Tab -->
-                  <div x-show="activeTab === 'medicinal'" x-transition="">
-                    <div class="space-y-6">
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Traditional Medicinal Uses</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <template x-for="use in currentWeed.medicinalUses" :key="use">
-                            <div class="flex items-start gap-3">
-                              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mt-1 flex-shrink-0">
-                                <i class="fas fa-heart text-blue-600"></i>
-                              </div>
-                              <p class="text-gray-700" x-text="use"></p>
-                            </div>
-                          </template>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Preparation Methods</h3>
-                        <div class="flex flex-wrap gap-3">
-                          <template x-for="method in currentWeed.preparationMethods" :key="method">
-                            <span class="bg-blue-50 text-blue-800 px-4 py-2 rounded-full font-medium">
-                              <span x-text="method"></span>
-                            </span>
-                          </template>
-                        </div>
-                      </div>
-
-                      <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                        <div class="flex items-start gap-3">
-                          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-exclamation-circle text-blue-600"></i>
-                          </div>
-                          <div>
-                            <h3 class="text-lg font-bold text-blue-800 mb-2">Safety Notes</h3>
-                            <p class="text-blue-700" x-text="currentWeed.safetyNotes"></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Nutrients Tab -->
-                  <div x-show="activeTab === 'nutrients'" x-transition="">
-                    <div class="space-y-6">
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Nutritional Profile</h3>
-                        <div class="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-6">
-                          <p class="text-gray-700 text-lg" x-text="currentWeed.nutritionalSummary"></p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Vitamins &amp; Minerals</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <template x-for="nutrient in currentWeed.nutrients" :key="nutrient.name">
-                            <div class="bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 transition-colors group">
-                              <div class="text-center">
-                                <div class="w-12 h-12 mx-auto mb-3 bg-emerald-100 rounded-full flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                                  <i class="fas fa-apple-alt text-emerald-600"></i>
-                                </div>
-                                <p class="font-bold text-gray-800 mb-1" x-text="nutrient.name"></p>
-                                <p class="text-sm text-emerald-600 font-semibold" x-text="nutrient.amount"></p>
-                              </div>
-                            </div>
-                          </template>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Health Benefits</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <template x-for="benefit in currentWeed.healthBenefits" :key="benefit">
-                            <div class="flex items-start gap-3 bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 transition-colors">
-                              <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mt-1 flex-shrink-0">
-                                <i class="fas fa-check text-green-600"></i>
-                              </div>
-                              <p class="text-gray-700" x-text="benefit"></p>
-                            </div>
-                          </template>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Column -->
-            <div class="space-y-8">
-              <!-- Quick Facts -->
-              <div class="bg-white rounded-2xl p-6 shadow-lg">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Quick Facts</h3>
-                <div class="space-y-4">
-                  <div class="flex items-center justify-between">
-                    <span class="text-gray-600">Plant Type</span>
-                    <span class="font-semibold" x-text="currentWeed.type"></span>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span class="text-gray-600">Growth Pattern</span>
-                    <span class="font-semibold" x-text="currentWeed.growthPattern"></span>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span class="text-gray-600">Flowering Season</span>
-                    <span class="font-semibold" x-text="currentWeed.floweringSeason"></span>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span class="text-gray-600">Height Range</span>
-                    <span class="font-semibold" x-text="currentWeed.heightRange"></span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Quiz Actions -->
-              <div class="bg-gradient-to-br from-emerald-600 to-green-600 rounded-2xl p-6 shadow-lg">
-                <h3 class="text-xl font-bold text-white mb-4">Test Your Knowledge</h3>
-                <p class="text-emerald-100 mb-6">Take a quiz about this plant</p>
-                <div class="space-y-3">
-                  <button @click="startSpecificQuiz('identification', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 bg-emerald-100/30 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-search text-white"></i>
-                      </div>
-                      <span>Identification Quiz</span>
-                    </div>
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                  </button>
-                  <button @click="startSpecificQuiz('edible', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 bg-amber-100/30 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-utensils text-white"></i>
-                      </div>
-                      <span>Edible Uses Quiz</span>
-                    </div>
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                  </button>
-                  <button @click="startSpecificQuiz('medicinal', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 bg-blue-100/30 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-heart text-white"></i>
-                      </div>
-                      <span>Medicinal Uses Quiz</span>
-                    </div>
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                  </button>
-                  <button @click="startSpecificQuiz('toxic', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 bg-red-100/30 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-skull-crossbones text-white"></i>
-                      </div>
-                      <span>Toxic &amp; Safety Quiz</span>
-                    </div>
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                  </button>
-                  <button @click="startSpecificQuiz('lookalikes', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 bg-orange-100/30 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-exclamation-triangle text-white"></i>
-                      </div>
-                      <span>Look-Alikes Quiz</span>
-                    </div>
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                  </button>
-                  <button @click="startSpecificQuiz('habitat', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 bg-teal-100/30 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-mountain text-white"></i>
-                      </div>
-                      <span>Habitat Quiz</span>
-                    </div>
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                  </button>
-                  <button @click="startSpecificQuiz('preparation', currentWeed.id)" class="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center justify-between transition-colors group">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 bg-purple-100/30 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-fire text-white"></i>
-                      </div>
-                      <span>Preparation Quiz</span>
-                    </div>
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Related Plants -->
-              <div class="bg-white rounded-2xl p-6 shadow-lg">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Similar Plants</h3>
-                <div class="space-y-4">
-                  <template x-for="related in getRelatedPlants(currentWeed)" :key="related.id">
-                    <div @click="viewWeedDetails(related)" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition-colors">
-                      <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                        <span class="text-2xl" x-text="related.emoji"></span>
-                      </div>
-                      <div>
-                        <p class="font-medium text-gray-800" x-text="related.commonName"></p>
-                        <p class="text-sm text-gray-500" x-text="related.scientificName"></p>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Game Screen -->
-      <div x-show="screen === 'game'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-auto">
-        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <!-- Game Header -->
-          <div class="bg-gradient-to-r from-emerald-600 to-green-600 p-8">
-            <div class="flex items-center justify-between mb-6">
-              <div>
-                <h2 class="text-3xl font-bold text-white" x-text="gameModeTitle"></h2>
-                <p class="text-emerald-100">Test your foraging knowledge</p>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                  <span class="text-white font-bold text-lg" x-text="score"></span>
-                  <span class="text-emerald-100 text-sm ml-1">points</span>
-                </div>
-                <button @click="exitGame()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
-                  <i class="fas fa-times text-white"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Progress -->
-            <div class="mb-2">
-              <div class="flex justify-between text-sm text-emerald-100 mb-2">
-                <span>Question <span x-text="currentQuestionIndex + 1"></span> of <span x-text="totalQuestions"></span></span>
-                <span x-text="Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100) + '%'"></span>
-              </div>
-              <div class="w-full bg-white/20 rounded-full h-3">
-                <div class="bg-white h-3 rounded-full transition-all duration-700 ease-out" :style="`width: ${((currentQuestionIndex + 1) / totalQuestions) * 100}%`"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Question Area -->
-          <div class="p-8" x-show="!showResults">
-            <!-- Question -->
-            <div class="mb-8">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                  <i class="fas fa-question text-emerald-600 text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800" x-text="currentQuestion.text"></h3>
-              </div>
-
-              <!-- Options -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <template x-for="(option, index) in currentQuestion.options" :key="index">
-                  <button @click="selectAnswer(option)" :disabled="selectedAnswer" class="option-btn group p-6 bg-white border-2 border-gray-200 rounded-2xl text-left transition-all duration-300 hover:border-emerald-300 hover:shadow-lg" :class="{
-                    'border-emerald-500 bg-emerald-50 scale-105': selectedAnswer &amp;&amp; option === currentQuestion.correctAnswer,
-                    'border-red-500 bg-red-50': selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option === selectedAnswer,
-                    'border-gray-200 opacity-50': selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option !== selectedAnswer
-                  }">
-                    <div class="flex items-center gap-4">
-                      <div class="flex-shrink-0 w-10 h-10 rounded-xl border-2 border-gray-300 group-hover:border-emerald-300 flex items-center justify-center font-bold text-gray-600 group-hover:text-emerald-600 transition-colors" :class="{
-                        'bg-emerald-500 text-white border-emerald-500': selectedAnswer &amp;&amp; option === currentQuestion.correctAnswer,
-                        'bg-red-500 text-white border-red-500': selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option === selectedAnswer
-                      }" x-text="String.fromCharCode(65 + index)"></div>
-                      <div class="flex-1">
-                        <span class="text-lg font-medium text-gray-800" x-text="option"></span>
-                      </div>
-                      <div class="flex-shrink-0">
-                        <span x-show="selectedAnswer &amp;&amp; option === currentQuestion.correctAnswer" class="text-emerald-600">
-                          <i class="fas fa-check-circle text-2xl"></i>
-                        </span>
-                        <span x-show="selectedAnswer &amp;&amp; option !== currentQuestion.correctAnswer &amp;&amp; option === selectedAnswer" class="text-red-600">
-                          <i class="fas fa-times-circle text-2xl"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </button>
-                </template>
-              </div>
-            </div>
-
-            <!-- Feedback -->
-            <div x-show="selectedAnswer" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-              <div class="mb-6 p-6 rounded-2xl" :class="isCorrect ? 'bg-emerald-50 border border-emerald-200' : 'bg-red-50 border border-red-200'">
-                <div class="flex items-start gap-4">
-                  <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" :class="isCorrect ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'">
-                    <i :class="isCorrect ? 'fas fa-check' : 'fas fa-times'" class="text-xl"></i>
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-lg mb-2" :class="isCorrect ? 'text-emerald-800' : 'text-red-800'" x-text="isCorrect ? 'Correct! 🎉' : 'Not quite right.'"></h4>
-                    <p class="text-gray-700" x-text="currentQuestion.explanation"></p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-between">
-                <button @click="showHelp = true" class="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium flex items-center gap-2">
-                  <i class="fas fa-question-circle"></i>
-                  <span>Need help?</span>
-                </button>
-                <button @click="nextQuestion()" class="btn-primary px-8 py-3 text-lg rounded-full flex items-center gap-3 group">
-                  <span x-text="currentQuestionIndex &lt; totalQuestions - 1 ? 'Next Question' : 'See Results'"></span>
-                  <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Results Screen -->
-          <div x-show="showResults" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="p-8">
-            <div class="text-center py-12">
-              <!-- Animated Trophy -->
-              <div class="relative w-32 h-32 mx-auto mb-8">
-                <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full animate-pulse"></div>
-                <div class="absolute inset-4 bg-gradient-to-br from-yellow-300 to-amber-400 rounded-full flex items-center justify-center">
-                  <i class="fas fa-trophy text-white text-4xl"></i>
-                </div>
-              </div>
-
-              <h2 class="text-4xl font-bold text-gray-800 mb-4">Quiz Complete!</h2>
-              <div class="inline-flex items-center gap-4 mb-6">
-                <span class="text-5xl font-bold" :class="score &gt;= 7 ? 'text-emerald-600' : score &gt;= 4 ? 'text-amber-600' : 'text-red-600'" x-text="score"></span>
-                <span class="text-2xl text-gray-400">/</span>
-                <span class="text-3xl text-gray-600" x-text="totalQuestions"></span>
-              </div>
-              
-              <p class="text-xl mb-2" :class="score &gt;= 7 ? 'text-emerald-600' : score &gt;= 4 ? 'text-amber-600' : 'text-red-600'" x-text="getResultMessage()"></p>
-              <p class="text-gray-600 mb-8 max-w-md mx-auto" x-text="getResultDescription()"></p>
-
-              <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button @click="restartGame()" class="btn-primary px-8 py-4 text-lg rounded-full flex items-center gap-3">
-                  <i class="fas fa-redo"></i>
-                  Play Again
-                </button>
-                <button @click="screen = 'home'" class="bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-8 py-4 text-lg rounded-full font-semibold transition-colors flex items-center gap-3">
-                  <i class="fas fa-home"></i>
-                  Back to Home
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Help Modal -->
-      <div x-show="showHelp" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div @click.outside="showHelp = false" class="bg-white rounded-3xl shadow-2xl max-w-md w-full transform transition-all duration-300 scale-100">
-          <div class="p-8">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="text-2xl font-bold text-gray-800">How to Play</h3>
-              <button @click="showHelp = false" class="w-10 h-10 hover:bg-gray-100 rounded-full flex items-center justify-center transition-colors">
-                <i class="fas fa-times text-xl text-gray-500"></i>
-              </button>
-            </div>
-            
-            <div class="space-y-6">
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <i class="fas fa-lightbulb text-emerald-600"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-800 mb-2">Read Carefully</h4>
-                  <p class="text-gray-600">Take your time to understand each question before answering.</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <i class="fas fa-check-circle text-blue-600"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-800 mb-2">Learn from Feedback</h4>
-                  <p class="text-gray-600">Each answer includes detailed explanations to help you learn.</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <i class="fas fa-trophy text-amber-600"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-800 mb-2">Track Progress</h4>
-                  <p class="text-gray-600">Your score improves with correct answers. Aim for perfection!</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="mt-8 pt-6 border-t border-gray-200">
-              <button @click="showHelp = false" class="w-full btn-primary py-3 rounded-xl text-lg">
-                Got it, let's play!
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fullscreen Image Viewer -->
-      <div x-show="fullscreenImage?.show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4" @keydown.escape="closeFullscreen()" @click.self="closeFullscreen()">
-        
-        <div class="relative max-w-6xl max-h-[90vh]">
-          <!-- Close Button -->
-          <button @click="closeFullscreen()" class="absolute top-4 right-4 z-20 text-white hover:text-gray-300">
-            <i class="fas fa-times text-3xl"></i>
-          </button>
-          
-          <!-- Navigation -->
-          <button @click.stop="prevFullscreenImage()" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300">
-            <i class="fas fa-chevron-left text-3xl"></i>
-          </button>
-          
-          <button @click.stop="nextFullscreenImage()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300">
-            <i class="fas fa-chevron-right text-3xl"></i>
-          </button>
-          
-          <!-- Image -->
-          <img :src="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.images[fullscreenImage?.currentIndex || 0]" :alt="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.commonName + ' identification photo'" class="max-w-full max-h-[80vh] object-contain rounded-lg">
-          
-          <!-- Image Info -->
-          <div class="mt-4 text-center text-white">
-            <p class="font-semibold" x-text="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.commonName"></p>
-            <p class="text-sm text-gray-300">
-              Photo <span x-text="(fullscreenImage?.currentIndex || 0) + 1"></span> of 
-              <span x-text="weeds.find(w =&gt; w.id === fullscreenImage?.weedId)?.images?.length"></span>
-            </p>
-          </div>
-        </div>
+</head>
+  <body class="bg-[#101512] text-stone-100" style="background:#101512;color:#f5f5f4;">
+<!--
+  Urban Forager UI source
+  -----------------------
+  This file contains BODY markup only because kodeWeave injects it into the page body.
+  Alpine state and plant/resource data live in src/script.js. Styles live in src/bundle.css.
+  Major screens are separate <main> regions selected by the Alpine `screen` state.
+-->
+<div x-data="urbanForager()" x-init="init()" @keydown.escape.window="menuOpen=false; closeLearningVideo()" class="uf-app min-h-screen">
+  <header class="uf-app-header">
+    <div class="uf-header-inner">
+      <button type="button" @click="navigate('home')" class="uf-brand uf-wordmark" aria-label="Urban Forager home"><span>URBAN FORAGER</span><i></i></button>
+      <div class="uf-header-actions">
+        <button type="button" @click="navigate('library')" class="uf-icon-action" aria-label="Search plants and fungi" title="Search plants and fungi"><i class="fas fa-magnifying-glass"></i></button>
+        <button type="button" @click.stop="menuOpen=!menuOpen" class="uf-menu-button" :class="{'is-open':menuOpen}" :aria-expanded="menuOpen" aria-controls="uf-menu" :aria-label="menuOpen ? 'Close menu' : 'Open menu'">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
+  </header>
+
+  <div x-show="menuOpen" x-cloak x-transition.opacity class="uf-menu-backdrop" @click="menuOpen=false"></div>
+  <aside id="uf-menu" x-show="menuOpen" x-cloak x-transition:enter="uf-menu-enter" x-transition:enter-start="uf-menu-enter-start" x-transition:enter-end="uf-menu-enter-end" x-transition:leave="uf-menu-leave" x-transition:leave-start="uf-menu-leave-start" x-transition:leave-end="uf-menu-leave-end" class="uf-menu-drawer" aria-label="Main navigation">
+    <div class="uf-menu-head">
+      <div><span>Explore</span><strong>Urban Forager</strong></div>
+      <button type="button" @click="menuOpen=false" aria-label="Close menu">×</button>
+    </div>
+    <nav class="uf-menu-links">
+      <button type="button" @click="navigate('home')"><i class="fas fa-house"></i><span><strong>Home</strong><small>Learn, watch &amp; reconnect</small></span><b>→</b></button>
+      <button type="button" @click="navigate('library')"><i class="fas fa-magnifying-glass"></i><span><strong>Discover Plants &amp; Fungi</strong><small>Search all 95 dossiers</small></span><b>→</b></button>
+      <button type="button" @click="navigate('resources')"><i class="fas fa-book-open"></i><span><strong>Resources Library</strong><small>Watch, read, study &amp; go deeper</small></span><b>→</b></button>
+      <button type="button" @click="navigate('favorites')"><i class="fas fa-bookmark"></i><span><strong>Saved Dossiers</strong><small>Your field reference list</small></span><b>→</b></button>
+      <button type="button" @click="navigate('recent')"><i class="fas fa-clock-rotate-left"></i><span><strong>Recently Viewed</strong><small>Continue where you left off</small></span><b>→</b></button>
+      <button type="button" @click="navigate('about')"><i class="fas fa-circle-info"></i><span><strong>Safety &amp; About</strong><small>Evidence, stewardship &amp; guidance</small></span><b>→</b></button>
+    </nav>
+    <div class="uf-menu-divider"></div>
+    <div class="uf-menu-external">
+      <a href="https://michaelsboost.github.io/Zerra" target="_blank" rel="noopener"><i class="fas fa-seedling"></i><span>Explore Zerra</span><b>↗</b></a>
+      <a href="https://github.com/michaelsboost/Urban-Forager/" target="_blank" rel="noopener"><i class="fab fa-github"></i><span>GitHub</span><b>↗</b></a>
+      <a href="https://michaelsboost.com/donate/" target="_blank" rel="noopener"><i class="fas fa-heart"></i><span>Support the project</span><b>↗</b></a>
+    </div>
+    <p class="uf-menu-note">Know the organism. Know the place. Take only what the land can spare.</p>
+  </aside>
+
+  <main x-show="screen==='home'" x-cloak>
+    <div class="max-w-7xl mx-auto px-4 md:px-7 py-5 md:py-8 space-y-7">
+      <section class="uf-hero rounded-[2rem] p-6 md:p-12 lg:p-16 flex items-end">
+        <div class="grid lg:grid-cols-[1.25fr_.75fr] gap-10 items-end w-full">
+          <div>
+            <p class="uf-kicker mb-5">The world beneath your feet</p>
+            <h2 class="uf-display text-white">You know your phone.<br><span class="text-emerald-300">Do you know the land?</span></h2>
+            <p class="text-lg md:text-2xl text-stone-300 max-w-3xl mt-7 leading-relaxed">We move through a living world every day while barely knowing its names. Food, fiber, medicine, ecology, history and generations of human knowledge can be growing outside the door. Urban Forager exists to help rebuild that relationship.</p>
+            <div class="flex flex-wrap gap-3 mt-8">
+              <button @click="navigate('library')" class="bg-emerald-300 hover:bg-emerald-200 text-emerald-950 font-black px-6 py-4 rounded-full">Learn what grows around you <i class="fas fa-arrow-right ml-2"></i></button>
+              <button @click="document.getElementById('why-it-matters').scrollIntoView({behavior:'smooth'})" class="border border-stone-600 hover:border-stone-400 text-white font-bold px-6 py-4 rounded-full">Why this matters ↓</button>
+            </div>
+          </div>
+          <aside class="uf-panel rounded-3xl p-6 md:p-8">
+            <p class="uf-kicker">There is a name for the disconnect</p>
+            <h3 class="text-3xl font-black mt-3">Plant Awareness Disparity</h3>
+            <p class="uf-muted mt-3 leading-relaxed">Researchers use this term for the tendency to overlook plants, know less about them and treat them as background rather than distinct living organisms.</p>
+            <a class="uf-source inline-block mt-5 text-sm font-bold" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9727616/" target="_blank" rel="noopener">Read the peer-reviewed research ↗</a>
+          </aside>
+        </div>
+      </section>
+
+      <section id="why-it-matters" class="py-5 md:py-10">
+        <p class="uf-kicker">Why this knowledge matters</p>
+        <h3 class="text-4xl md:text-6xl font-black tracking-tight mt-3 max-w-5xl">Plants dominate the living world around us. Yet research shows we routinely fail to notice them.</h3>
+        <p class="uf-muted text-lg mt-5 max-w-3xl">This isn't nostalgia. Plant literacy affects how we understand biodiversity, conservation, food, culture and the ecosystems keeping us alive.</p>
+        <div class="grid md:grid-cols-3 gap-4 mt-8">
+          <article class="uf-panel uf-stat rounded-3xl p-6"><strong>&gt;80%</strong><h4 class="text-xl font-black mt-4">of global biomass</h4><p class="uf-muted mt-2">Recent research reviewing plant-awareness disparity notes that plants represent more than 80% of global biomass.</p><a class="uf-source block mt-4 text-sm" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0343890" target="_blank" rel="noopener">PLOS One · 2026 ↗</a></article>
+          <article class="uf-panel uf-stat rounded-3xl p-6"><strong>702</strong><h4 class="text-xl font-black mt-4">college students studied</h4><p class="uf-muted mt-2">Across six colleges, most participants did not report confidence identifying plant categories; food, herbs and foraging plants were among the better-known groups.</p><a class="uf-source block mt-4 text-sm" href="https://acsess.onlinelibrary.wiley.com/doi/10.1002/nse2.20146" target="_blank" rel="noopener">Natural Sciences Education · 2024 ↗</a></article>
+          <article class="uf-panel uf-stat rounded-3xl p-6"><strong>4</strong><h4 class="text-xl font-black mt-4">dimensions of the disparity</h4><p class="uf-muted mt-2">Research describes plant-awareness disparity through attention, knowledge, attitude and relative interest—not simply whether someone can visually see a plant.</p><a class="uf-source block mt-4 text-sm" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9727616/" target="_blank" rel="noopener">CBE—Life Sciences Education ↗</a></article>
+        </div>
+      </section>
+
+      <section class="uf-cinema rounded-[2rem] overflow-hidden" aria-labelledby="watch-title">
+        <div class="p-6 md:p-9 border-b border-stone-800">
+          <p class="uf-kicker">Watch · learn · reconnect</p>
+          <h3 id="watch-title" class="text-4xl md:text-5xl font-black mt-2">Learn without leaving the app.</h3>
+          <p class="uf-muted mt-3 max-w-3xl">Free films, lectures and field instruction. Tap a title and watch it here in the lightbox.</p>
+        </div>
+        <button type="button" @click="openLearningVideo(activeLearningVideo)" class="uf-poster w-full text-left p-7 md:p-12 min-h-[360px]">
+          <img :src="activeLearningVideo.thumbnail" :alt="activeLearningVideo.title + ' preview'" loading="lazy">
+          <div class="relative z-10 max-w-2xl">
+            <span class="inline-flex bg-emerald-300 text-emerald-950 px-3 py-1 rounded-full text-xs font-black tracking-wider" x-text="activeLearningVideo.label"></span>
+            <h4 class="text-4xl md:text-6xl font-black mt-5 text-white" x-text="activeLearningVideo.title"></h4>
+            <p class="text-stone-300 text-lg mt-4" x-text="activeLearningVideo.description"></p>
+            <span class="uf-play mt-7"><i class="fas fa-play ml-1"></i></span>
+          </div>
+        </button>
+        <div class="uf-cinema-rail">
+          <template x-for="(video,index) in learningVideos" :key="video.title">
+            <button type="button" @click="learningVideoIndex=index" class="uf-thumb rounded-2xl overflow-hidden text-left" :class="{'active':learningVideoIndex===index}">
+              <img :src="video.thumbnail" :alt="video.title" class="w-full aspect-video object-cover opacity-80" loading="lazy">
+              <span class="block p-3"><small class="text-emerald-300 font-black" x-text="video.label"></small><strong class="block mt-1 text-white" x-text="video.title"></strong></span>
+            </button>
+          </template>
+        </div>
+      </section>
+
+      <section class="py-6 md:py-10">
+        <p class="uf-kicker">Knowledge becomes relationship</p>
+        <h3 class="text-4xl md:text-6xl font-black mt-3">Don't just identify it. Understand it.</h3>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-7">
+          <button @click="intent='plants';navigate('library')" class="uf-dark-card rounded-3xl p-6 text-left"><i class="fas fa-leaf text-3xl text-emerald-300"></i><h4 class="text-xl font-black mt-5">Identify Plants</h4><p class="uf-muted mt-2">Names, features, habitat and dangerous look-alikes.</p></button>
+          <button @click="intent='food';navigate('library')" class="uf-dark-card rounded-3xl p-6 text-left"><i class="fas fa-utensils text-3xl text-emerald-300"></i><h4 class="text-xl font-black mt-5">Food & Nutrition</h4><p class="uf-muted mt-2">Edible parts, preparation and documented nutrients.</p></button>
+          <button @click="intent='medicine';navigate('library')" class="uf-dark-card rounded-3xl p-6 text-left"><i class="fas fa-mortar-pestle text-3xl text-emerald-300"></i><h4 class="text-xl font-black mt-5">Medicine & Evidence</h4><p class="uf-muted mt-2">Traditional uses separated from modern evidence.</p></button>
+          <button @click="intent='indigenous';navigate('library')" class="uf-dark-card rounded-3xl p-6 text-left"><i class="fas fa-book-open text-3xl text-emerald-300"></i><h4 class="text-xl font-black mt-5">Indigenous Knowledge</h4><p class="uf-muted mt-2">Documented uses tied to specific nations and sources.</p></button>
+        </div>
+      </section>
+
+      <section class="uf-panel rounded-[2rem] p-6 md:p-10">
+        <div class="grid lg:grid-cols-2 gap-8">
+          <div><p class="uf-kicker">Reciprocity, not extraction</p><h3 class="text-4xl font-black mt-3">Knowing what you can take is only half the lesson.</h3><p class="uf-muted text-lg mt-4">USDA's Indigenous and wild-plant harvesting guidance emphasizes sustainable harvest, permission, giving back, proper identification and maintaining relationships with plant and wildlife relatives.</p><a href="https://www.usda.gov/sites/default/files/documents/foraging-harvesting-indigenous-wild-plants-best-practices.pdf" target="_blank" rel="noopener" class="uf-source inline-block mt-5 font-bold">Read the USDA guide ↗</a></div>
+          <div class="rounded-3xl bg-emerald-950/50 border border-emerald-800 p-6"><p class="text-emerald-300 font-black">CONTINUE THE RELATIONSHIP</p><h4 class="text-3xl font-black mt-2">Zerra</h4><p class="text-stone-300 mt-3">Urban Forager helps you recognize and understand the living world. Zerra continues that relationship through ecological literacy, reciprocity, regeneration and lower-waste living.</p><a href="https://michaelsboost.github.io/Zerra" target="_blank" rel="noopener" class="inline-flex mt-5 bg-emerald-300 text-emerald-950 px-5 py-3 rounded-full font-black">Explore Zerra <i class="fas fa-arrow-right ml-2 mt-1"></i></a></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div x-show="learningVideoOpen" x-cloak class="uf-video-modal" @click.self="closeLearningVideo()" @keydown.escape.window="closeLearningVideo()" role="dialog" aria-modal="true" aria-label="Learning video">
+    <div class="uf-video-shell">
+      <div class="flex items-center justify-between gap-4 p-4 border-b border-stone-800"><div><small class="text-emerald-300 font-black" x-text="selectedLearningVideo && selectedLearningVideo.label"></small><strong class="block text-white" x-text="selectedLearningVideo && selectedLearningVideo.title"></strong></div><button @click="closeLearningVideo()" class="w-11 h-11 rounded-full border border-stone-700 text-xl" aria-label="Close video">×</button></div>
+      <div class="uf-video-frame"><iframe x-if="selectedLearningVideo" :src="selectedLearningVideo.embedUrl" :title="selectedLearningVideo.title" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+      <div class="p-4 text-sm text-stone-400"><span x-text="selectedLearningVideo && selectedLearningVideo.description"></span><a x-show="selectedLearningVideo" :href="selectedLearningVideo && selectedLearningVideo.sourceUrl" target="_blank" rel="noopener" class="uf-source ml-2">Source ↗</a></div>
+    </div>
+  </div>
+
+  <main x-show="screen==='library'" class="uf-view">
+    <section class="uf-discover-hero">
+      <button type="button" @click="navigate('home')" class="uf-back-link"><i class="fas fa-arrow-left"></i><span>Home</span></button>
+      <span class="uf-eyebrow">FIELD LIBRARY</span>
+      <h2>Find what the land is telling you.</h2>
+      <p>Search by organism, nutrient, edible part, season, habitat, medicine, history or safety.</p>
+    </section>
+
+    <section class="uf-search-studio">
+      <div class="uf-search-main">
+        <i class="fas fa-magnifying-glass"></i>
+        <input x-model="query" :placeholder="searchPlaceholder" aria-label="Search plants and fungi library">
+        <button type="button" x-show="query" @click="query=''" aria-label="Clear search">×</button>
+      </div>
+
+      <div class="uf-intent-strip" aria-label="Search category">
+        <button type="button" @click="intent='all'" :class="{'active':intent==='all'}">Everything</button>
+        <button type="button" @click="intent='plants'" :class="{'active':intent==='plants'}">Identify</button>
+        <button type="button" @click="intent='food'" :class="{'active':intent==='food'}">Food</button>
+        <button type="button" @click="intent='nutrition'" :class="{'active':intent==='nutrition'}">Nutrition</button>
+        <button type="button" @click="intent='medicine'" :class="{'active':intent==='medicine'}">Medicine</button>
+        <button type="button" @click="intent='indigenous'" :class="{'active':intent==='indigenous'}">Indigenous</button>
+        <button type="button" @click="intent='safety'" :class="{'active':intent==='safety'}">Safety</button>
+      </div>
+
+      <div class="uf-filter-grid">
+        <label><span>Type</span><select x-model="selectedOrganismType"><option value="">Any type</option><template x-for="n in organismTypeOptions"><option :value="n" x-text="n"></option></template></select></label>
+        <label><span>Nutrient</span><select x-model="selectedNutrient"><option value="">Any nutrient</option><template x-for="n in nutrientOptions"><option :value="n" x-text="n"></option></template></select></label>
+        <label><span>Edible part</span><select x-model="selectedEdiblePart"><option value="">Any edible part</option><template x-for="n in ediblePartOptions"><option :value="n" x-text="n"></option></template></select></label>
+        <label><span>Season</span><select x-model="selectedSeason"><option value="">Any season</option><template x-for="n in seasonOptions"><option :value="n" x-text="n"></option></template></select></label>
+        <label><span>Habitat</span><select x-model="selectedHabitat"><option value="">Any habitat</option><template x-for="n in habitatOptions"><option :value="n" x-text="n"></option></template></select></label>
+      </div>
+
+      <div x-show="activeFilters.length" class="uf-active-filters">
+        <template x-for="f in activeFilters" :key="f.key"><button type="button" @click="removeFilter(f.key)"><span x-text="f.label"></span><b>×</b></button></template>
+      </div>
+      <div class="uf-result-summary">
+        <span><strong x-text="filteredPlants.length"></strong> <span x-text="filteredPlants.length===1 ? 'organism' : 'organisms'"></span> found</span>
+        <button type="button" x-show="activeFilters.length" @click="clearFilters()">Reset filters</button>
+      </div>
+    </section>
+
+    <div x-show="!filteredPlants.length" class="uf-empty-state">
+      <i class="fas fa-leaf"></i><h3>No organisms found.</h3><p>Remove a filter or broaden your search. Urban Forager will not invent a match.</p>
+    </div>
+
+    <section class="uf-plant-grid">
+      <template x-for="plant in filteredPlants" :key="plant.id">
+        <button type="button" @click="openPlant(plant)" class="uf-plant-card">
+          <div class="uf-plant-photo">
+            <img x-show="plant.images && plant.images[0]" :src="plant.images && plant.images[0]" :alt="plant.commonName" loading="lazy" @error="handlePlantImageError(plant,$event)">
+            <div x-show="!(plant.images && plant.images[0])" class="uf-organism-fallback uf-photo-loading" aria-hidden="true"><small>Loading species photo…</small></div>
+            <span class="uf-plant-season" x-text="plant.season || 'Season varies'"></span>
+          </div>
+          <div class="uf-plant-copy">
+            <div class="uf-plant-title"><div><h3 x-text="plant.commonName"></h3><p x-text="plant.scientificName"></p></div><span>↗</span></div>
+            <p class="uf-plant-description" x-text="plant.description"></p>
+            <div class="uf-plant-tags"><template x-for="tag in (plant.tags||[]).slice(0,4)"><span x-text="tag"></span></template></div>
+          </div>
+        </button>
+      </template>
+    </section>
+  </main>
+
+  <main x-show="screen==='details' && currentPlant" class="uf-dossier-view">
+    <div class="uf-dossier-toolbar"><button @click="parseRoute()?.type==='dossier' ? history.back() : navigate('library')" class="uf-back-link"><i class="fas fa-arrow-left"></i><span>Results</span></button><div class="flex gap-2"><button @click="toggleFavorite(currentPlant.id)" class="px-3 py-2 border rounded-lg bg-white" :aria-label="isFavorite(currentPlant.id) ? 'Remove favorite' : 'Add favorite'"><i :class="isFavorite(currentPlant.id) ? 'fas fa-bookmark text-emerald-700' : 'far fa-bookmark'"></i></button><button @click="goBack()" :disabled="!canBack()" class="px-3 py-2 border rounded-lg disabled:opacity-30" aria-label="Previous viewed plant">←</button><button @click="goForward()" :disabled="!canForward()" class="px-3 py-2 border rounded-lg disabled:opacity-30" aria-label="Next viewed plant">→</button></div></div>
+    <article class="uf-dossier">
+      <div class="relative uf-dossier-hero"><img x-show="currentPlant.images && currentPlant.images[0]" :src="currentPlant.images && currentPlant.images[0]" class="w-full h-64 md:h-96 object-cover" :alt="currentPlant.commonName" @error="handlePlantImageError(currentPlant,$event)"><div x-show="!(currentPlant.images && currentPlant.images[0])" class="uf-detail-fallback uf-photo-loading" aria-hidden="true"><small>Loading species photo…</small></div><div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-6 pt-16 text-white"><h2 class="text-4xl md:text-5xl font-bold" x-text="currentPlant.commonName"></h2><p class="italic text-lg" x-text="currentPlant.scientificName"></p></div></div>
+      <div class="uf-dossier-body">
+        <div class="uf-dossier-meta"><span><strong>Type:</strong> <span x-text="currentPlant.organismType || 'Plant'"></span></span><span><strong>Family:</strong> <span x-text="currentPlant.family"></span></span><span><strong>Season:</strong> <span x-text="currentPlant.season"></span></span><span><strong>Habitat:</strong> <span x-text="currentPlant.habitat"></span></span><span><strong>Regional status:</strong> <span x-text="currentPlant.regionalStatus || 'Not recorded'"></span></span><span><strong>ID level:</strong> <span x-text="currentPlant.difficulty || 'Not recorded'"></span></span></div>
+        <p class="text-gray-700 text-lg" x-text="currentPlant.description"></p>
+
+        <section class="uf-safety-callout"><h3>⚠️ Identify before use</h3><p>Never eat or medicinally use a wild organism from an app identification alone. Confirm multiple diagnostic features, habitat, season, and species-level characters, then rule out dangerous look-alikes.</p><div class="mt-4"><h4 class="font-bold">Look-alikes / distinguishing notes</h4><p x-text="currentPlant.lookAlikes || 'No look-alike notes currently recorded. Absence of a note does not mean no dangerous look-alikes exist.'"></p></div><div class="mt-3" x-show="(currentPlant.dangerousLookAlikes||[]).length"><h4 class="font-bold">Dangerous look-alikes / critical distinctions</h4><ul class="list-disc pl-5 mt-2 space-y-1"><template x-for="v in currentPlant.dangerousLookAlikes||[]"><li x-text="v"></li></template></ul></div><div class="mt-3"><h4 class="font-bold">Recorded safety notes</h4><p x-text="currentPlant.safetyNotes || 'No safety notes currently recorded. This is not evidence that the organism is risk-free.'"></p></div></section>
+
+        <nav class="uf-dossier-tabs" aria-label="Dossier sections"><template x-for="tab in [{id:'identification',t:'Identification'},{id:'food',t:'Food'},{id:'nutrition',t:'Nutrition'},{id:'medicine',t:'Medicine'},{id:'indigenous',t:'Indigenous'},{id:'modern',t:'Modern'},{id:'utility',t:'Utility'},{id:'stewardship',t:'Stewardship'},{id:'history',t:'History'},{id:'sources',t:'Sources'}]"><button type="button" @click="scrollToSection(tab.id)" x-text="tab.t"></button></template></nav>
+
+        <div class="uf-dossier-sections">
+          <div class="uf-evidence-status"><i class="fas fa-circle-info"></i><div><p class="uf-note-title">Evidence status</p><p x-text="(currentPlant.evidenceStatus && currentPlant.evidenceStatus.summary) || ((currentPlant.tags||[]).includes('Audited') ? 'Reviewed dossier. Follow the source list for scope, limitations, and section support.' : 'Verification remains incomplete for this record.')"></p></div></div>
+
+          <section id="identification" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🌿 Identification</h3><div class="grid md:grid-cols-2 gap-5"><div><h4 class="font-bold mb-2">Diagnostic features</h4><ul class="list-disc pl-5 space-y-1"><template x-for="v in currentPlant.identifyingFeatures||[]"><li x-text="v"></li></template></ul><p x-show="!(currentPlant.identifyingFeatures||[]).length" class="text-gray-500">No diagnostic features recorded yet.</p></div><div><h4 class="font-bold mb-2">Field context</h4><dl class="space-y-2"><div><dt class="font-semibold">Scientific name</dt><dd x-text="currentPlant.scientificName || 'Not recorded'"></dd></div><div x-show="(currentPlant.synonyms||[]).length"><dt class="font-semibold">Synonyms / older names</dt><dd x-text="(currentPlant.synonyms||[]).join(', ')"></dd></div><div><dt class="font-semibold">Season</dt><dd x-text="currentPlant.season || 'Not recorded'"></dd></div><div><dt class="font-semibold">Habitat</dt><dd x-text="currentPlant.habitat || 'Not recorded'"></dd></div><div><dt class="font-semibold">Family</dt><dd x-text="currentPlant.family || 'Not recorded'"></dd></div><div><dt class="font-semibold">Regional status</dt><dd x-text="currentPlant.regionalStatus || 'Not recorded'"></dd></div></dl></div></div></section>
+
+          <section id="food" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🍽️ Food & harvesting</h3><p><strong>Recorded edible parts:</strong> <span x-text="(currentPlant.edibleParts||[]).join(', ') || 'None recorded'"></span></p><p class="mt-2" x-text="currentPlant.harvestingNotes || 'No harvesting notes recorded.'"></p><div class="grid md:grid-cols-2 gap-5 mt-4"><div><h4 class="font-bold">Culinary uses</h4><ul class="list-disc pl-5 mt-2"><template x-for="v in currentPlant.culinaryUses||[]"><li x-text="v"></li></template></ul></div><div><h4 class="font-bold">Preparation methods</h4><ul class="list-disc pl-5 mt-2"><template x-for="v in currentPlant.preparationMethods||[]"><li x-text="v"></li></template></ul></div></div><div class="mt-5"><h4 class="font-bold">External recipes & cooking guides</h4><template x-if="(currentPlant.recipeLinks||[]).length"><div class="mt-2 space-y-2"><template x-for="r in currentPlant.recipeLinks"><a :href="r.url" target="_blank" rel="noopener noreferrer" class="block text-emerald-700 underline" x-text="r.title + ' ↗'"></a></template></div></template><template x-if="!(currentPlant.recipeLinks||[]).length"><p class="text-gray-500 mt-2">No external recipe resource has been verified for this dossier yet.</p></template></div></section>
+
+          <section id="nutrition" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🥗 Nutrition</h3><div class="uf-data-note uf-data-note-blue"><strong>Data note:</strong> Urban Forager now avoids unsourced “high/good/moderate” nutrient labels. Quantitative values are shown only when an appropriate composition source has been reviewed; an empty table means no standardized value was added, not that the nutrient is absent.</div><p x-text="currentPlant.nutritionalSummary || 'No quantitative nutrition summary has been verified for this organism/part.'"></p><div x-show="(currentPlant.nutrients||[]).length" class="overflow-x-auto mt-4"><table class="w-full text-left border-collapse"><thead><tr class="border-b"><th class="py-2 pr-4">Nutrient / constituent</th><th class="py-2">Verified value or source-qualified note</th></tr></thead><tbody><template x-for="n in currentPlant.nutrients||[]"><tr class="border-b border-gray-100"><td class="py-2 pr-4 font-medium" x-text="n.name"></td><td class="py-2" x-text="n.amount"></td></tr></template></tbody></table></div></section>
+
+          <section id="medicine" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🩺 Medicinal & traditional-use records</h3><div class="uf-data-note uf-data-note-amber"><strong>Evidence warning:</strong> Traditional use, pharmacology, preclinical research, and clinical evidence are not interchangeable. This section states the evidence level where the reviewed source allows it; modern evidence is summarized separately.</div><ul class="list-disc pl-5 space-y-1"><template x-for="v in currentPlant.medicinalUses||[]"><li x-text="v"></li></template></ul><p x-show="!(currentPlant.medicinalUses||[]).length" class="text-gray-500">No general medicinal claim is presented for this dossier. Nation-specific historical uses may still appear in the Indigenous section.</p></section>
+
+          <section id="indigenous" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🪶 Indigenous uses</h3><template x-if="(currentPlant.indigenousUses||[]).length"><div class="space-y-3"><template x-for="r in currentPlant.indigenousUses"><div class="border rounded-xl p-4"><p class="font-bold" x-text="r.nation || r.people || 'Community not recorded'"></p><p x-text="r.use || r.description"></p><p class="text-sm text-gray-500 mt-1" x-text="r.source || 'Source pending'"></p></div></template></div></template><template x-if="!(currentPlant.indigenousUses||[]).length"><p class="text-gray-500">No sourced Indigenous-use record has been added yet. Future entries must name the specific nation/community and cite the documentation.</p></template></section>
+
+          <section id="modern" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🔬 Modern uses & research</h3><template x-if="(currentPlant.modernUses||[]).length"><ul class="list-disc pl-5"><template x-for="v in currentPlant.modernUses"><li x-text="typeof v==='string'?v:(v.use||v.description)"></li></template></ul></template><template x-if="!(currentPlant.modernUses||[]).length"><p class="text-gray-500">No separately verified modern-use/research record has been added. That absence is not evidence of benefit or lack of benefit.</p></template></section>
+
+          <section id="utility" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🧰 Practical utility</h3><template x-if="(currentPlant.utilityUses||[]).length"><ul class="list-disc pl-5 space-y-1"><template x-for="v in currentPlant.utilityUses||[]"><li x-text="v"></li></template></ul></template><template x-if="!(currentPlant.utilityUses||[]).length"><p class="text-gray-500">No separately sourced material/utility use has been added for this dossier.</p></template></section>
+
+          <section id="stewardship" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🌎 Stewardship & legal context</h3><div><h4 class="font-bold">Stewardship</h4><p class="mt-1" x-text="currentPlant.stewardshipNotes || 'Harvest lightly, protect habitat and wildlife, and follow land-manager rules.'"></p></div><div class="mt-4"><h4 class="font-bold">Legal / access note</h4><p class="mt-1" x-text="currentPlant.legalNotes || 'Collection rules vary by site and land manager; permission is required where applicable.'"></p></div></section>
+
+          <section id="history" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">📜 History</h3><p x-text="currentPlant.history || 'Historical record not yet added or verified.'" class="text-gray-600"></p></section>
+
+          
+<section id="sources" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">📚 Sources & verification</h3><template x-if="(currentPlant.sources||[]).length"><ol class="list-decimal pl-5 space-y-3"><template x-for="src in currentPlant.sources"><li><div><span class="font-semibold" x-text="typeof src==='string'?src:(src.title||src.citation||'Source')"></span><a x-show="src && typeof src==='object' && src.url" :href="src.url" target="_blank" rel="noopener noreferrer" class="ml-2 text-emerald-700 underline">Open source ↗</a></div><p x-show="src && typeof src==='object' && (src.sections||[]).length" class="text-sm text-gray-500 mt-1"><strong>Supports:</strong> <span x-text="(src.sections||[]).join(', ')"></span></p><p x-show="src && typeof src==='object' && src.note" class="text-sm text-gray-500 mt-1" x-text="src.note"></p></li></template></ol></template><template x-if="!(currentPlant.sources||[]).length"><div class="uf-data-note"><p class="uf-note-title">Verification pending</p><p>This record does not currently contain a claim-level source list. Treat its information as provisional until sources are added and reviewed.</p></div></template></section>
+        </div>
+      </div>
+    </article>
+  </main>
+  <main x-show="screen==='favorites' || screen==='recent'">
+    <div class="flex items-center gap-3 mb-5"><button @click="navigate('home')" class="uf-back-link"><i class="fas fa-arrow-left"></i><span>Home</span></button><div><h2 class="text-3xl font-bold" x-text="screen==='favorites' ? 'Favorites' : 'Recently viewed'"></h2><p class="text-gray-500" x-text="screen==='favorites' ? 'Dossiers saved on this device.' : 'Dossiers you recently opened on this device.'"></p></div></div>
+    <div x-show="(screen==='favorites' ? favoritePlants : recentPlants).length===0" class="bg-white border rounded-2xl p-6 text-gray-600">Nothing here yet. Open dossiers and save favorites as you explore.</div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"><template x-for="plant in (screen==='favorites' ? favoritePlants : recentPlants)" :key="plant.id"><button @click="openPlant(plant)" class="bg-white rounded-2xl border overflow-hidden text-left shadow-sm hover:shadow-lg"><img :src="plant.images && plant.images[0]" class="w-full h-44 object-cover" :alt="plant.commonName" @error="handlePlantImageError(plant,$event)"><div class="p-4"><h3 class="text-xl font-bold" x-text="plant.commonName"></h3><p class="italic text-gray-500" x-text="plant.scientificName"></p></div></button></template></div>
+  </main>
+
+  <main x-show="screen==='resources'" class="uf-page uf-resources-page">
+    <button @click="navigate('home')" class="uf-back-link"><i class="fas fa-arrow-left"></i><span>Home</span></button>
+    <header class="uf-resource-hero"><span class="uf-eyebrow">RESOURCES / KEEP LEARNING</span><h2>Resources Library</h2><p>The app should never be a dead end. Watch, read, study and cross-check with reputable resources that take you deeper into plants, ethnobotany, nutrition, medicine and responsible foraging.</p><strong x-text="resourceVisibleCount + ' RESOURCES'"></strong></header>
+    <section class="uf-resource-note"><i class="fas fa-compass"></i><p><strong>Use more than one source.</strong> Field identification, traditional knowledge, nutrition and medical evidence answer different questions. No single database replaces careful identification or qualified local expertise.</p></section>
+    <section class="uf-resource-tools">
+      <label class="uf-resource-search"><i class="fas fa-magnifying-glass"></i><input x-model="resourceQuery" @input="applyResourceFilters()" placeholder="Search resources, topics or organizations…" aria-label="Search resources"></label>
+      <div class="uf-resource-filters"><template x-for="cat in resourceCategories" :key="cat"><button type="button" @click="selectResourceCategory(cat); applyResourceFilters()" :class="{'active':resourceCategory===cat}" x-text="cat"></button></template></div>
+    </section>
+    <section class="uf-resource-grid" data-resource-grid>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="plant medicine for beginners linda black elk an introductory field lesson on edible and medicinal plants of the northern plains. plant medicine ethnobotany video">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(0)" aria-label="Watch Plant Medicine for Beginners">
+<img src="https://img.youtube.com/vi/pVqcSsyXDw4/hqdefault.jpg" alt="Plant Medicine for Beginners video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>Plant Medicine for Beginners</h3><p class="uf-resource-source">Linda Black Elk</p><p>An introductory field lesson on edible and medicinal plants of the Northern Plains.</p><div class="uf-resource-tags"><span>plant medicine</span><span>ethnobotany</span><span>video</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(0)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="10+ medicines in one city park linda black elk an urban plant walk focused on common food and medicine plants and safer foraging. urban foraging medicine identification">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(1)" aria-label="Watch 10+ Medicines in One City Park">
+<img src="https://img.youtube.com/vi/x20Z7pPMBEg/hqdefault.jpg" alt="10+ Medicines in One City Park video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>10+ Medicines in One City Park</h3><p class="uf-resource-source">Linda Black Elk</p><p>An urban plant walk focused on common food and medicine plants and safer foraging.</p><div class="uf-resource-tags"><span>urban foraging</span><span>medicine</span><span>identification</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(1)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="learn to forage with sam thayer samuel thayer / robin greenfield a practical field walk identifying more than twenty wild edible plants. wild edibles field skills identification">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(2)" aria-label="Watch Learn to Forage with Sam Thayer">
+<img src="https://img.youtube.com/vi/j-wscPmoS2M/hqdefault.jpg" alt="Learn to Forage with Sam Thayer video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>Learn to Forage with Sam Thayer</h3><p class="uf-resource-source">Samuel Thayer / Robin Greenfield</p><p>A practical field walk identifying more than twenty wild edible plants.</p><div class="uf-resource-tags"><span>wild edibles</span><span>field skills</span><span>identification</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(2)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="foraging the most inconspicuous edible wildflower learn your land / adam haritan a focused wild-edible field lesson from learn your land. wild edibles identification field skills">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(3)" aria-label="Watch Foraging the Most Inconspicuous Edible Wildflower">
+<img src="https://img.youtube.com/vi/9NdqY8faQTU/hqdefault.jpg" alt="Foraging the Most Inconspicuous Edible Wildflower video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>Foraging the Most Inconspicuous Edible Wildflower</h3><p class="uf-resource-source">Learn Your Land / Adam Haritan</p><p>A focused wild-edible field lesson from Learn Your Land.</p><div class="uf-resource-tags"><span>wild edibles</span><span>identification</span><span>field skills</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(3)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="foraging for 3 overlooked wild edible fruits learn your land / adam haritan a field lesson on three overlooked edible fruits and the plants that produce them. wild edibles fruit identification">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(4)" aria-label="Watch Foraging for 3 Overlooked Wild Edible Fruits">
+<img src="https://img.youtube.com/vi/lhAUIYmO6ko/hqdefault.jpg" alt="Foraging for 3 Overlooked Wild Edible Fruits video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>Foraging for 3 Overlooked Wild Edible Fruits</h3><p class="uf-resource-source">Learn Your Land / Adam Haritan</p><p>A field lesson on three overlooked edible fruits and the plants that produce them.</p><div class="uf-resource-tags"><span>wild edibles</span><span>fruit</span><span>identification</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(4)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="10 easy plants for beginner foragers in the midwest robin greenfield a midwest field walk covering ten approachable plants plus legality, herbal medicine and reconnecting with earth. midwest illinois beginner wild food">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(5)" aria-label="Watch 10 Easy Plants for Beginner Foragers in the Midwest">
+<img src="https://img.youtube.com/vi/3YMC8CD0eT0/hqdefault.jpg" alt="10 Easy Plants for Beginner Foragers in the Midwest video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>10 Easy Plants for Beginner Foragers in the Midwest</h3><p class="uf-resource-source">Robin Greenfield</p><p>A Midwest field walk covering ten approachable plants plus legality, herbal medicine and reconnecting with Earth.</p><div class="uf-resource-tags"><span>Midwest</span><span>Illinois</span><span>beginner</span><span>wild food</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(5)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="23 easy plants for beginner foragers in california robin greenfield a long-form beginner walk through common edible and medicinal plants of urban southern california. california beginner wild food medicine">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(6)" aria-label="Watch 23 Easy Plants for Beginner Foragers in California">
+<img src="https://img.youtube.com/vi/7MQKc1drudk/hqdefault.jpg" alt="23 Easy Plants for Beginner Foragers in California video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>23 Easy Plants for Beginner Foragers in California</h3><p class="uf-resource-source">Robin Greenfield</p><p>A long-form beginner walk through common edible and medicinal plants of urban Southern California.</p><div class="uf-resource-tags"><span>California</span><span>beginner</span><span>wild food</span><span>medicine</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(6)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="foraging in florida: easy edible plants for beginner foragers robin greenfield a beginner-oriented tour of seventeen common edible plants found across florida. florida beginner wild food identification">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(7)" aria-label="Watch Foraging in Florida: Easy Edible Plants for Beginner Foragers">
+<img src="https://img.youtube.com/vi/Nul8yd_Q5yI/hqdefault.jpg" alt="Foraging in Florida: Easy Edible Plants for Beginner Foragers video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>Foraging in Florida: Easy Edible Plants for Beginner Foragers</h3><p class="uf-resource-source">Robin Greenfield</p><p>A beginner-oriented tour of seventeen common edible plants found across Florida.</p><div class="uf-resource-tags"><span>Florida</span><span>beginner</span><span>wild food</span><span>identification</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(7)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-visual" data-resource-card data-category="Watch" data-search="black forager: finding wild edible plants for meals alexis nikole nelson / cbs mornings a profile of alexis nikole nelson demonstrating urban and woodland foraging and turning wild ingredients into food. black forager urban foraging wild food alexis nikole nelson">
+<button type="button" class="uf-resource-art" onclick="window.urbanForagerOpenResourceVideo(8)" aria-label="Watch Black Forager: Finding Wild Edible Plants for Meals">
+<img src="https://img.youtube.com/vi/mwltqBr1NN0/hqdefault.jpg" alt="Black Forager: Finding Wild Edible Plants for Meals video thumbnail" loading="lazy" decoding="async"><span class="uf-resource-art-shade"></span><span class="uf-resource-play"><i class="fas fa-play"></i></span></button><div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Watch</span><b>FREE</b></div>
+<h3>Black Forager: Finding Wild Edible Plants for Meals</h3><p class="uf-resource-source">Alexis Nikole Nelson / CBS Mornings</p><p>A profile of Alexis Nikole Nelson demonstrating urban and woodland foraging and turning wild ingredients into food.</p><div class="uf-resource-tags"><span>Black Forager</span><span>urban foraging</span><span>wild food</span><span>Alexis Nikole Nelson</span></div><button type="button" onclick="window.urbanForagerOpenResourceVideo(8)" class="uf-resource-open">Watch here <span>▶</span></button></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Creators" data-search="black forager alexis nikole nelson urban foraging educator known for approachable wild-food education, cooking, history and plant knowledge. urban foraging wild food educator vegan">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Creators</span><b>FREE</b></div>
+<h3>Black Forager</h3><p class="uf-resource-source">Alexis Nikole Nelson</p><p>Urban foraging educator known for approachable wild-food education, cooking, history and plant knowledge.</p><div class="uf-resource-tags"><span>urban foraging</span><span>wild food</span><span>educator</span><span>vegan</span></div><a href="https://www.simonandschuster.com/authors/Alexis-Nikole-Nelson/191188817" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Creators" data-search="the forager&#x27;s harvest samuel thayer samuel thayer’s home for responsible foraging education and his field guides to edible wild plants. wild edibles field guides responsible harvest">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Creators</span><b>FREE</b></div>
+<h3>The Forager&#x27;s Harvest</h3><p class="uf-resource-source">Samuel Thayer</p><p>Samuel Thayer’s home for responsible foraging education and his field guides to edible wild plants.</p><div class="uf-resource-tags"><span>wild edibles</span><span>field guides</span><span>responsible harvest</span></div><a href="https://www.foragersharvest.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Creators" data-search="learn your land adam haritan plant, mushroom, tree and ecology education built around careful observation and connection to local landscapes. ecology identification mushrooms trees">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Creators</span><b>FREE</b></div>
+<h3>Learn Your Land</h3><p class="uf-resource-source">Adam Haritan</p><p>Plant, mushroom, tree and ecology education built around careful observation and connection to local landscapes.</p><div class="uf-resource-tags"><span>ecology</span><span>identification</span><span>mushrooms</span><span>trees</span></div><a href="https://learnyourland.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Creators" data-search="forager chef alan bergo extensive wild-food tutorials, plant and mushroom articles, recipes and preparation techniques from a professional chef and forager. wild food recipes plants mushrooms">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Creators</span><b>FREE</b></div>
+<h3>Forager Chef</h3><p class="uf-resource-source">Alan Bergo</p><p>Extensive wild-food tutorials, plant and mushroom articles, recipes and preparation techniques from a professional chef and forager.</p><div class="uf-resource-tags"><span>wild food</span><span>recipes</span><span>plants</span><span>mushrooms</span></div><a href="https://foragerchef.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Creators" data-search="wildman steve brill steve brill long-running educational collection covering wild plants, mushrooms, recipes, tours, books and identification resources. wild plants mushrooms education recipes">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Creators</span><b>FREE</b></div>
+<h3>Wildman Steve Brill</h3><p class="uf-resource-source">Steve Brill</p><p>Long-running educational collection covering wild plants, mushrooms, recipes, tours, books and identification resources.</p><div class="uf-resource-tags"><span>wild plants</span><span>mushrooms</span><span>education</span><span>recipes</span></div><a href="https://www.wildmanstevebrill.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Creators" data-search="foraging with robin greenfield robin greenfield a large collection of beginner guides, field walks, plant lists, videos and experiential projects centered on food, medicine and reciprocity. foraging food freedom reciprocity field skills">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Creators</span><b>FREE</b></div>
+<h3>Foraging with Robin Greenfield</h3><p class="uf-resource-source">Robin Greenfield</p><p>A large collection of beginner guides, field walks, plant lists, videos and experiential projects centered on food, medicine and reciprocity.</p><div class="uf-resource-tags"><span>foraging</span><span>food freedom</span><span>reciprocity</span><span>field skills</span></div><a href="https://www.robingreenfield.org/category/foraging/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Courses" data-search="online foraging school robin greenfield self-paced field-based video instruction covering foundations, wild greens, herbs, teas, fruits, roots, nuts, safe harvesting and sustainability. course beginner wild food sustainability">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Courses</span></div>
+<h3>Online Foraging School</h3><p class="uf-resource-source">Robin Greenfield</p><p>Self-paced field-based video instruction covering foundations, wild greens, herbs, teas, fruits, roots, nuts, safe harvesting and sustainability.</p><div class="uf-resource-tags"><span>course</span><span>beginner</span><span>wild food</span><span>sustainability</span></div><a href="https://www.robingreenfield.org/onlineforagingschool/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Courses" data-search="learn your land courses adam haritan self-paced courses in wild mushrooms, trees, ecosystems and old-growth forest ecology. course ecology trees mushrooms">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Courses</span></div>
+<h3>Learn Your Land Courses</h3><p class="uf-resource-source">Adam Haritan</p><p>Self-paced courses in wild mushrooms, trees, ecosystems and old-growth forest ecology.</p><div class="uf-resource-tags"><span>course</span><span>ecology</span><span>trees</span><span>mushrooms</span></div><a href="https://courses.learnyourland.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Courses" data-search="foraging with the wildman and violet steve brill &amp; violet brill a long-form video course pairing plant footage with identification, recipes, history, folklore and original illustrations. course wild plants identification recipes">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Courses</span></div>
+<h3>Foraging with the Wildman and Violet</h3><p class="uf-resource-source">Steve Brill &amp; Violet Brill</p><p>A long-form video course pairing plant footage with identification, recipes, history, folklore and original illustrations.</p><div class="uf-resource-tags"><span>course</span><span>wild plants</span><span>identification</span><span>recipes</span></div><a href="https://www.wildmanstevebrill.com/Store" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Books" data-search="sam thayer&#x27;s field guide to edible wild plants samuel thayer a field-focused reference to edible wild plants of eastern and central north america from a highly experienced forager and author. book field guide wild edibles north america">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Books</span></div>
+<h3>Sam Thayer&#x27;s Field Guide to Edible Wild Plants</h3><p class="uf-resource-source">Samuel Thayer</p><p>A field-focused reference to edible wild plants of eastern and central North America from a highly experienced forager and author.</p><div class="uf-resource-tags"><span>book</span><span>field guide</span><span>wild edibles</span><span>North America</span></div><a href="https://www.foragersharvest.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Books" data-search="the forager&#x27;s harvest samuel thayer a foundational wild-food book emphasizing identification, harvest, preparation and firsthand experience. book wild edibles harvest preparation">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Books</span></div>
+<h3>The Forager&#x27;s Harvest</h3><p class="uf-resource-source">Samuel Thayer</p><p>A foundational wild-food book emphasizing identification, harvest, preparation and firsthand experience.</p><div class="uf-resource-tags"><span>book</span><span>wild edibles</span><span>harvest</span><span>preparation</span></div><a href="https://www.foragersharvest.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Books" data-search="nature&#x27;s garden samuel thayer an in-depth companion volume on identifying, harvesting and preparing wild edible plants. book wild edibles identification">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Books</span></div>
+<h3>Nature&#x27;s Garden</h3><p class="uf-resource-source">Samuel Thayer</p><p>An in-depth companion volume on identifying, harvesting and preparing wild edible plants.</p><div class="uf-resource-tags"><span>book</span><span>wild edibles</span><span>identification</span></div><a href="https://www.foragersharvest.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Books" data-search="the forager chef&#x27;s book of flora alan bergo a culinary deep dive into cooking with wild and cultivated plants, herbs, spices, nuts and starches. book wild food cooking plants">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Books</span></div>
+<h3>The Forager Chef&#x27;s Book of Flora</h3><p class="uf-resource-source">Alan Bergo</p><p>A culinary deep dive into cooking with wild and cultivated plants, herbs, spices, nuts and starches.</p><div class="uf-resource-tags"><span>book</span><span>wild food</span><span>cooking</span><span>plants</span></div><a href="https://foragerchef.com/the-forager-chefs-book-of-flora-2/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Books" data-search="food freedom robin greenfield a freely accessible book about a year of growing and foraging food, with practical actions and extensive references for deeper study. book food freedom foraging self-reliance">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Books</span><b>FREE</b></div>
+<h3>Food Freedom</h3><p class="uf-resource-source">Robin Greenfield</p><p>A freely accessible book about a year of growing and foraging food, with practical actions and extensive references for deeper study.</p><div class="uf-resource-tags"><span>book</span><span>food freedom</span><span>foraging</span><span>self-reliance</span></div><a href="https://www.robingreenfield.org/wp-content/uploads/2025/08/Food-Freedom-by-Robin-Greenfield-Second-Edition.pdf" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Books" data-search="happy snacking, don&#x27;t die! alexis nikole nelson black forager’s guide combining foraging with vegan recipes and approachable wild-food education. book urban foraging vegan recipes">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Books</span></div>
+<h3>Happy Snacking, Don&#x27;t Die!</h3><p class="uf-resource-source">Alexis Nikole Nelson</p><p>Black Forager’s guide combining foraging with vegan recipes and approachable wild-food education.</p><div class="uf-resource-tags"><span>book</span><span>urban foraging</span><span>vegan</span><span>recipes</span></div><a href="https://www.simonandschuster.com/authors/Alexis-Nikole-Nelson/191188817" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Ethnobotany" data-search="best practices for foraging and harvesting indigenous and wild plants linda black elk &amp; lisa iron cloud / usda usda-supported guidance centered on sustainable harvest, asking permission, reciprocity and positive relationships with plant nations. indigenous knowledge reciprocity harvest ethics usda">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Ethnobotany</span><b>FREE</b></div>
+<h3>Best Practices for Foraging and Harvesting Indigenous and Wild Plants</h3><p class="uf-resource-source">Linda Black Elk &amp; Lisa Iron Cloud / USDA</p><p>USDA-supported guidance centered on sustainable harvest, asking permission, reciprocity and positive relationships with Plant Nations.</p><div class="uf-resource-tags"><span>Indigenous knowledge</span><span>reciprocity</span><span>harvest ethics</span><span>USDA</span></div><a href="https://www.usda.gov/sites/default/files/documents/foraging-harvesting-indigenous-wild-plants-best-practices.pdf" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Ethnobotany" data-search="tribal food sovereignty progress update usda office of tribal relations regional indigenous and wild-plant materials, including midwest resources on dandelion, nettles, purslane and wild rose. indigenous food sovereignty midwest wild plants usda">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Ethnobotany</span><b>FREE</b></div>
+<h3>Tribal Food Sovereignty Progress Update</h3><p class="uf-resource-source">USDA Office of Tribal Relations</p><p>Regional Indigenous and wild-plant materials, including Midwest resources on dandelion, nettles, purslane and wild rose.</p><div class="uf-resource-tags"><span>Indigenous food sovereignty</span><span>Midwest</span><span>wild plants</span><span>USDA</span></div><a href="https://www.usda.gov/sites/default/files/documents/food-sovereignty-usda-progress-update-spring-2024.pdf" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Ethnobotany" data-search="native american ethnobotany daniel e. moerman / university of michigan–dearborn a major historical ethnobotanical reference connecting plants with documented food, medicine, dye, fiber and other uses by specific native peoples. indigenous knowledge ethnobotany historical sources">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Ethnobotany</span><b>FREE</b></div>
+<h3>Native American Ethnobotany</h3><p class="uf-resource-source">Daniel E. Moerman / University of Michigan–Dearborn</p><p>A major historical ethnobotanical reference connecting plants with documented food, medicine, dye, fiber and other uses by specific Native peoples.</p><div class="uf-resource-tags"><span>Indigenous knowledge</span><span>ethnobotany</span><span>historical sources</span></div><a href="https://www-personal.umd.umich.edu/~dmoerman/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Ethnobotany" data-search="historical plant use collections university of michigan museum of anthropological archaeology online collections related to economic plants and historical traditional plant use, useful for tracing claims back to documented sources. ethnobotany history plant use collections">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Ethnobotany</span><b>FREE</b></div>
+<h3>Historical Plant Use Collections</h3><p class="uf-resource-source">University of Michigan Museum of Anthropological Archaeology</p><p>Online collections related to economic plants and historical traditional plant use, useful for tracing claims back to documented sources.</p><div class="uf-resource-tags"><span>ethnobotany</span><span>history</span><span>plant use</span><span>collections</span></div><a href="https://lsa.umich.edu/ummaa/collections/online-collections.html" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Identification" data-search="plants database usda natural resources conservation service standardized u.s. plant names, taxonomy, distribution, characteristics, images, checklists and references. taxonomy distribution identification usda">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Identification</span><b>FREE</b></div>
+<h3>PLANTS Database</h3><p class="uf-resource-source">USDA Natural Resources Conservation Service</p><p>Standardized U.S. plant names, taxonomy, distribution, characteristics, images, checklists and references.</p><div class="uf-resource-tags"><span>taxonomy</span><span>distribution</span><span>identification</span><span>USDA</span></div><a href="https://plants.sc.egov.usda.gov/home/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Identification" data-search="inaturalist inaturalist community identification and biodiversity observations. useful for learning and comparison, but its own guidance says not to rely solely on computer-vision suggestions. identification community science observations ai caution">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Identification</span><b>FREE</b></div>
+<h3>iNaturalist</h3><p class="uf-resource-source">iNaturalist</p><p>Community identification and biodiversity observations. Useful for learning and comparison, but its own guidance says not to rely solely on computer-vision suggestions.</p><div class="uf-resource-tags"><span>identification</span><span>community science</span><span>observations</span><span>AI caution</span></div><a href="https://www.inaturalist.org/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Identification" data-search="north american plant atlas bonap county, state/province and continental plant-distribution maps for checking whether a species is documented in an area. distribution range maps botany north america">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Identification</span><b>FREE</b></div>
+<h3>North American Plant Atlas</h3><p class="uf-resource-source">BONAP</p><p>County, state/province and continental plant-distribution maps for checking whether a species is documented in an area.</p><div class="uf-resource-tags"><span>distribution</span><span>range maps</span><span>botany</span><span>North America</span></div><a href="https://www.bonap.net/NAPA/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Identification" data-search="wild edibles forage app steve brill, becky lerner &amp; christopher nyerges mobile reference covering hundreds of edible and medicinal plants plus look-alikes, photographs, illustrations and recipes. app identification look-alikes wild edibles">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Identification</span></div>
+<h3>Wild Edibles Forage App</h3><p class="uf-resource-source">Steve Brill, Becky Lerner &amp; Christopher Nyerges</p><p>Mobile reference covering hundreds of edible and medicinal plants plus look-alikes, photographs, illustrations and recipes.</p><div class="uf-resource-tags"><span>app</span><span>identification</span><span>look-alikes</span><span>wild edibles</span></div><a href="https://www.wildmanstevebrill.com/mobile-app" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Nutrition" data-search="fooddata central usda agricultural research service usda food-composition database for checking quantitative nutrient data when a wild food is represented. nutrition food composition usda">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Nutrition</span><b>FREE</b></div>
+<h3>FoodData Central</h3><p class="uf-resource-source">USDA Agricultural Research Service</p><p>USDA food-composition database for checking quantitative nutrient data when a wild food is represented.</p><div class="uf-resource-tags"><span>nutrition</span><span>food composition</span><span>USDA</span></div><a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Medicine" data-search="herbs at a glance national center for complementary and integrative health evidence-oriented botanical fact sheets covering research findings, side effects, cautions and references. medicine safety research nccih">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Medicine</span><b>FREE</b></div>
+<h3>Herbs at a Glance</h3><p class="uf-resource-source">National Center for Complementary and Integrative Health</p><p>Evidence-oriented botanical fact sheets covering research findings, side effects, cautions and references.</p><div class="uf-resource-tags"><span>medicine</span><span>safety</span><span>research</span><span>NCCIH</span></div><a href="https://www.nccih.nih.gov/health/herbsataglance" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Medicine" data-search="herb–drug interactions national center for complementary and integrative health a clinical-safety starting point for known and potential interactions between herbs, supplements and medicines. medicine interactions safety nccih">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Medicine</span><b>FREE</b></div>
+<h3>Herb–Drug Interactions</h3><p class="uf-resource-source">National Center for Complementary and Integrative Health</p><p>A clinical-safety starting point for known and potential interactions between herbs, supplements and medicines.</p><div class="uf-resource-tags"><span>medicine</span><span>interactions</span><span>safety</span><span>NCCIH</span></div><a href="https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Maps &amp; Tools" data-search="falling fruit falling fruit a collaborative map of urban harvest locations and public food resources. some locations are explicitly unverified, so verify identity, access and edibility yourself. map urban foraging fruit trees community data">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Maps &amp; Tools</span><b>FREE</b></div>
+<h3>Falling Fruit</h3><p class="uf-resource-source">Falling Fruit</p><p>A collaborative map of urban harvest locations and public food resources. Some locations are explicitly unverified, so verify identity, access and edibility yourself.</p><div class="uf-resource-tags"><span>map</span><span>urban foraging</span><span>fruit trees</span><span>community data</span></div><a href="https://fallingfruit.org/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Maps &amp; Tools" data-search="find a forager robin greenfield a directory intended to help learners find experienced foragers and classes in their region. classes local educators field learning directory">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Maps &amp; Tools</span><b>FREE</b></div>
+<h3>Find a Forager</h3><p class="uf-resource-source">Robin Greenfield</p><p>A directory intended to help learners find experienced foragers and classes in their region.</p><div class="uf-resource-tags"><span>classes</span><span>local educators</span><span>field learning</span><span>directory</span></div><a href="https://www.robingreenfield.org/findaforager/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Reference" data-search="robin greenfield start here robin greenfield a directory into hundreds of articles, videos, interviews, books and curated educational resources on foraging and earth-connected living. resource directory videos articles books">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Reference</span><b>FREE</b></div>
+<h3>Robin Greenfield Start Here</h3><p class="uf-resource-source">Robin Greenfield</p><p>A directory into hundreds of articles, videos, interviews, books and curated educational resources on foraging and Earth-connected living.</p><div class="uf-resource-tags"><span>resource directory</span><span>videos</span><span>articles</span><span>books</span></div><a href="https://www.robingreenfield.org/starthere/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Reference" data-search="forager chef plant tutorials alan bergo detailed practical articles on wild plants with identification context, harvest timing, preparation and cooking techniques. plant tutorials cooking wild food">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Reference</span><b>FREE</b></div>
+<h3>Forager Chef Plant Tutorials</h3><p class="uf-resource-source">Alan Bergo</p><p>Detailed practical articles on wild plants with identification context, harvest timing, preparation and cooking techniques.</p><div class="uf-resource-tags"><span>plant tutorials</span><span>cooking</span><span>wild food</span></div><a href="https://foragerchef.com/" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+<article class="uf-resource-card uf-resource-card-text" data-resource-card data-category="Reference" data-search="wildman knowledge base steve brill reference material for common edible and medicinal wild plants, mushrooms and recipes. knowledge base plants mushrooms recipes">
+<div class="uf-resource-card-body"><div class="uf-resource-meta"><span>Reference</span><b>FREE</b></div>
+<h3>Wildman Knowledge Base</h3><p class="uf-resource-source">Steve Brill</p><p>Reference material for common edible and medicinal wild plants, mushrooms and recipes.</p><div class="uf-resource-tags"><span>knowledge base</span><span>plants</span><span>mushrooms</span><span>recipes</span></div><a href="https://www.wildmanstevebrill.com/foraging" target="_blank" rel="noopener" class="uf-resource-open">Open resource <span>↗</span></a></div></article>
+</section>
+    <div data-resource-empty class="uf-empty-state" style="display:none" class="uf-empty-state"><i class="fas fa-leaf"></i><h3>No resources found.</h3><p>Try another search or category.</p></div>
+  </main>
+
+  <main x-show="screen==='about'" class="uf-page uf-about-page">
+    <button @click="navigate('home')" class="uf-back-link"><i class="fas fa-arrow-left"></i><span>Home</span></button>
+    <header class="uf-page-intro"><span class="uf-eyebrow">SAFETY / STEWARDSHIP / EVIDENCE</span><h2>About Urban Forager</h2><p>A free, mobile-first field reference for learning wild plants and fungi through identification, food, nutrition, documented traditional knowledge, history, modern research and safety.</p></header>
+    <div class="uf-about-stack">
+      <section class="uf-about-card uf-about-danger"><span class="uf-card-kicker">START HERE</span><h3><i class="fas fa-triangle-exclamation"></i> Foraging safety</h3><p>Never eat, drink, or medicinally use a wild plant or fungus based solely on this app. Positive identification requires multiple diagnostic features, and edible organisms can have dangerous or deadly look-alikes.</p><p>Every dossier now follows the same evidence rules. Traditional or historical use does not establish clinical effectiveness, missing nutrition data is not guessed, and herbs can interact with medicines.</p></section>
+      <section class="uf-about-card uf-about-steward"><span class="uf-card-kicker">RECIPROCITY</span><h3><i class="fas fa-seedling"></i> Stewardship, not extraction</h3><p>Harvest only where permitted. Take only what you need. Protect populations and habitat, leave enough for wildlife and regeneration, and avoid creating waste while gathering or preparing food and medicine.</p><p>Urban Forager helps you learn what the land can provide. <strong>Zerra</strong> continues that relationship by helping reduce waste and build more sustainable everyday habits.</p><a href="https://michaelsboost.github.io/Zerra" target="_blank" rel="noopener" class="uf-text-link">Explore Zerra <span>↗</span></a></section>
+      <section class="uf-about-card uf-about-evidence"><span class="uf-card-kicker">HOW CLAIMS ARE HANDLED</span><h3><i class="fas fa-shield-halved"></i> Accuracy &amp; evidence policy</h3><p>Urban Forager applies one evidence standard across all 95 current dossiers and future additions. Claims are retained only when supported, explicitly qualified, or clearly labeled as historical/traditional documentation.</p><ul><li><strong>Identification:</strong> verify names, diagnostic features, range and look-alikes against botanical authorities and qualified field references.</li><li><strong>Nutrition:</strong> prefer quantitative food-composition data; unsupported qualitative rankings are removed rather than treated as verified.</li><li><strong>Medicine:</strong> distinguish traditional use, preclinical research, human evidence and safety.</li><li><strong>Indigenous uses:</strong> identify the specific nation/community and historical source rather than collapsing distinct peoples into a generic claim.</li><li><strong>Uncertainty:</strong> gaps or conflicting evidence are stated rather than filled in.</li></ul></section>
+      <section class="uf-about-card uf-about-resources"><span class="uf-card-kicker">KEEP LEARNING</span><h3><i class="fas fa-book-open"></i> Go beyond the app</h3><p>Urban Forager is a starting point, not the end of the trail. Use the Resources Library for videos, databases, safety references, ethnobotany collections and food-composition data.</p><button type="button" @click="navigate('resources')" class="uf-primary-action">Open Resources Library <span>→</span></button></section>
+    </div>
+  </main>
+  <footer class="uf-footer"><p>Never consume a wild plant or fungus based solely on this app. Positively identify organisms and consult qualified sources.</p></footer>
+</div>
+
+
 
     <script src="libraries/tailwind-mod.min.js"></script>
-    <script src="src/script.js"></script>
-    <script src="https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-sw.js"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(reg => {
-          reg.addEventListener('updatefound', () => {
-            const newSW = reg.installing;
-            newSW.addEventListener('statechange', () => {
-              if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-                // Notify the user and reload if they confirm
-                if (confirm('A new version is available. Reload now?')) {
-                  window.location.reload();
-                }
-              }
-            });
-          });
-        });
-
-        // Ensure immediate activation of a new service worker
-        navigator.serviceWorker.ready.then(registration => {
-          registration.active.postMessage({ type: 'SKIP_WAITING' });
-        });
-      }
-    </script>
+    <script src="dist/script.js"></script>
+    <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');</script>
   </body>
 </html>
