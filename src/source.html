@@ -31,6 +31,7 @@
       <button type="button" @click="navigate('favorites')"><i class="fas fa-bookmark"></i><span><strong>Saved Dossiers</strong><small>Your field reference list</small></span><b>→</b></button>
       <button type="button" @click="navigate('recent')"><i class="fas fa-clock-rotate-left"></i><span><strong>Recently Viewed</strong><small>Continue where you left off</small></span><b>→</b></button>
       <button type="button" @click="navigate('about')"><i class="fas fa-circle-info"></i><span><strong>Safety &amp; About</strong><small>Evidence, stewardship &amp; guidance</small></span><b>→</b></button>
+      <button type="button" @click="shareCurrentView()"><i class="fas fa-share-nodes"></i><span><strong>Share Urban Forager</strong><small x-text="screen === 'details' && currentPlant ? 'Share this dossier' : 'Share the app'"></small></span><b>↗</b></button>
     </nav>
     <div class="uf-menu-divider"></div>
     <div class="uf-menu-external">
