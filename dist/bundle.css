@@ -240,3 +240,234 @@ body{margin:0;background:radial-gradient(circle at 80% -10%,rgba(49,201,133,.08)
 .uf-organism-fallback{position:absolute;inset:0}.uf-organism-fallback span{font-size:3.2rem;filter:drop-shadow(0 8px 18px rgba(0,0,0,.3))}.uf-organism-fallback small,.uf-detail-fallback small{margin-top:.55rem;font-size:.67rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#8dcfb0}
 .uf-detail-fallback{height:16rem;min-height:16rem}.uf-detail-fallback span{font-size:5.5rem;filter:drop-shadow(0 14px 28px rgba(0,0,0,.34))}.uf-dossier-hero{overflow:hidden;background:#0b1710}.uf-dossier-hero .uf-detail-fallback+div{pointer-events:none}
 @media(min-width:768px){.uf-detail-fallback{height:24rem;min-height:24rem}.uf-detail-fallback span{font-size:7rem}}
+
+
+/* Custom print designer (on-screen controls) */
+.uf-print-modal {position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:12px;color:#f5f5f4}
+.uf-print-overlay {position:absolute;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px)}
+.uf-print-dialog {position:relative;display:flex;flex-direction:column;width:min(760px,100%);max-height:min(92dvh,940px);background:#141d17;border:1px solid #3e5647;border-radius:20px;box-shadow:0 24px 80px #000a;overflow:hidden}
+.uf-print-dialog-head {display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 22px 12px;border-bottom:1px solid #304036}
+.uf-print-dialog-head h2 {font-size:clamp(1.25rem,3.5vw,1.85rem);font-weight:800;line-height:1.25;margin:6px 0}
+.uf-print-dialog-head p,.uf-print-hint {font-size:.85rem;line-height:1.5;color:#b4c7bb}
+.uf-print-close {border:1px solid #455e4e;border-radius:50%;height:36px;min-width:36px;font-size:1.7rem;line-height:1;color:#fff;background:#26372d}
+.uf-print-dialog-body {overflow-y:auto;min-height:0;padding:12px 22px 20px}
+.uf-print-fieldset {border:0;margin:12px 0 20px;padding:0;min-width:0}
+.uf-print-fieldset legend {font-weight:800;margin-bottom:10px;font-size:1rem}
+.uf-print-scope-grid,.uf-print-layout-options {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.uf-print-scope-grid label,.uf-print-layout-options label {display:flex;gap:10px;align-items:flex-start;padding:12px;background:#1d2b21;border:1px solid #385042;border-radius:10px;cursor:pointer}
+.uf-print-unavailable {opacity:.5;cursor:not-allowed!important}
+.uf-print-scope-grid small,.uf-print-layout-options small,.uf-print-plant-list small {display:block;font-size:.76rem;line-height:1.3;color:#b4c7bb;margin-top:3px}
+.uf-print-scope-grid strong,.uf-print-layout-options strong {font-size:.85rem}
+.uf-print-modal input[type=checkbox],.uf-print-modal input[type=radio] {accent-color:#6ee7b7;width:17px;height:17px;flex:none;margin-top:2px}
+.uf-print-section-toolbar {display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.uf-print-section-toolbar div,.uf-print-selected-actions {display:flex;gap:12px;align-items:center}
+.uf-print-section-toolbar span {font-size:.76rem;color:#b4c7bb}
+.uf-print-section-toolbar button,.uf-print-selected-actions button {font-size:.83rem;text-decoration:underline;color:#86efac}
+.uf-print-sections-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.uf-print-sections-grid label {display:flex;gap:9px;align-items:center;font-size:.87rem;padding:9px;background:#1d2b21;border-radius:8px;cursor:pointer}
+.uf-print-hint {margin:10px 0}
+.uf-print-selection {background:#1a281e;padding:12px;margin:0 0 18px;border-radius:12px;border:1px solid #37543e}
+.uf-print-search-label {display:block;font-size:.83rem;font-weight:700;margin-bottom:6px}
+.uf-print-selection input[type=search] {width:100%;background:#0c160f;border:1px solid #4c6955;border-radius:8px;padding:10px;color:#fff}
+.uf-print-selected-actions {margin:9px 0;flex-wrap:wrap;font-size:.82rem}
+.uf-print-plant-list {max-height:215px;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.uf-print-plant-list label {display:flex;gap:9px;align-items:center;background:#25372a;border-radius:7px;padding:8px;cursor:pointer;font-size:.82rem}
+.uf-print-dialog-footer {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-top:1px solid #304036;background:#18251c;font-size:.84rem}
+.uf-print-dialog-footer span {color:#b4c7bb}
+.uf-print-footer-buttons {display:flex;gap:9px;align-items:center}
+.uf-print-cancel,.uf-print-submit,.uf-print-launch {border:1px solid #486451;border-radius:9px;padding:10px 14px;font-size:.86rem;font-weight:800;cursor:pointer}
+.uf-print-cancel {background:transparent;color:#e7f4e9}
+/* Clear, borderless print actions. Avoid a bright outline against the dark UI. */
+.uf-app button.uf-print-launch,.uf-app button.uf-print-submit:not(:disabled) {
+  background:#11764f!important;background-color:#11764f!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+  border:0!important;box-shadow:none!important;
+  font-weight:850!important;min-height:48px;line-height:1.3;
+  forced-color-adjust:none;color-scheme:dark;
+}
+.uf-app button.uf-print-launch:hover,.uf-app button.uf-print-submit:hover:not(:disabled) {
+  background:#15855b!important;background-color:#15855b!important;
+}
+.uf-app button.uf-print-launch i,.uf-app button.uf-print-submit i {color:inherit!important;-webkit-text-fill-color:inherit!important}
+.uf-app button.uf-print-launch:focus-visible,.uf-app button.uf-print-submit:focus-visible {outline:3px solid #fff!important;outline-offset:3px}
+.uf-print-submit:disabled {background:#283b30!important;color:#c2d0c7!important;-webkit-text-fill-color:#c2d0c7!important;border-color:#60796b!important;opacity:.78;cursor:not-allowed}
+.uf-print-error {color:#fecaca;font-size:.84rem;margin:10px 0}
+.uf-print-launch {display:inline-flex;align-items:center;gap:7px;text-align:center}
+.uf-print-button-icon {display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em;flex:none;stroke:currentColor;}
+/* Dossier toolbar uses four identical, icon-only 42px controls. */
+.uf-app .uf-dossier-toolbar>div button.uf-dossier-print-action {
+  display:grid!important;place-items:center!important;
+  width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
+  padding:0!important;border:0!important;border-radius:14px!important;
+  background:rgba(255,255,255,.055)!important;color:#dce5df!important;
+  -webkit-text-fill-color:#dce5df!important;box-shadow:none!important;line-height:1!important;
+}
+.uf-app .uf-dossier-toolbar>div button.uf-dossier-print-action:hover:not(:disabled) {
+  background:rgba(94,230,168,.12)!important;color:var(--uf-green)!important;
+  -webkit-text-fill-color:var(--uf-green)!important;
+}
+.uf-app .uf-dossier-toolbar .uf-dossier-print-action .uf-print-button-icon {
+  width:20px!important;height:20px!important;display:block!important;
+}
+.uf-print-tool-row {display:flex;justify-content:flex-end;margin:12px 0}
+#uf-print-root {display:none}
+@media(max-width:560px){.uf-print-modal {padding:0}.uf-print-dialog{max-height:100dvh;height:100dvh;border-radius:0}.uf-print-dialog-body{padding:12px 14px}.uf-print-dialog-head,.uf-print-dialog-footer{padding:14px}.uf-print-scope-grid,.uf-print-layout-options{grid-template-columns:1fr}.uf-print-scope-grid label{padding:8px 10px}.uf-print-plant-list{grid-template-columns:1fr}.uf-print-dialog-footer{flex-wrap:wrap}.uf-print-footer-buttons{width:100%;justify-content:space-between}.uf-print-footer-buttons button{flex:1}.uf-print-dialog-footer{align-items:stretch;gap:12px;padding-bottom:max(14px,env(safe-area-inset-bottom))}.uf-print-dialog-footer>div:first-child{text-align:center}.uf-print-footer-buttons .uf-print-cancel{flex:0 0 28%}.uf-print-footer-buttons .uf-print-submit{flex:1;font-size:.93rem;padding:12px 9px;min-height:52px}.uf-print-tool-row .uf-print-launch{width:100%;justify-content:center;min-height:52px;font-size:.95rem}.uf-print-sections-grid{gap:6px}}
+
+/* Printable document: isolated from the on-screen SPA and independent of its dark theme. */
+/* Printer margins on each page. Some Android print engines ignore @page margins,
+   so the printable document also includes its own horizontal safety inset. */
+@page {size:auto;margin:16mm 9mm;background:#fff}
+@media print {
+  :root,html,body {color-scheme:light!important}
+  html, body {background:#fff!important;background-color:#fff!important;color:#111!important;height:auto!important;min-height:0!important;overflow:visible!important;margin:0!important;padding:0!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  body > :not(#uf-print-root) {display:none!important}
+  #uf-print-root {display:block!important;position:static!important;visibility:visible!important;box-sizing:border-box!important;width:100%!important;margin:0!important;padding:0 10mm!important;background:#fff!important;background-color:#fff!important;color:#111!important;color-scheme:light!important;forced-color-adjust:none!important}
+  #uf-print-root * {color:#111!important;text-shadow:none!important;box-shadow:none!important;background:transparent!important}
+  .uf-paper {font:10pt/1.37 Arial,Helvetica,sans-serif;overflow:visible;overflow-wrap:anywhere}
+  .uf-paper h1,.uf-paper h2,.uf-paper h3,.uf-paper h4 {font-family:Arial,Helvetica,sans-serif;font-weight:700;line-height:1.2;break-after:avoid;page-break-after:avoid;margin:0}
+  .uf-paper-cover {padding:0 0 8pt;border-bottom:2pt solid #111;margin-bottom:9pt}
+  .uf-paper-cover h1 {font-size:16pt;margin:3pt 0 4pt}
+  .uf-paper-cover p {margin:2pt 0}
+  .uf-paper-kicker {font-size:8pt;letter-spacing:.09em;font-weight:bold}
+  .uf-paper-cover-warning,.uf-paper-warning {font-size:8.5pt;border-left:2pt solid #555;padding:3pt 7pt;margin:6pt 0}
+  .uf-paper-dossier {margin:0 0 12pt;border-top:1pt solid #777;padding-top:7pt;break-inside:auto;page-break-inside:auto}
+  .uf-paper-dossier-head {break-inside:avoid;page-break-inside:avoid;margin:0 0 4pt}
+  .uf-paper-dossier-head h2 {font-size:14pt;margin:0 0 2pt}
+  .uf-paper-dossier-head p,.uf-paper-status {margin:1pt 0;font-size:8.6pt}
+  .uf-paper-section {margin:7pt 0;break-inside:auto}
+  .uf-paper-section h3 {font-size:10.5pt;padding-bottom:2pt;margin:0 0 3pt;border-bottom:.5pt solid #aaa}
+  .uf-paper-section h4 {font-size:9.2pt;margin:4pt 0 2pt}
+  .uf-paper-section p {margin:2pt 0}
+  .uf-paper-section ul,.uf-paper-section ol {margin:2pt 0 3pt;padding-left:17pt}
+  .uf-paper-section li {margin:1pt 0;break-inside:avoid;page-break-inside:avoid}
+  .uf-paper-nutrients {border-collapse:collapse;width:100%;margin:4pt 0;font-size:8.7pt}
+  .uf-paper-nutrients th,.uf-paper-nutrients td {padding:2pt 5pt;border-bottom:.5pt solid #bbb;text-align:left;vertical-align:top}
+  .uf-paper-nutrients th:first-child {width:35%}
+  .uf-paper-note {font-size:8pt}
+  .uf-paper-indigenous-record {margin:3pt 0 6pt;padding-left:6pt;border-left:1pt solid #aaa;break-inside:avoid}
+  .uf-paper-sources {font-size:8pt}
+  .uf-paper-source-url,.uf-paper-source-note {display:block;font-size:7.8pt;overflow-wrap:anywhere}
+  .uf-paper-inline-url {font-size:7.6pt}
+  .uf-paper a {text-decoration:underline}
+  .uf-paper-last-note {font-size:8pt;border-top:.5pt solid #999;margin-top:10pt;padding-top:4pt}
+  .uf-paper-detailed {font-size:11pt;line-height:1.48}
+  .uf-paper-detailed .uf-paper-dossier {margin-bottom:20pt;padding-top:12pt}
+  .uf-paper-detailed .uf-paper-section {margin:11pt 0}
+  .uf-paper-detailed .uf-paper-section h3 {font-size:12pt}
+  .uf-paper-detailed .uf-paper-dossier-head h2 {font-size:17pt}
+}
+
+/* Evidence audit Phase 1B: transparent photo-availability disclosure. */
+.uf-photo-disclosure{background:rgba(221,165,60,.10);border-left:3px solid rgba(244,188,71,.8);border-radius:.65rem;color:#eedab0;padding:.85rem 1rem;margin:1.1rem 0;line-height:1.55;font-size:.9rem}
+.uf-photo-disclosure strong{color:#ffdea1;font-weight:800}
+@media print{.uf-photo-disclosure{display:none!important}}
+
+
+/* Phase 1E: photo research candidate links; never presented as approved ID photos. */
+.uf-photo-candidate{margin-top:.8rem;padding-top:.75rem;border-top:1px solid rgba(244,188,71,.25);font-size:.85rem}
+.uf-photo-candidate p{margin:.25rem 0;color:#edd8b7}
+.uf-photo-candidate-status{display:inline-block;margin-left:.35rem;font-size:.68rem;letter-spacing:.04em;font-weight:800;color:#fbd38d}
+.uf-photo-candidate-links{display:flex;gap:.4rem .8rem;flex-wrap:wrap;align-items:center;margin-top:.55rem}
+.uf-photo-candidate-links a{color:#fef08a;text-decoration:underline;text-underline-offset:2px;font-weight:700}
+.uf-photo-candidate-links span{color:#f3e2c9}
+@media print{.uf-photo-candidate{display:none!important}}
+
+/* Phase 2J: curated Commons photo reference gallery. No print layout changes. */
+.uf-photo-filter{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.25rem;color:#e7f0e7;font-size:.88rem;margin:.6rem 0 1rem}
+.uf-photo-filter label{display:flex;align-items:center;gap:.55rem;cursor:pointer;font-weight:750}
+.uf-photo-filter input{width:1.05rem;height:1.05rem;accent-color:#6ee7b7}
+.uf-photo-filter small{color:#b4c2b7;font-size:.8rem}
+.uf-photo-gallery{border:1px solid #2c4839;background:#142019;border-radius:1rem;padding:.85rem 1rem;margin:1rem 0}
+.uf-photo-gallery-head{display:flex;justify-content:space-between;color:#dbf5e6;font-size:.9rem}
+.uf-photo-gallery-head span{color:#a2b8a9}
+.uf-photo-thumbs{display:flex;overflow-x:auto;gap:.65rem;padding:.75rem .05rem .4rem}
+.uf-photo-thumb{border:2px solid #395746;background:#243b2c;border-radius:.55rem;overflow:hidden;width:94px;height:72px;flex:0 0 94px;padding:0;cursor:pointer}
+.uf-photo-thumb.selected{border-color:#6ee7b7;box-shadow:0 0 0 2px #183f2a}
+.uf-photo-thumb img{width:100%;height:100%;object-fit:cover}
+.uf-photo-credits{display:flex;align-items:center;gap:.2rem .55rem;flex-wrap:wrap;color:#b7d0bf;font-size:.82rem;margin-top:.55rem}
+.uf-photo-credits a{color:#86efac;text-decoration:underline;text-underline-offset:2px}
+.uf-photo-reference-warning{font-size:.78rem;color:#bdd4c4;line-height:1.45;margin-top:.55rem}
+@media print{.uf-photo-filter,.uf-photo-gallery{display:none!important}}
+
+/* Phase 2K: scientific-name-scoped online reference lookup and clear confidence labels. */
+.uf-photo-sync{display:inline-flex;gap:.3rem;align-items:center;color:#86efac;font-size:.82rem;font-weight:600}
+.uf-photo-context{font-size:.76rem;color:#afc9b7;line-height:1.45;margin:-.4rem 0 .7rem}
+.uf-photo-retry{font-size:.76rem;text-decoration:underline;color:#bbf7d0;cursor:pointer}
+.uf-photo-status,.uf-legacy-photo-status{font-size:.79rem;line-height:1.45;padding:.6rem .8rem;border-left:3px solid #d9aa48;color:#f7e3b0;background:#433617;margin:.6rem 0;border-radius:.25rem}
+.uf-legacy-photo-status{color:#6b4814;background:#fff5dc}
+@media print{.uf-photo-context,.uf-photo-status,.uf-legacy-photo-status,.uf-photo-sync,.uf-photo-retry{display:none!important}}
+
+@media screen{.uf-fungal-photo-badge{position:absolute;left:9px;top:9px;z-index:3;max-width:calc(100% - 18px);background:#7f1d1d;color:#fff;font-weight:800;font-size:10px;letter-spacing:.03em;border-radius:6px;padding:5px 7px;line-height:1.25;text-align:left;pointer-events:none}.uf-fungal-hero-notice{position:absolute;top:12px;left:12px;right:12px;z-index:5;border-radius:8px;background:rgba(127,29,29,.96);color:white;padding:9px 12px;font-size:12px;font-weight:800;line-height:1.35;letter-spacing:.01em;pointer-events:none}}
+
+/* Phase 2P: review status display */
+.uf-photo-original-link a,.uf-indigenous-citation{display:inline-block;color:#86efac;text-decoration:underline;text-underline-offset:3px;font-weight:700;margin:.55rem 0;line-height:1.5}
+.uf-indigenous-pending{border-left:3px solid #d6a85d;background:rgba(214,168,93,.08);padding:.9rem 1rem;border-radius:.5rem;line-height:1.6;color:#e7dcc7}
+
+
+/* Phase 2S — responsive, user-selected dossier display.
+   Cards / Grid / List are display choices, not fixed-column settings.
+   Changing device size or orientation reflows each mode automatically. */
+.uf-result-summary{gap:.8rem;flex-wrap:wrap}
+.uf-results-actions{display:flex;gap:.75rem;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.uf-view-switch{display:inline-flex;gap:3px;align-items:center;padding:4px;background:#15231b;border:1px solid rgba(255,255,255,.085);border-radius:15px;max-width:100%}
+.uf-view-switch-label{padding:0 .6rem 0 .5rem;color:#aabbb0;font-size:.76rem;font-weight:800}
+.uf-app .uf-view-choice{display:inline-flex;justify-content:center;align-items:center;gap:.38rem;min-width:66px;min-height:44px;padding:.55rem .65rem;background:transparent!important;border:0!important;border-radius:11px;color:#c8d5cb!important;font-size:.78rem;font-weight:800;cursor:pointer;white-space:nowrap;transition:background .15s ease,color .15s ease}
+.uf-app .uf-view-choice i{font-size:.86rem}
+.uf-app .uf-view-choice.is-active{background:#6ee7b7!important;color:#092317!important;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.uf-app .uf-view-choice:not(.is-active):hover{background:rgba(110,231,183,.11)!important;color:#fff!important}
+.uf-app .uf-view-choice:focus-visible{outline:3px solid #e3fce9!important;outline-offset:2px}
+.uf-saved-view-bar{display:flex;justify-content:flex-end;margin:.65rem 0 .1rem}
+/* Roomy: detail-oriented reference cards. */
+.uf-plant-grid.uf-view-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:1.15rem}
+/* Compact: the photo-first grid from the Health Check, readable on phones. */
+.uf-plant-grid.uf-view-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:.8rem}
+.uf-view-grid .uf-plant-card{min-width:0;border-radius:18px!important}
+.uf-view-grid .uf-plant-photo{aspect-ratio:4 / 3}
+.uf-view-grid .uf-plant-copy{padding:.72rem .75rem .8rem}
+.uf-view-grid .uf-plant-title{gap:.15rem;min-width:0}
+.uf-view-grid .uf-plant-title>div{min-width:0}
+.uf-view-grid .uf-plant-title h3{font-size:.98rem;line-height:1.24;overflow-wrap:anywhere}
+.uf-view-grid .uf-plant-title p{font-size:.7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uf-view-grid .uf-plant-title>span,.uf-view-grid .uf-plant-description,.uf-view-grid .uf-plant-tags{display:none}
+.uf-view-grid .uf-plant-season{font-size:.61rem;padding:.28rem .42rem;bottom:.45rem;left:.45rem}
+/* List: horizontal image and readable text on every screen size. */
+.uf-plant-grid.uf-view-list{grid-template-columns:minmax(0,1fr);gap:.7rem}
+.uf-view-list .uf-plant-card{display:grid;grid-template-columns:clamp(120px,22%,180px) minmax(0,1fr);min-width:0;align-items:stretch;border-radius:17px!important}
+.uf-view-list .uf-plant-photo{aspect-ratio:auto;min-height:120px;height:100%}
+.uf-view-list .uf-plant-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.uf-view-list .uf-plant-copy{min-width:0;padding:.85rem 1rem}
+.uf-view-list .uf-plant-title h3{font-size:1.05rem;line-height:1.28}
+.uf-view-list .uf-plant-title p{font-size:.79rem}
+.uf-view-list .uf-plant-description{margin-top:.42rem;-webkit-line-clamp:2;font-size:.78rem}
+.uf-view-list .uf-plant-tags{margin-top:.45rem}
+.uf-view-list .uf-plant-tags span{font-size:.63rem;padding:.25rem .45rem}
+@media (max-width:1099px){.uf-plant-grid.uf-view-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:899px){.uf-plant-grid.uf-view-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.uf-plant-grid.uf-view-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:639px){
+ .uf-plant-grid.uf-view-cards{grid-template-columns:minmax(0,1fr)}
+ .uf-plant-grid.uf-view-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.58rem}
+ .uf-view-grid .uf-plant-card{border-radius:14px!important}
+ .uf-view-grid .uf-plant-copy{padding:.65rem .58rem .75rem}
+ .uf-view-grid .uf-plant-title h3{font-size:.87rem;line-height:1.2}
+ .uf-view-grid .uf-plant-title p{font-size:.67rem}
+ .uf-view-grid .uf-plant-season{display:none}
+ .uf-view-grid .uf-fungal-photo-badge{font-size:8px;padding:3px 4px;max-width:calc(100% - 10px);top:5px;left:5px}
+ .uf-view-list .uf-plant-card{grid-template-columns:104px minmax(0,1fr)}
+ .uf-view-list .uf-plant-photo{min-height:108px}
+ .uf-view-list .uf-plant-copy{padding:.7rem .75rem}
+ .uf-view-list .uf-plant-description{-webkit-line-clamp:2;font-size:.73rem}
+ .uf-view-list .uf-plant-tags{display:none}
+ .uf-view-list .uf-plant-season{display:none}
+ .uf-view-list .uf-plant-title>span{display:none}
+ .uf-view-list .uf-plant-title h3{font-size:.92rem}
+ .uf-view-list .uf-plant-title p{font-size:.69rem}
+ .uf-view-switch-label{padding-left:.25rem;padding-right:.3rem}
+ .uf-app .uf-view-choice{min-width:58px;padding:.5rem .35rem;font-size:.72rem}
+}
+@media (max-width:390px){
+ .uf-result-summary{align-items:flex-start}
+ .uf-results-actions{width:100%;justify-content:space-between}
+ .uf-view-switch{width:100%;justify-content:space-between}
+ .uf-app .uf-view-choice{flex:1}
+}
+@media print{.uf-view-switch,.uf-saved-view-bar{display:none!important}}
