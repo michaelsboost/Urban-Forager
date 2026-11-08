@@ -28,6 +28,8 @@ A free, open-source web app that helps people explore wild and cultivated plants
 |:--|:--|:--|
 | Browse **174 dossiers** with photo references, names, habitats, and look-alikes. | Explore **nutrition, Indigenous-use histories, herbal research, and practical plant materials** with sources. | Save **Favorites**, choose **Cards / Grid / List**, and **print selected dossier sections** as a cited field reference. |
 
+**New:** [The Forager's Code](https://michaelsboost.com/Urban-Forager/#/category/forager-code) — 12 principles covering identification, access, sustainable harvesting, ecological respect, and reciprocity. Available from the main menu and linked in species dossiers.
+
 **At a glance:** 343 photo references · 111 nutrition profiles · 1,117 nutrient measurements · 82 Indigenous-use/history records · 45 learning resources.
 
 <details>
@@ -154,6 +156,12 @@ When printing, you can choose **All** sections or customize: Identification, Saf
 
 </details>
 
+## Printable reference grids
+
+The in-app **Print / Save as PDF** dialog now defaults to a **two-column × four-row field grid** (8 summary cards per US Letter sheet), matching the supplied complete and field examples. It can print the full 174-dossier library (22 pages), the first 95 field dossiers (12 pages), search results, favorites or hand-picked records. The grid summarizes edible parts, six source-reported nutrient quantities where available, medicinal/traditional-use context, Indigenous history, and safety cautions. The full Compact and Detailed dossier modes still retain complete citations and configurable research sections.
+
+For convenience, ready-to-print reference snapshots are included under [`printables/`](printables/). These examples are static; printing from the app reflects the current dossier data. For best results print US Letter / portrait / 100% and turn off browser header/footer overlays.
+
 ## Safety & research integrity
 
 - **Field identification:** Confirm multiple diagnostic features, habitat, range, season and dangerous look-alikes with independent expert-quality sources. Some mushrooms and plants can be lethal.
@@ -178,3 +186,21 @@ Created by **Michael Schwartz** · [Website](https://michaelsboost.com/) · [Sup
 *The database is the tool. Reconnection is the purpose.*
 
 </div>
+
+### The Forager's Code on the homepage
+
+The homepage prominently shows the **12 Rules of Foraging** as a readable checklist
+under the hero, with links to the complete Forager's Code page. The detailed
+page remains available from the main menu and individual species dossiers.
+
+
+### Responsive homepage and learning videos
+
+Home hero actions span the full available width on phones. Both mobile and
+desktop show a large, clickable featured-video preview. On desktop, the preview
+uses a split layout (video description beside a prominent 16:9 poster) above
+the horizontal, scrollable video gallery; the existing full-image mobile poster
+is unchanged. Both the featured video and thumbnails open the local lightbox
+in one click. The lightbox supports switching videos and destroys the iframe
+on close so playback stops. The print grids, 12 rules, and full dossiers are
+unchanged.

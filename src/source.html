@@ -28,6 +28,7 @@
       <button type="button" @click="navigate('home')"><i class="fas fa-house"></i><span><strong>Home</strong><small>Learn, watch &amp; reconnect</small></span><b>→</b></button>
       <button type="button" @click="navigate('library')"><i class="fas fa-magnifying-glass"></i><span><strong>Discover Plants &amp; Fungi</strong><small>Search all 174 dossiers</small></span><b>→</b></button>
       <button type="button" @click="navigate('resources')"><i class="fas fa-book-open"></i><span><strong>Resources Library</strong><small>Watch, read, study &amp; go deeper</small></span><b>→</b></button>
+      <button type="button" @click="navigate('forager-code')"><i class="fas fa-leaf"></i><span><strong>The Forager's Code</strong><small>12 principles for responsible foraging</small></span><b>→</b></button>
       <button type="button" @click="navigate('favorites')"><i class="fas fa-bookmark"></i><span><strong>Saved Dossiers</strong><small>Your field reference list</small></span><b>→</b></button>
 
       <button type="button" @click="navigate('recent')"><i class="fas fa-clock-rotate-left"></i><span><strong>Recently Viewed</strong><small>Continue where you left off</small></span><b>→</b></button>
@@ -52,9 +53,10 @@
             <p class="uf-kicker mb-5">The world beneath your feet</p>
             <h2 class="uf-display text-white">You know your phone.<br><span class="text-emerald-300">Do you know the land?</span></h2>
             <p class="text-lg md:text-2xl text-stone-300 max-w-3xl mt-7 leading-relaxed">We move through a living world every day while barely knowing its names. Food, fiber, medicine, ecology, history and generations of human knowledge can be growing outside the door. Urban Forager exists to help rebuild that relationship.</p>
-            <div class="flex flex-wrap gap-3 mt-8">
-              <button @click="navigate('library')" class="bg-emerald-300 hover:bg-emerald-200 text-emerald-950 font-black px-6 py-4 rounded-full">Learn what grows around you <i class="fas fa-arrow-right ml-2"></i></button>
-              <button @click="document.getElementById('why-it-matters').scrollIntoView({behavior:'smooth'})" class="border border-stone-600 hover:border-stone-400 text-white font-bold px-6 py-4 rounded-full">Why this matters ↓</button>
+            <div class="uf-hero-actions flex flex-wrap gap-3 mt-8" aria-label="Get started with Urban Forager">
+              <button type="button" @click="navigate('library')" class="uf-hero-primary bg-emerald-300 hover:bg-emerald-200 text-emerald-950 font-black px-6 py-4 rounded-full"><span>Learn what grows around you</span><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+              <button type="button" @click="document.getElementById('rules-of-foraging').scrollIntoView({behavior:'smooth',block:'start'})" class="uf-hero-rules-link"><i class="fas fa-leaf" aria-hidden="true"></i><span>12 Rules of Foraging</span><i class="fas fa-arrow-down" aria-hidden="true"></i></button>
+              <button type="button" @click="document.getElementById('why-it-matters').scrollIntoView({behavior:'smooth',block:'start'})" class="uf-hero-secondary border border-stone-600 hover:border-stone-400 text-white font-bold px-6 py-4 rounded-full"><span>Why this matters</span><i class="fas fa-arrow-down" aria-hidden="true"></i></button>
             </div>
           </div>
           <aside class="uf-panel rounded-3xl p-6 md:p-8">
@@ -63,6 +65,72 @@
             <p class="uf-muted mt-3 leading-relaxed">Researchers use this term for the tendency to overlook plants, know less about them and treat them as background rather than distinct living organisms.</p>
             <a class="uf-source inline-block mt-5 text-sm font-bold" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9727616/" target="_blank" rel="noopener">Read the peer-reviewed research ↗</a>
           </aside>
+        </div>
+      </section>
+
+      <!-- Show the Forager's Code on the homepage so it is impossible to miss. -->
+      <section id="rules-of-foraging" class="uf-home-rules" aria-labelledby="uf-home-rules-title">
+        <div class="uf-home-rules-head">
+          <div>
+            <p class="uf-kicker">Start here · Before you forage</p>
+            <h3 id="uf-home-rules-title">The 12 Rules <span>of Foraging.</span></h3>
+            <p>Every harvest affects a living ecosystem. Learn the essentials of safe identification, responsible collecting, and respect for the land before gathering anything.</p>
+          </div>
+          <button type="button" @click="navigate('forager-code')" class="uf-home-rules-open">Read the complete Forager's Code <span aria-hidden="true">→</span></button>
+        </div>
+        <ol class="uf-home-rules-grid" aria-label="The twelve rules of responsible foraging">
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">01</span>
+            <div><h4>Identify Before You Harvest</h4><p>Confirm an organism’s identity and learn its dangerous look-alikes.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">02</span>
+            <div><h4>Know the Laws of the Land</h4><p>Check permissions, permits, land rules, and protected species.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">03</span>
+            <div><h4>Take Only What You Need</h4><p>Harvest with purpose, and avoid unnecessary waste.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">04</span>
+            <div><h4>Harvest Sustainably</h4><p>Leave enough for wildlife, reproduction, and regeneration.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">05</span>
+            <div><h4>Respect Wildlife and Habitat</h4><p>Protect pollinators, nesting animals, soil life, and habitats.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">06</span>
+            <div><h4>Protect Rare and Vulnerable Species</h4><p>Never collect protected species or from declining populations.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">07</span>
+            <div><h4>Minimize Unnecessary Damage</h4><p>Avoid harming roots, mycelium, trees, and surrounding plants.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">08</span>
+            <div><h4>Know Your Environment</h4><p>Avoid polluted sites, treated areas, and contaminated soil or water.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">09</span>
+            <div><h4>Prevent Ecological Harm</h4><p>Avoid spreading invasive species, pests, and pathogens.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">10</span>
+            <div><h4>Honor Indigenous Knowledge</h4><p>Respect living knowledge holders, land rights, and traditions.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">11</span>
+            <div><h4>Practice Reciprocity</h4><p>Restore habitats, remove litter safely, and protect biodiversity.</p></div>
+          </li>
+          <li class="uf-home-rule-card">
+            <span class="uf-home-rule-num">12</span>
+            <div><h4>Know When Not to Harvest</h4><p>Sometimes observation is the most responsible choice.</p></div>
+          </li>
+        </ol>
+        <div class="uf-home-rules-warning">
+          <p><strong><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> Safety first:</strong> Never identify or eat wild plants or fungi using this app alone. Verify with expert-quality sources, check local restrictions, and avoid contaminated sites.</p>
+          <button type="button" @click="navigate('forager-code')">Read all 12 rules in detail <span aria-hidden="true">→</span></button>
         </div>
       </section>
 
@@ -77,28 +145,45 @@
         </div>
       </section>
 
-      <section class="uf-cinema rounded-[2rem] overflow-hidden" aria-labelledby="watch-title">
-        <div class="p-6 md:p-9 border-b border-stone-800">
-          <p class="uf-kicker">Watch · learn · reconnect</p>
-          <h3 id="watch-title" class="text-4xl md:text-5xl font-black mt-2">Learn without leaving the app.</h3>
-          <p class="uf-muted mt-3 max-w-3xl">Free films, lectures and field instruction. Tap a title and watch it here in the lightbox.</p>
-        </div>
-        <button type="button" @click="openLearningVideo(activeLearningVideo)" class="uf-poster w-full text-left p-7 md:p-12 min-h-[360px]">
-          <img :src="activeLearningVideo.thumbnail" :alt="activeLearningVideo.title + ' preview'" loading="lazy">
-          <div class="relative z-10 max-w-2xl">
-            <span class="inline-flex bg-emerald-300 text-emerald-950 px-3 py-1 rounded-full text-xs font-black tracking-wider" x-text="activeLearningVideo.label"></span>
-            <h4 class="text-4xl md:text-6xl font-black mt-5 text-white" x-text="activeLearningVideo.title"></h4>
-            <p class="text-stone-300 text-lg mt-4" x-text="activeLearningVideo.description"></p>
-            <span class="uf-play mt-7"><i class="fas fa-play ml-1"></i></span>
+      <section class="uf-cinema rounded-[2rem]" aria-labelledby="watch-title">
+        <header class="uf-cinema-header">
+          <div>
+            <p class="uf-kicker">Watch · learn · reconnect</p>
+            <h3 id="watch-title" class="text-4xl md:text-5xl font-black mt-2">Learn without leaving the app.</h3>
+            <p class="uf-muted mt-3 max-w-3xl">Explore field walks, films and lessons. Select a video to watch it here in a lightbox.</p>
+          </div>
+          <div class="uf-cinema-nav" aria-label="Browse learning videos">
+            <span class="uf-cinema-counter" x-text="learningVideos.length + ' videos'"></span>
+            <button type="button" @click="$refs.learningVideoRail.scrollBy({left:-$refs.learningVideoRail.clientWidth*.8,behavior:'smooth'})" class="uf-cinema-arrow" aria-label="Scroll videos left"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
+            <button type="button" @click="$refs.learningVideoRail.scrollBy({left:$refs.learningVideoRail.clientWidth*.8,behavior:'smooth'})" class="uf-cinema-arrow" aria-label="Scroll videos right"><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+        </header>
+        <!-- Featured watch preview: desktop split layout, with the existing mobile overlay treatment preserved. -->
+        <button type="button" @click="openLearningVideo(activeLearningVideo)" class="uf-cinema-featured uf-poster w-full text-left p-7 md:p-12" :aria-label="'Watch ' + activeLearningVideo.title">
+          <span class="uf-cinema-featured-preview" aria-hidden="true">
+            <img :src="activeLearningVideo.thumbnail" alt="" loading="lazy" decoding="async">
+            <span class="uf-cinema-featured-play"><i class="fas fa-play" aria-hidden="true"></i></span>
+          </span>
+          <div class="uf-cinema-featured-copy relative z-10 max-w-2xl">
+            <span class="uf-cinema-label" x-text="activeLearningVideo.label"></span>
+            <h4 class="text-3xl font-black mt-4 text-white" x-text="activeLearningVideo.title"></h4>
+            <p class="text-stone-300 mt-3" x-text="activeLearningVideo.description"></p>
+            <span class="uf-play mt-6" aria-hidden="true"><i class="fas fa-play"></i><span class="uf-cinema-featured-watch">Watch now</span></span>
           </div>
         </button>
-        <div class="uf-cinema-rail">
-          <template x-for="(video,index) in learningVideos" :key="video.title">
-            <button type="button" @click="learningVideoIndex=index" class="uf-thumb rounded-2xl overflow-hidden text-left" :class="{'active':learningVideoIndex===index}">
-              <img :src="video.thumbnail" :alt="video.title" class="w-full aspect-video object-cover opacity-80" loading="lazy">
-              <span class="block p-3"><small class="text-emerald-300 font-black" x-text="video.label"></small><strong class="block mt-1 text-white" x-text="video.title"></strong></span>
-            </button>
-          </template>
+        <div class="uf-cinema-gallery">
+          <p class="uf-cinema-gallery-hint"><i class="fas fa-hand-pointer" aria-hidden="true"></i><span>Tap any video to play · Swipe or use the arrows to browse</span></p>
+          <div x-ref="learningVideoRail" class="uf-cinema-rail" role="region" tabindex="0" aria-label="Horizontally scrollable learning video gallery">
+            <template x-for="(video,index) in learningVideos" :key="video.title">
+              <button type="button" @click="openLearningVideo(video)" class="uf-thumb uf-cinema-card" :class="{'active':learningVideoIndex===index}" :aria-label="'Watch ' + video.title">
+                <span class="uf-cinema-card-image">
+                  <img :src="video.thumbnail" :alt="video.title + ' video thumbnail'" loading="lazy" decoding="async">
+                  <span class="uf-cinema-card-play" aria-hidden="true"><i class="fas fa-play"></i></span>
+                </span>
+                <span class="uf-cinema-card-copy"><small x-text="video.label"></small><strong x-text="video.title"></strong><span class="uf-cinema-card-cta">Watch video <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span>
+              </button>
+            </template>
+          </div>
         </div>
       </section>
 
@@ -115,18 +200,31 @@
 
       <section class="uf-panel rounded-[2rem] p-6 md:p-10">
         <div class="grid lg:grid-cols-2 gap-8">
-          <div><p class="uf-kicker">Reciprocity, not extraction</p><h3 class="text-4xl font-black mt-3">Knowing what you can take is only half the lesson.</h3><p class="uf-muted text-lg mt-4">USDA's Indigenous and wild-plant harvesting guidance emphasizes sustainable harvest, permission, giving back, proper identification and maintaining relationships with plant and wildlife relatives.</p><a href="https://www.usda.gov/sites/default/files/documents/foraging-harvesting-indigenous-wild-plants-best-practices.pdf" target="_blank" rel="noopener" class="uf-source inline-block mt-5 font-bold">Read the USDA guide ↗</a></div>
+          <div><p class="uf-kicker">Reciprocity, not extraction</p><h3 class="text-4xl font-black mt-3">Knowing what you can take is only half the lesson.</h3><p class="uf-muted text-lg mt-4">USDA's Indigenous and wild-plant harvesting guidance emphasizes sustainable harvest, permission, giving back, proper identification and maintaining relationships with plant and wildlife relatives.</p><div class="uf-inline-actions"><button type="button" @click="navigate('forager-code')" class="uf-primary-action">Read the Forager's Code <span>→</span></button><a href="https://www.usda.gov/sites/default/files/documents/foraging-harvesting-indigenous-wild-plants-best-practices.pdf" target="_blank" rel="noopener" class="uf-source font-bold">USDA harvesting guide ↗</a></div></div>
           <div class="rounded-3xl bg-emerald-950/50 border border-emerald-800 p-6"><p class="text-emerald-300 font-black">CONTINUE THE RELATIONSHIP</p><h4 class="text-3xl font-black mt-2">Zerra</h4><p class="text-stone-300 mt-3">Urban Forager helps you recognize and understand the living world. Zerra continues that relationship through ecological literacy, reciprocity, regeneration and lower-waste living.</p><a href="https://michaelsboost.github.io/Zerra" target="_blank" rel="noopener" class="inline-flex mt-5 bg-emerald-300 text-emerald-950 px-5 py-3 rounded-full font-black">Explore Zerra <i class="fas fa-arrow-right ml-2 mt-1"></i></a></div>
         </div>
       </section>
     </div>
   </main>
 
-  <div x-show="learningVideoOpen" x-cloak class="uf-video-modal" @click.self="closeLearningVideo()" @keydown.escape.window="closeLearningVideo()" role="dialog" aria-modal="true" aria-label="Learning video">
+  <!-- Go Vegan-inspired video lightbox: the iframe is created only while open, so closing stops playback. -->
+  <div x-show="learningVideoOpen" x-cloak x-transition.opacity class="uf-video-modal" @click.self="closeLearningVideo()" @keydown.escape.window="closeLearningVideo()" role="dialog" aria-modal="true" :aria-label="selectedLearningVideo ? 'Now watching: ' + selectedLearningVideo.title : 'Learning video'">
     <div class="uf-video-shell">
-      <div class="flex items-center justify-between gap-4 p-4 border-b border-stone-800"><div><small class="text-emerald-300 font-black" x-text="selectedLearningVideo && selectedLearningVideo.label"></small><strong class="block text-white" x-text="selectedLearningVideo && selectedLearningVideo.title"></strong></div><button @click="closeLearningVideo()" class="w-11 h-11 rounded-full border border-stone-700 text-xl" aria-label="Close video">×</button></div>
-      <div class="uf-video-frame"><iframe x-if="selectedLearningVideo" :src="selectedLearningVideo.embedUrl" :title="selectedLearningVideo.title" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
-      <div class="p-4 text-sm text-stone-400"><span x-text="selectedLearningVideo && selectedLearningVideo.description"></span><a x-show="selectedLearningVideo" :href="selectedLearningVideo && selectedLearningVideo.sourceUrl" target="_blank" rel="noopener" class="uf-source ml-2">Source ↗</a></div>
+      <div class="uf-video-header">
+        <div><small>Now watching</small><strong x-text="selectedLearningVideo && selectedLearningVideo.title"></strong></div>
+        <button type="button" @click="closeLearningVideo()" class="uf-video-close" aria-label="Close video">Close <span aria-hidden="true">×</span></button>
+      </div>
+      <div class="uf-video-frame">
+        <template x-if="learningVideoOpen && selectedLearningVideo">
+          <iframe :src="selectedLearningVideo.embedUrl" :title="selectedLearningVideo.title" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </template>
+      </div>
+      <div class="uf-video-description"><span x-text="selectedLearningVideo && selectedLearningVideo.description"></span><a x-show="selectedLearningVideo && selectedLearningVideo.sourceUrl" :href="selectedLearningVideo && selectedLearningVideo.sourceUrl" target="_blank" rel="noopener noreferrer" class="uf-source">Original video ↗</a></div>
+      <div class="uf-video-switcher" aria-label="Choose another learning video">
+        <template x-for="(video,index) in learningVideos" :key="'modal-' + video.title">
+          <button type="button" :class="{'active':selectedLearningVideo && selectedLearningVideo.title===video.title}" @click="openLearningVideo(video)"><small x-text="String(index+1).padStart(2,'0')"></small><span x-text="video.title"></span></button>
+        </template>
+      </div>
     </div>
   </div>
 
@@ -268,7 +366,7 @@
 
           <section id="utility" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🧰 Practical utility</h3><template x-if="(currentPlant.utilityUses||[]).length"><ul class="list-disc pl-5 space-y-1"><template x-for="v in currentPlant.utilityUses||[]"><li x-text="v"></li></template></ul></template><template x-if="!(currentPlant.utilityUses||[]).length"><p class="text-gray-500">No separately sourced material/utility use has been added for this dossier.</p></template></section>
 
-          <section id="stewardship" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🌎 Stewardship & legal context</h3><div><h4 class="font-bold">Stewardship</h4><p class="mt-1" x-text="currentPlant.stewardshipNotes || 'Harvest lightly, protect habitat and wildlife, and follow land-manager rules.'"></p></div><div class="mt-4"><h4 class="font-bold">Legal / access note</h4><p class="mt-1" x-text="currentPlant.legalNotes || 'Collection rules vary by site and land manager; permission is required where applicable.'"></p></div></section>
+          <section id="stewardship" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">🌎 Stewardship & legal context</h3><p class="uf-dossier-code-note">Before harvesting, review the <button type="button" @click="navigate('forager-code')" class="uf-text-link">Forager's Code →</button> along with these species-specific notes.</p><div><h4 class="font-bold">Stewardship</h4><p class="mt-1" x-text="currentPlant.stewardshipNotes || 'Harvest lightly, protect habitat and wildlife, and follow land-manager rules.'"></p></div><div class="mt-4"><h4 class="font-bold">Legal / access note</h4><p class="mt-1" x-text="currentPlant.legalNotes || 'Collection rules vary by site and land manager; permission is required where applicable.'"></p></div></section>
 
           <section id="history" class="uf-dossier-section"><h3 class="text-2xl font-bold mb-3">📜 History</h3><p x-text="currentPlant.history || 'Historical record not yet added or verified.'" class="text-gray-600"></p></section>
 
@@ -463,12 +561,101 @@
     <div data-resource-empty class="uf-empty-state" style="display:none" class="uf-empty-state"><i class="fas fa-leaf"></i><h3>No resources found.</h3><p>Try another search or category.</p></div>
   </main>
 
+  <main x-show="screen==='forager-code'" x-cloak class="uf-page uf-code-page" aria-labelledby="uf-code-page-title">
+    <button type="button" @click="navigate('home')" class="uf-back-link"><i class="fas fa-arrow-left"></i><span>Home</span></button>
+    <header class="uf-code-hero">
+      <span class="uf-eyebrow">SAFETY · STEWARDSHIP · RECIPROCITY</span>
+      <h2 id="uf-code-page-title">The Forager's <span>Code.</span></h2>
+      <p class="uf-code-subtitle">Principles of Responsible &amp; Ethical Foraging</p>
+      <p class="uf-code-deck">Observe first. Harvest responsibly. Give back whenever possible.</p>
+      <p>Foraging is more than identifying edible plants and fungi. It is an opportunity to understand the living world, recognize our place within ecosystems, and practice responsible stewardship. Nature is not an unlimited resource. Every organism contributes to a larger ecological community.</p>
+    </header>
+    <section class="uf-code-pillars" aria-label="Foundations of responsible foraging">
+      <div class="uf-code-pillar"><i class="fas fa-shield-halved" aria-hidden="true"></i><strong>Safety</strong><span>Know the organism, location and risks.</span></div>
+      <div class="uf-code-pillar"><i class="fas fa-seedling" aria-hidden="true"></i><strong>Stewardship</strong><span>Protect populations, habitats and regeneration.</span></div>
+      <div class="uf-code-pillar"><i class="fas fa-hands-holding-circle" aria-hidden="true"></i><strong>Reciprocity</strong><span>Respect relationships and contribute to ecological health.</span></div>
+    </section>
+    <div class="uf-code-section-heading"><div><span class="uf-eyebrow">THE 12 PRINCIPLES</span><h3>Take knowledge into the field.</h3></div><p>A practical code for learning from nature without treating it as an unlimited resource.</p></div>
+    <section class="uf-code-grid" aria-label="Twelve principles of responsible foraging">
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">01</span><span class="uf-code-icon" aria-hidden="true">🔍</span><span class="uf-code-tag uf-code-tag-safety">Safety</span></div>
+          <h3>Identify Before You Harvest</h3>
+          <p>Never consume a wild plant or fungus without confidently verifying its identity using multiple distinguishing characteristics and reliable expert sources. Learn dangerous look-alikes. When uncertain, leave it untouched.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">02</span><span class="uf-code-icon" aria-hidden="true">⚖️</span><span class="uf-code-tag uf-code-tag-safety">Safety</span></div>
+          <h3>Know the Laws of the Land</h3>
+          <p>Research local regulations, protected species, harvesting restrictions and permit requirements. Obtain permission before entering private property or collecting where access is restricted.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">03</span><span class="uf-code-icon" aria-hidden="true">🌱</span><span class="uf-code-tag uf-code-tag-stewardship">Stewardship</span></div>
+          <h3>Take Only What You Need</h3>
+          <p>Harvest with purpose, not excess. Collect only what you can responsibly use, and avoid unnecessary waste.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">04</span><span class="uf-code-icon" aria-hidden="true">🌿</span><span class="uf-code-tag uf-code-tag-stewardship">Stewardship</span></div>
+          <h3>Harvest Sustainably</h3>
+          <p>Only harvest from healthy, abundant populations. Leave enough plants, fruiting bodies, seeds and reproductive structures for regeneration and other species. There is no universal safe harvesting percentage.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">05</span><span class="uf-code-icon" aria-hidden="true">🐝</span><span class="uf-code-tag uf-code-tag-reciprocity">Reciprocity</span></div>
+          <h3>Respect Wildlife and Habitat</h3>
+          <p>Wild plants and fungi provide food, shelter and habitat for other organisms. Avoid disturbing nests, burrows, pollinators, soil communities and surrounding habitats.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">06</span><span class="uf-code-icon" aria-hidden="true">🌼</span><span class="uf-code-tag uf-code-tag-stewardship">Stewardship</span></div>
+          <h3>Protect Rare and Vulnerable Species</h3>
+          <p>Never harvest threatened, endangered, legally protected or locally declining species. Small populations may be especially vulnerable to disturbance.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">07</span><span class="uf-code-icon" aria-hidden="true">🍄</span><span class="uf-code-tag uf-code-tag-stewardship">Stewardship</span></div>
+          <h3>Minimize Unnecessary Damage</h3>
+          <p>Use appropriate harvesting methods for each species. Avoid damage to roots, mycelium, trees, nearby vegetation and soil. Do not uproot an organism when a less destructive method is suitable.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">08</span><span class="uf-code-icon" aria-hidden="true">🏙️</span><span class="uf-code-tag uf-code-tag-safety">Safety</span></div>
+          <h3>Know Your Environment</h3>
+          <p>Avoid collecting food from potentially contaminated roadsides, chemically treated lawns, industrial areas, polluted waterways and sites with unknown soil or water quality.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">09</span><span class="uf-code-icon" aria-hidden="true">🌍</span><span class="uf-code-tag uf-code-tag-stewardship">Stewardship</span></div>
+          <h3>Prevent Ecological Harm</h3>
+          <p>Clean footwear and equipment when necessary to reduce the spread of invasive species, pests and pathogens. Do not relocate wild organisms without understanding legal and ecological consequences.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">10</span><span class="uf-code-icon" aria-hidden="true">🪶</span><span class="uf-code-tag uf-code-tag-reciprocity">Reciprocity</span></div>
+          <h3>Honor Indigenous Knowledge</h3>
+          <p>Recognize the longstanding ecological knowledge of Indigenous communities. Respect living knowledge holders, distinct cultural traditions, land rights and community-specific teachings.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">11</span><span class="uf-code-icon" aria-hidden="true">♻️</span><span class="uf-code-tag uf-code-tag-reciprocity">Reciprocity</span></div>
+          <h3>Practice Reciprocity</h3>
+          <p>Look for meaningful ways to help ecosystems flourish. Safely remove litter, participate in habitat restoration, support native biodiversity and share accurate knowledge responsibly.</p>
+        </article>
+        <article class="uf-code-card">
+          <div class="uf-code-card-top"><span class="uf-code-number">12</span><span class="uf-code-icon" aria-hidden="true">💚</span><span class="uf-code-tag uf-code-tag-reciprocity">Reciprocity</span></div>
+          <h3>Know When Not to Harvest</h3>
+          <p>Not every edible organism needs to become food. Sometimes observation without collection is the most responsible choice.</p>
+        </article>
+    </section>
+    <section class="uf-code-conclusion">
+      <span class="uf-eyebrow">OUR GUIDING PHILOSOPHY</span>
+      <h3>The goal is not to take as much as possible from nature, but to learn to live responsibly within it.</h3>
+      <p>A successful forager leaves an ecosystem capable of continuing to thrive long after they have departed.</p>
+      <strong>Learn the land. Respect its inhabitants. Protect its future.</strong>
+    </section>
+    <section class="uf-code-references" aria-label="Further reading and safety">
+      <div><h3>Keep learning</h3><p>These principles are general guidance, not a substitute for local regulations, species-specific conservation guidance, or qualified in-person identification. Avoid consuming any wild organism based on this app alone.</p></div>
+      <div class="uf-code-reference-links"><a href="https://www.usda.gov/sites/default/files/documents/foraging-harvesting-indigenous-wild-plants-best-practices.pdf" target="_blank" rel="noopener noreferrer">USDA · Best Practices for Foraging and Harvesting Indigenous and Wild Plants ↗</a><button type="button" @click="navigate('about')">Read safety &amp; evidence guidance →</button><button type="button" @click="navigate('resources')">Explore the Resources Library →</button></div>
+    </section>
+  </main>
+
   <main x-show="screen==='about'" class="uf-page uf-about-page">
     <button @click="navigate('home')" class="uf-back-link"><i class="fas fa-arrow-left"></i><span>Home</span></button>
     <header class="uf-page-intro"><span class="uf-eyebrow">SAFETY / STEWARDSHIP / EVIDENCE</span><h2>About Urban Forager</h2><p>A free, mobile-first field reference for learning wild plants and fungi through identification, food, nutrition, documented traditional knowledge, history, modern research and safety.</p></header>
     <div class="uf-about-stack">
       <section class="uf-about-card uf-about-danger"><span class="uf-card-kicker">START HERE</span><h3><i class="fas fa-triangle-exclamation"></i> Foraging safety</h3><p>Never eat, drink, or medicinally use a wild plant or fungus based solely on this app. Positive identification requires multiple diagnostic features, and edible organisms can have dangerous or deadly look-alikes.</p><p>Every dossier now follows the same evidence rules. Traditional or historical use does not establish clinical effectiveness, missing nutrition data is not guessed, and herbs can interact with medicines.</p></section>
-      <section class="uf-about-card uf-about-steward"><span class="uf-card-kicker">RECIPROCITY</span><h3><i class="fas fa-seedling"></i> Stewardship, not extraction</h3><p>Harvest only where permitted. Take only what you need. Protect populations and habitat, leave enough for wildlife and regeneration, and avoid creating waste while gathering or preparing food and medicine.</p><p>Urban Forager helps you learn what the land can provide. <strong>Zerra</strong> continues that relationship by helping reduce waste and build more sustainable everyday habits.</p><a href="https://michaelsboost.github.io/Zerra" target="_blank" rel="noopener" class="uf-text-link">Explore Zerra <span>↗</span></a></section>
+      <section class="uf-about-card uf-about-steward"><span class="uf-card-kicker">RECIPROCITY</span><h3><i class="fas fa-seedling"></i> Stewardship, not extraction</h3><p>Harvest only where permitted. Take only what you need. Protect populations and habitat, leave enough for wildlife and regeneration, and avoid creating waste while gathering or preparing food and medicine.</p><p>Urban Forager helps you learn what the land can provide. <strong>Zerra</strong> continues that relationship by helping reduce waste and build more sustainable everyday habits.</p><button type="button" @click="navigate('forager-code')" class="uf-primary-action uf-about-code-action">Explore the 12 Principles <span>→</span></button><a href="https://michaelsboost.github.io/Zerra" target="_blank" rel="noopener" class="uf-text-link">Explore Zerra <span>↗</span></a></section>
       <section class="uf-about-card uf-about-evidence"><span class="uf-card-kicker">HOW CLAIMS ARE HANDLED</span><h3><i class="fas fa-shield-halved"></i> Accuracy &amp; evidence policy</h3><p>Urban Forager applies one evidence standard across all 174 current dossiers and future additions. Claims are retained only when supported, explicitly qualified, or clearly labeled as historical/traditional documentation.</p><ul><li><strong>Identification:</strong> verify names, diagnostic features, range and look-alikes against botanical authorities and qualified field references.</li><li><strong>Nutrition:</strong> prefer quantitative food-composition data; unsupported qualitative rankings are removed rather than treated as verified.</li><li><strong>Medicine:</strong> distinguish traditional use, preclinical research, human evidence and safety.</li><li><strong>Indigenous uses:</strong> identify the specific nation/community and historical source rather than collapsing distinct peoples into a generic claim.</li><li><strong>Uncertainty:</strong> gaps or conflicting evidence are stated rather than filled in.</li></ul></section>
       <section class="uf-about-card uf-about-resources"><span class="uf-card-kicker">KEEP LEARNING</span><h3><i class="fas fa-book-open"></i> Go beyond the app</h3><p>Urban Forager is a starting point, not the end of the trail. Use the Resources Library for videos, databases, safety references, ethnobotany collections and food-composition data.</p><button type="button" @click="navigate('resources')" class="uf-primary-action">Open Resources Library <span>→</span></button></section>
     </div>
@@ -486,6 +673,7 @@
           <legend>Which dossiers?</legend>
           <div class="uf-print-scope-grid">
             <label><input type="radio" x-model="printScope" value="all"><span><strong>Entire library</strong><small x-text="plants.length + ' dossiers'"></small></span></label>
+            <label><input type="radio" x-model="printScope" value="field"><span><strong>Field edition</strong><small>First 95 dossiers · 12 grid pages</small></span></label>
             <label :class="{'uf-print-unavailable':!currentPlant}"><input type="radio" x-model="printScope" value="individual" :disabled="!currentPlant"><span><strong>Current dossier</strong><small x-text="currentPlant ? currentPlant.commonName : 'Open a dossier first'"></small></span></label>
             <label><input type="radio" x-model="printScope" value="selected"><span><strong>Choose dossiers</strong><small>Pick individual records</small></span></label>
             <label><input type="radio" x-model="printScope" value="filtered"><span><strong>Search results</strong><small x-text="filteredPlants.length + ' matching current filters'"></small></span></label>
@@ -501,19 +689,21 @@
           </div>
           <div class="uf-print-plant-list"><template x-for="plant in printSelectablePlants" :key="plant.id"><label><input type="checkbox" :checked="printSelectedIds.includes(plant.id)" @change="togglePrintPlant(plant.id,$event.target.checked)"><span><strong x-text="plant.commonName"></strong><small x-text="plant.scientificName"></small></span></label></template></div>
         </div>
-        <fieldset class="uf-print-fieldset">
+        <fieldset class="uf-print-fieldset" x-show="printLayout!=='grid'">
           <legend>Include information</legend><div class="uf-print-section-toolbar"><span>Choose any combination</span><div><button type="button" @click="setAllPrintSections(true)">Select all</button><button type="button" @click="setAllPrintSections(false)">Clear</button></div></div>
           <div class="uf-print-sections-grid"><template x-for="option in printSectionOptions" :key="option.id"><label><input type="checkbox" :value="option.id" x-model="printSections"><span x-text="option.label"></span></label></template></div>
           <p class="uf-print-hint">All 11 sections are enabled by default. A short identification warning and applicable reference citations are retained even if you uncheck Safety or Sources.</p>
         </fieldset>
         <fieldset class="uf-print-fieldset">
           <legend>Print layout</legend>
-          <div class="uf-print-layout-options"><label><input type="radio" x-model="printLayout" value="compact"><span><strong>Compact · ink-saving</strong><small>Tight spacing, black text, no photographs</small></span></label><label><input type="radio" x-model="printLayout" value="detailed"><span><strong>Detailed</strong><small>Larger text and more breathing room</small></span></label></div>
+          <div class="uf-print-layout-options"><label><input type="radio" x-model="printLayout" value="grid"><span><strong>Field grid · 8 per page</strong><small>2 columns × 4 rows · quick-reference summaries · B&amp;W</small></span></label><label><input type="radio" x-model="printLayout" value="compact"><span><strong>Compact · ink-saving</strong><small>Tight spacing, black text, no photographs</small></span></label><label><input type="radio" x-model="printLayout" value="detailed"><span><strong>Detailed</strong><small>Larger text and more breathing room</small></span></label></div>
         </fieldset>
-        <p class="uf-print-hint">Use your browser's printer dialog and choose <strong>Save as PDF</strong> to create a PDF. Full-library printing can produce many pages.</p>
+        <p class="uf-print-hint" x-show="printLayout==='grid'"><strong>Grid mode:</strong> summarizes Edible, Nutrients, Medicine, Indigenous uses and Cautions. For all 11 custom sections, full citations and research notes, switch to Compact or Detailed dossiers.</p>
+        <p class="uf-print-hint">Use your browser's printer dialog and choose <strong>Save as PDF</strong> to create a PDF. Select US Letter, portrait, 100% scale and disable browser headers/footers for the grid.</p>
+        <div class="uf-print-presets"><strong>Ready-to-print reference PDFs</strong><span>These are snapshots matching the supplied examples; use Print above for current app data.</span><div><a href="printables/Urban_Forager_Complete_Grid.pdf" download>Complete · 174 entries / 22 pages ↓</a><a href="printables/Urban_Forager_Field_Grid.pdf" download>Field · 95 entries / 12 pages ↓</a></div></div>
         <p x-show="printError" class="uf-print-error" role="alert" x-text="printError"></p>
       </div>
-      <footer class="uf-print-dialog-footer"><div><strong x-text="printPlants.length + (printPlants.length===1?' dossier':' dossiers')"></strong><span x-text="' · ' + printSections.length + ' of 11 sections · ' + printLayout"></span></div><div class="uf-print-footer-buttons"><button type="button" class="uf-print-cancel" @click="closePrintDialog()">Close</button><button type="button" class="uf-print-submit" :disabled="!printReady" @click="printDossiers()"><svg class="uf-print-button-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/><path d="M17 11h.01"/></svg> Print / Save as PDF</button></div></footer>
+      <footer class="uf-print-dialog-footer"><div><strong x-text="printPlants.length + (printPlants.length===1?' dossier':' dossiers')"></strong><span x-text="printLayout==='grid' ? ' · grid · ' + Math.ceil(printPlants.length/8) + ' pages' : ' · ' + printSections.length + ' of 11 sections · ' + printLayout"></span></div><div class="uf-print-footer-buttons"><button type="button" class="uf-print-cancel" @click="closePrintDialog()">Close</button><button type="button" class="uf-print-submit" :disabled="!printReady" @click="printDossiers()"><svg class="uf-print-button-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/><path d="M17 11h.01"/></svg> Print / Save as PDF</button></div></footer>
     </section>
   </div>
 

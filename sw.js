@@ -1,5 +1,5 @@
-const CACHE = 'urban-forager-v1.0.0-expansion-95-dossiers';
-const SHELL = ['./','./index.html','./manifest.json','./dist/bundle.css','./dist/script.js','./libraries/tailwind-mod.min.js','./libraries/all.min.css','./imgs/logo.svg','./imgs/logo-192x192.png','./imgs/logo-512x512.png'];
+const CACHE = 'urban-forager-v1.0.4-featured-cinema';
+const SHELL = ['./','./index.html','./manifest.json','./dist/bundle.css','./dist/script.js','./libraries/tailwind-mod.min.js','./libraries/all.min.css','./imgs/logo-192x192.png','./imgs/logo-512x512.png'];
 self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))); self.clients.claim(); });
 self.addEventListener('fetch', event => {

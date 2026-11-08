@@ -37440,10 +37440,112 @@ function ufBuildPrintDossier(plant, selected) {
     <p class="uf-paper-warning"><strong>Identification warning:</strong> Never consume or medicinally use a wild organism based only on this app. Confirm identity and dangerous look-alikes using qualified references.</p>
     ${sections.join('')}</article>`;
 }
+/* Eight-card, two-column field grid. This is deliberately a *summary* of the
+   source-backed dossiers; full quotations, sources, and unresolved evidence
+   belong in the regular printable dossier layout. */
+function ufGridShort(value, limit = 130) {
+  const txt = String(value || '').replace(/\s+/g,' ').trim();
+  if (txt.length <= limit) return txt;
+  // Prefer a whole sentence where it contains enough meaningful content.
+  const first = txt.match(/^.{25,}?[.!?](?=\s|$)/);
+  if (first && first[0].length <= limit) return first[0];
+  const part = txt.slice(0, limit - 1);
+  return part.slice(0, Math.max(0,part.lastIndexOf(' '))).replace(/[,;:\s]+$/,'') + '…';
+}
+function ufGridNutrients(plant) {
+  const labels = {
+    'protein':'Protein','dietary fiber':'Fiber','fiber':'Fiber',
+    'calcium':'Ca','iron':'Fe','magnesium':'Mg','potassium':'K',
+    'vitamin c':'Vit C','vitamin a (rae)':'Vit A','vitamin a':'Vit A',
+    'vitamin k':'Vit K','vitamin e':'Vit E','vitamin b6':'B6',
+    'thiamin':'B1','riboflavin':'B2','folate':'Folate',
+    'manganese':'Mn','copper':'Cu','zinc':'Zn','phosphorus':'Phos'
+  };
+  const entries = [];
+  const used = new Set();
+  for (const item of plant.nutrients || []) {
+    const key = String(item.name||'').toLowerCase().replace(/\s+/g,' ').trim();
+    if (!labels[key] || used.has(key) || ufNutritionReviewNote(plant,item)) continue;
+    // The app stores source context after each number, often in parentheses.
+    const match = String(item.amount || '').match(/(-?\d[\d,.]*)(?:\s*)(µg|μg|mcg|mg|g)\b/i);
+    if (!match) continue;
+    const amount = match[1] + match[2].replace(/mcg/i,'µg').replace('μg','µg');
+    const foodPart = String(item.foodPart || '').toLowerCase();
+    const processing = String(item.processing || '').toLowerCase();
+    // Avoid false '[prepared]' labels from caveats comparing raw vs cooked.
+    const qualifier = /\bdried?\b|dry weight|dry matter/.test(foodPart + ' ' + processing)
+      ? '[dry]' : /blanch|cooked|boiled|roasted/.test(processing) && !/\braw\b/.test(processing) ? '[prepared]' : '';
+    used.add(key);
+    entries.push(labels[key] + ' ' + amount + qualifier);
+    if (entries.length === 6) break;
+  }
+  return entries.length ? entries.join(' · ') : 'Not numerically quantified for this species/edible part in this guide.';
+}
+function ufGridMedicine(plant) {
+  const records = Array.isArray(plant.medicinalUses) ? plant.medicinalUses : [];
+  if (!records.length) return 'No medicinal benefit established in this guide.';
+  const first = typeof records[0] === 'string' ? records[0] : (records[0].use || records[0].description || 'Traditional-use record available in dossier.');
+  return ufGridShort(first,132);
+}
+function ufGridIndigenous(plant) {
+  const records = ufIndigenousDocumentedRecords(plant).filter(v=>v && !/^documentation status$/i.test(String(v.nation||v.people||'')));
+  if (!records.length) return 'No nation-specific use verified in guide (not proof of non-use).';
+  const record = records[0];
+  const name = String(record.nation || record.people || 'Community');
+  return ufGridShort(name + ': ' + String(record.use || record.description || 'documented historical use; see dossier.'), 143);
+}
+function ufGridCaution(plant) {
+  const safety = String(plant.safetyNotes || '').trim();
+  const fungal = ufFungalPhotoReview(plant);
+  const danger = (plant.dangerousLookAlikes || []).filter(Boolean);
+  // Dangerous food-contact warnings must be prominent when there is no edible use.
+  const noFood = !(plant.edibleParts || []).length;
+  const highDanger = /\b(lethal|highly poisonous|fatal|severely toxic|toxic even|poisonous)\b/i.test(safety);
+  const statement = noFood && highDanger ? 'DANGER — DO NOT EAT. ' + safety : safety || (danger.length ? danger[0] : fungal);
+  return statement ? ufGridShort(statement,137) : '';
+}
+function ufBuildPrintGridCard(plant) {
+  const id = String(plant.id || '').padStart(3,'0');
+  const edible = (plant.edibleParts || []).length ? plant.edibleParts.join(', ') : 'None recorded; no food-use recommendation.';
+  const rows = [
+    ['EDIBLE',ufGridShort(edible,150)],
+    ['NUTRIENTS',ufGridNutrients(plant)],
+    ['MEDICINE',ufGridMedicine(plant)],
+    ['INDIGENOUS',ufGridIndigenous(plant)]
+  ];
+  const caution = ufGridCaution(plant);
+  if (caution) rows.push(['CAUTION',caution]);
+  return `<article class="uf-grid-card" data-print-plant-id="${ufPrintEscape(plant.id)}">
+    <header class="uf-grid-card-head"><h2>${ufPrintEscape(id)} ${ufPrintEscape(plant.commonName || 'Unnamed organism')}</h2><p><em>${ufPrintEscape(plant.scientificName || 'Scientific name not recorded')}</em></p></header>
+    <div class="uf-grid-card-fields">${rows.map(([key,value])=>`<p><strong>${ufPrintEscape(key)}</strong> ${ufPrintEscape(value)}</p>`).join('')}</div>
+    <span class="uf-grid-card-link">Full dossier: Urban Forager · #/dossier/${ufPrintEscape(plant.id)}</span>
+  </article>`;
+}
+function ufBuildPrintGrid(plants) {
+  if (!Array.isArray(plants) || !plants.length) return '';
+  const pages = [];
+  const whole = plants.length === 174 && plants.every((p,i)=>Number(p.id)===i+1);
+  const field = plants.length === 95 && plants.every((p,i)=>Number(p.id)===i+1);
+  const edition = whole ? 'COMPLETE EDITION' : field ? 'FIELD EDITION' : 'CUSTOM SELECTION';
+  const totalPages = Math.ceil(plants.length/8);
+  for (let offset=0; offset<plants.length; offset+=8) {
+    const page = Math.floor(offset/8)+1;
+    pages.push(`<section class="uf-grid-page" aria-label="Printable field grid page ${page}">
+      <header class="uf-grid-page-header"><div class="uf-grid-title"><strong>URBAN FORAGER</strong><span>/ PRINTABLE GRID</span></div><p>${ufPrintEscape(edition)} · ${plants.length} ENTRIES · ${page}/${totalPages}</p></header>
+      <div class="uf-grid-page-notice"><p>Nutrients = source-reported amounts per 100 g of the specified food/form; key values only. “Not quantified” ≠ absent.</p><p>Indigenous uses are historical, community-specific records; medicinal history is NOT treatment advice. Summaries require source review.</p></div>
+      <div class="uf-grid-cards">${plants.slice(offset,offset+8).map(ufBuildPrintGridCard).join('')}</div>
+      <footer class="uf-grid-page-footer"><span>SAFETY: Never identify or eat wild plants/fungi from this grid alone. Check look-alikes, contamination, permits and preparation.</span><span>US Letter · B&amp;W · double-sided</span></footer>
+    </section>`);
+  }
+  return `<div class="uf-paper uf-paper-grid">${pages.join('')}</div>`;
+}
+
 function ufBuildPrintDocument(plants, ids, layout) {
   const allowed = new Set(UF_PRINT_SECTIONS.map(s=>s.id));
   const selected = new Set((ids || []).filter(id => allowed.has(id)));
-  if (!selected.size || !Array.isArray(plants) || !plants.length) return '';
+  if (!Array.isArray(plants) || !plants.length) return '';
+  if (layout === 'grid') return ufBuildPrintGrid(plants);
+  if (!selected.size) return '';
   const date = new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
   const title = `${plants.length} ${plants.length===1?'dossier':'dossiers'}`;
   return `<div class="uf-paper ${layout === 'compact' ? 'uf-paper-compact' : 'uf-paper-detailed'}">
@@ -37665,10 +37767,10 @@ function urbanForager() {
         // Homepage cinema playlist. Keep this synchronized with verified video resources.
     learningVideos:[{"title": "Plant Medicine for Beginners", "label": "WATCH", "description": "An introductory field lesson on edible and medicinal plants of the Northern Plains.", "thumbnail": "https://img.youtube.com/vi/pVqcSsyXDw4/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/pVqcSsyXDw4?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=pVqcSsyXDw4", "video": true}, {"title": "10+ Medicines in One City Park", "label": "WATCH", "description": "An urban plant walk focused on common food and medicine plants and safer foraging.", "thumbnail": "https://img.youtube.com/vi/x20Z7pPMBEg/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/x20Z7pPMBEg?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=x20Z7pPMBEg", "video": true}, {"title": "Learn to Forage with Sam Thayer", "label": "WATCH", "description": "A practical field walk identifying more than twenty wild edible plants.", "thumbnail": "https://img.youtube.com/vi/j-wscPmoS2M/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/j-wscPmoS2M?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=j-wscPmoS2M", "video": true}, {"title": "Foraging the Most Inconspicuous Edible Wildflower", "label": "WATCH", "description": "A focused wild-edible field lesson from Learn Your Land.", "thumbnail": "https://img.youtube.com/vi/9NdqY8faQTU/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/9NdqY8faQTU?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=9NdqY8faQTU", "video": true}, {"title": "Foraging for 3 Overlooked Wild Edible Fruits", "label": "WATCH", "description": "A field lesson on three overlooked edible fruits and the plants that produce them.", "thumbnail": "https://img.youtube.com/vi/lhAUIYmO6ko/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/lhAUIYmO6ko?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=lhAUIYmO6ko", "video": true}, {"title": "10 Easy Plants for Beginner Foragers in the Midwest", "label": "WATCH", "description": "A Midwest field walk covering ten approachable plants plus legality, herbal medicine and reconnecting with Earth.", "thumbnail": "https://img.youtube.com/vi/3YMC8CD0eT0/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/3YMC8CD0eT0?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=3YMC8CD0eT0", "video": true}, {"title": "23 Easy Plants for Beginner Foragers in California", "label": "WATCH", "description": "A long-form beginner walk through common edible and medicinal plants of urban Southern California.", "thumbnail": "https://img.youtube.com/vi/7MQKc1drudk/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/7MQKc1drudk?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=7MQKc1drudk", "video": true}, {"title": "Foraging in Florida: Easy Edible Plants for Beginner Foragers", "label": "WATCH", "description": "A beginner-oriented tour of seventeen common edible plants found across Florida.", "thumbnail": "https://img.youtube.com/vi/Nul8yd_Q5yI/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/Nul8yd_Q5yI?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=Nul8yd_Q5yI", "video": true}, {"title": "Black Forager: Finding Wild Edible Plants for Meals", "label": "WATCH", "description": "A profile of Alexis Nikole Nelson demonstrating urban and woodland foraging and turning wild ingredients into food.", "thumbnail": "https://img.youtube.com/vi/mwltqBr1NN0/hqdefault.jpg", "embedUrl": "https://www.youtube-nocookie.com/embed/mwltqBr1NN0?autoplay=1", "sourceUrl": "https://www.youtube.com/watch?v=mwltqBr1NN0", "video": true}],
     get activeLearningVideo(){return this.learningVideos[this.learningVideoIndex]||this.learningVideos[0]},
-    openLearningVideo(video){this.selectedLearningVideo=video||this.activeLearningVideo;this.learningVideoOpen=true;document.body.style.overflow='hidden'},
+    openLearningVideo(video){const chosen=video||this.activeLearningVideo;const index=this.learningVideos.findIndex(item=>item.title===chosen.title);if(index>=0)this.learningVideoIndex=index;this.selectedLearningVideo=chosen;this.learningVideoOpen=true;document.body.style.overflow='hidden'},
     closeLearningVideo(){this.learningVideoOpen=false;this.selectedLearningVideo=null;document.body.style.overflow=''},
     photoOnly:false,photoIndex:0,selectedOrganismType:'',selectedNutrient:'',selectedEdiblePart:'',selectedSeason:'',selectedHabitat:'',historyStack:[],historyIndex:-1,favoriteIds:[],recentIds:[],
-    printOpen:false,printScope:'all',printLayout:'compact',printSections:UF_PRINT_SECTIONS.map(s=>s.id),printSectionOptions:UF_PRINT_SECTIONS,printSelectedIds:[],printSearch:'',printError:'',
+    printOpen:false,printScope:'all',printLayout:'grid',printSections:UF_PRINT_SECTIONS.map(s=>s.id),printSectionOptions:UF_PRINT_SECTIONS,printSelectedIds:[],printSearch:'',printError:'',
     photoLoading:false,photoLookupDone:0,photoLookupFailed:0,photoLookupAttempted:0,
     photoLookupWarning:'Online community photographs are references, not verified field identification.',
     // Exact scientific-taxon lookup; never match fuzzy autocomplete hits.
@@ -37882,7 +37984,7 @@ function urbanForager() {
     categoryHash(screen=this.screen){return `#/category/${encodeURIComponent(screen||'home')}`},
     dossierHash(id){return `#/dossier/${encodeURIComponent(id)}`},
     parseRoute(){const match=window.location.hash.match(/^#\/(category|dossier)\/([^/?#]+)/);if(!match)return null;try{return {type:match[1],value:decodeURIComponent(match[2])}}catch(error){return null}},
-    applyRoute(){const route=this.parseRoute();if(!route)return false;if(route.type==='dossier'){const found=this.plants.find(plant=>String(plant.id)===String(route.value));if(!found)return false;this.photoIndex=0;this.currentPlant=found;this.screen='details';if(!(found.images||[]).length)this.resolveSpeciesPhoto(found);this.rememberRecent(found.id);return true}const validScreens=['home','library','resources','favorites','recent','about'];if(!validScreens.includes(route.value))return false;this.screen=route.value;this.currentPlant=null;if(this.screen==='resources')this.$nextTick(()=>this.applyResourceFilters());return true},
+    applyRoute(){const route=this.parseRoute();if(!route)return false;if(route.type==='dossier'){const found=this.plants.find(plant=>String(plant.id)===String(route.value));if(!found)return false;this.photoIndex=0;this.currentPlant=found;this.screen='details';if(!(found.images||[]).length)this.resolveSpeciesPhoto(found);this.rememberRecent(found.id);return true}const validScreens=['home','library','resources','favorites','recent','about','forager-code'];if(!validScreens.includes(route.value))return false;this.screen=route.value;this.currentPlant=null;if(this.screen==='resources')this.$nextTick(()=>this.applyResourceFilters());return true},
     initializeRouting(){if('scrollRestoration' in history)history.scrollRestoration='manual';const initialRoute=this.parseRoute();if(initialRoute?.type==='dossier'){const found=this.plants.find(plant=>String(plant.id)===String(initialRoute.value));if(found){const dossierHash=this.dossierHash(found.id);history.replaceState({urbanForager:true},'',this.categoryHash('library'));history.pushState({urbanForager:true},'',dossierHash);this.applyRoute()}else history.replaceState({urbanForager:true},'',this.categoryHash('home'))}else if(!this.applyRoute())history.replaceState({urbanForager:true},'',this.categoryHash('home'));this.routeListener=()=>{const wasDossier=this.screen==='details';if(!this.applyRoute()){history.replaceState({urbanForager:true},'',this.categoryHash('home'));this.currentPlant=null;this.screen='home'}if(!(wasDossier&&this.restoreBrowsePosition(this.screen)))window.scrollTo({top:0,behavior:'auto'})};window.addEventListener('hashchange',this.routeListener)},
     async shareCurrentView(){
       const url=window.location.href;
@@ -37904,8 +38006,8 @@ function urbanForager() {
     scrollToSection(id){const el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'})},
     // Printing is independent of dossier/search navigation: it never alters the active view.
     openPrintDialog(scope='all'){
-      this.printScope=['all','individual','selected','filtered','favorites'].includes(scope)?scope:'all';
-      this.printLayout='compact';this.printSections=UF_PRINT_SECTIONS.map(s=>s.id);
+      this.printScope=['all','field','individual','selected','filtered','favorites'].includes(scope)?scope:'all';
+      this.printLayout='grid';this.printSections=UF_PRINT_SECTIONS.map(s=>s.id);
       this.printSelectedIds=this.currentPlant?[this.currentPlant.id]:[];
       this.printSearch='';this.printError='';this.printOpen=true;this.menuOpen=false;
       this.$nextTick(()=>{const heading=document.getElementById('uf-print-dialog-title');if(heading)heading.focus()});
@@ -37915,13 +38017,14 @@ function urbanForager() {
     get printSelectablePlants(){const q=normalize(this.printSearch);return this.plants.filter(p=>!q||normalize(p.commonName+' '+p.scientificName).includes(q))},
     togglePrintPlant(id,enabled){id=Number(id);this.printSelectedIds=enabled?[...new Set([...this.printSelectedIds,id])]:this.printSelectedIds.filter(x=>x!==id)},
     get printPlants(){
+      if(this.printScope==='field')return this.plants.slice(0,95);
       if(this.printScope==='individual')return this.currentPlant?[this.currentPlant]:[];
       if(this.printScope==='selected')return this.plants.filter(p=>this.printSelectedIds.includes(p.id));
       if(this.printScope==='filtered')return this.filteredPlants;
       if(this.printScope==='favorites')return this.favoritePlants;
       return this.plants;
     },
-    get printReady(){return this.printPlants.length>0&&this.printSections.length>0},
+    get printReady(){return this.printPlants.length>0&&(this.printLayout==='grid'||this.printSections.length>0)},
     printDossiers(){
       if(!this.printReady)return;
       this.printError='';

@@ -431,3 +431,196 @@ body{margin:0;background:radial-gradient(circle at 80% -10%,rgba(49,201,133,.08)
  .uf-app .uf-view-choice{flex:1}
 }
 @media print{.uf-view-switch,.uf-saved-view-bar{display:none!important}}
+
+
+/* The Forager's Code — responsible harvesting guide */
+.uf-code-page{max-width:1160px;margin:0 auto;padding:2.2rem 1.25rem 5rem}
+.uf-code-hero{margin-top:1.4rem;padding:clamp(2rem,6vw,4rem);border:1px solid rgba(94,230,168,.22);border-radius:28px;background:radial-gradient(circle at 90% 20%,rgba(94,230,168,.15),transparent 32%),linear-gradient(135deg,#142a1b,#0c1711 70%)}
+.uf-code-hero h2{font-size:clamp(3.1rem,8vw,6.4rem);font-weight:950;line-height:.95;letter-spacing:-.06em;margin:1rem 0;color:#f4f7f4}
+.uf-code-hero h2 span{color:#6ee7b7}
+.uf-code-subtitle{font-size:clamp(1rem,3vw,1.5rem);font-weight:800;letter-spacing:-.02em;color:#d8f9e5;margin:0 0 1.35rem}
+.uf-code-hero .uf-code-deck{font-weight:800;color:#b8f4d5;font-size:1.1rem;margin-bottom:1rem}
+.uf-code-hero>p:last-child{max-width:760px;color:#b7c9bd;line-height:1.75;font-size:1.04rem}
+.uf-code-pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.35rem 0 3.2rem}
+.uf-code-pillar{display:flex;flex-direction:column;align-items:flex-start;gap:.45rem;padding:1.5rem;border:1px solid #2a4033;background:#15251b;border-radius:20px}
+.uf-code-pillar i{color:#6ee7b7;font-size:1.45rem;margin-bottom:.35rem}
+.uf-code-pillar strong{font-size:1.13rem;color:#f4f7f4}
+.uf-code-pillar span{color:#aabbb0;font-size:.93rem;line-height:1.6}
+.uf-code-section-heading{display:flex;align-items:end;justify-content:space-between;gap:2rem;margin-bottom:1.35rem}
+.uf-code-section-heading h3{font-weight:900;font-size:clamp(1.75rem,4vw,2.65rem);letter-spacing:-.04em;line-height:1.1;margin-top:.45rem}
+.uf-code-section-heading>p{max-width:310px;color:#aabbb0;line-height:1.6}
+.uf-code-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.uf-code-card{background:#132018;border:1px solid #2a3b30;border-radius:21px;padding:clamp(1.35rem,3vw,1.85rem);min-width:0}
+.uf-code-card-top{display:flex;align-items:center;gap:.75rem;margin-bottom:1.15rem}
+.uf-code-number{font-size:.76rem;letter-spacing:.1em;color:#77e7b2;font-weight:900}
+.uf-code-icon{font-size:1.45rem}
+.uf-code-tag{margin-left:auto;text-transform:uppercase;letter-spacing:.07em;font-size:.63rem;font-weight:900;padding:.35rem .65rem;border-radius:99px;background:#233d2c;color:#a7efc8}
+.uf-code-tag-safety{background:#30331f;color:#e6e7a8}
+.uf-code-tag-reciprocity{background:#223b42;color:#a8e4ea}
+.uf-code-card h3{font-size:1.25rem;line-height:1.2;font-weight:900;letter-spacing:-.02em;color:#f4f7f4;margin:0 0 .8rem}
+.uf-code-card p{font-size:.96rem;color:#b0c0b5;line-height:1.7;margin:0}
+.uf-code-conclusion{background:linear-gradient(120deg,#183725,#102117);border:1px solid #35694a;border-radius:25px;padding:clamp(1.7rem,5vw,3rem);margin-top:2rem}
+.uf-code-conclusion h3{font-size:clamp(1.65rem,3.7vw,2.7rem);font-weight:900;line-height:1.2;letter-spacing:-.035em;margin:1rem 0;max-width:850px}
+.uf-code-conclusion p{line-height:1.7;color:#bfdbc9;margin:0 0 1rem}
+.uf-code-conclusion strong{color:#a3f5ca}
+.uf-code-references{display:flex;align-items:start;justify-content:space-between;gap:2rem;margin-top:2rem;padding:1rem 0}
+.uf-code-references h3{font-size:1.25rem;font-weight:900}
+.uf-code-references p{max-width:600px;color:#aabbb0;line-height:1.7;margin-top:.65rem}
+.uf-code-reference-links{display:flex;flex-direction:column;align-items:flex-start;gap:.8rem;min-width:250px}
+.uf-code-reference-links>a,.uf-code-reference-links>button{background:none;border:0;text-align:left;color:#91f1ba;text-decoration:underline;text-underline-offset:3px;font-weight:700;cursor:pointer;line-height:1.45;padding:0}
+.uf-inline-actions{display:flex;flex-wrap:wrap;align-items:center;gap:1.1rem;margin-top:1.25rem}
+.uf-inline-actions .uf-source{display:inline-block}
+.uf-dossier-code-note{background:#163021;border-left:3px solid #6ee7b7;border-radius:7px;padding:.85rem 1rem;margin-bottom:1.2rem;line-height:1.5}
+.uf-dossier-code-note .uf-text-link{display:inline;padding:0;border:0;background:none;cursor:pointer;font-weight:900;color:#a3f5ca;text-decoration:underline;text-underline-offset:3px}
+.uf-about-code-action{margin:.9rem 0 1rem}
+@media(max-width:720px){.uf-code-pillars{grid-template-columns:1fr;gap:.65rem;margin-bottom:2.3rem}.uf-code-pillar{padding:1.2rem}.uf-code-section-heading{display:block}.uf-code-section-heading>p{margin-top:.8rem}.uf-code-grid{grid-template-columns:1fr}.uf-code-references{display:block}.uf-code-reference-links{margin-top:1.25rem}.uf-code-hero{padding:2rem 1.35rem}.uf-code-page{padding-top:1.25rem}}
+
+
+
+/* HOMEPAGE: the 12 Rules of Foraging must be visible, not hidden in navigation. */
+.uf-hero-rules-link{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;min-height:56px;padding:.95rem 1.5rem;border:2px solid #a7f3d0;border-radius:999px;background:rgba(19,74,47,.73);color:#e9fff2;font-weight:900;line-height:1.25;cursor:pointer;transition:background-color .2s,border-color .2s,transform .2s}
+.uf-hero-rules-link:hover,.uf-hero-rules-link:focus-visible{background:#235c3e;border-color:#d5ffe6;transform:translateY(-1px)}
+.uf-home-rules{scroll-margin-top:95px;padding:clamp(1.4rem,4vw,2.75rem);border-radius:28px;border:1px solid #3c7550;background:radial-gradient(circle at 100% 0%,rgba(107,230,154,.11),transparent 32%),linear-gradient(145deg,#15271b,#0d1b13 80%);box-shadow:0 25px 75px rgba(0,0,0,.16)}
+.uf-home-rules-head{display:flex;align-items:end;justify-content:space-between;gap:1.2rem;margin-bottom:1.55rem}
+.uf-home-rules-head>div{max-width:790px}
+.uf-home-rules-head h3{margin:.45rem 0 .75rem;font-size:clamp(2.1rem,5vw,4rem);font-weight:950;line-height:1.04;letter-spacing:-.055em;color:#f2fff7}
+.uf-home-rules-head h3 span{color:#92ebbd}
+.uf-home-rules-head p:not(.uf-kicker){font-size:1.02rem;color:#b7ccbe;line-height:1.65;max-width:740px}
+.uf-home-rules-open{flex-shrink:0;display:inline-flex;align-items:center;justify-content:space-between;gap:1.2rem;max-width:275px;padding:.9rem 1.1rem;border-radius:12px;border:1px solid #6cd9a0;background:#245536;color:#f4fff7;font-weight:850;line-height:1.35;text-align:left;cursor:pointer}
+.uf-home-rules-open:hover,.uf-home-rules-open:focus-visible{background:#356d4b}
+.uf-home-rules-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin:0;padding:0;list-style:none}
+.uf-home-rule-card{display:flex;gap:.9rem;align-items:flex-start;min-width:0;padding:1.05rem;border-radius:14px;border:1px solid rgba(140,202,163,.17);background:rgba(10,20,14,.65)}
+.uf-home-rule-num{flex:0 0 auto;min-width:1.65rem;font-size:.8rem;font-weight:900;letter-spacing:.06em;color:#a0f1c6}
+.uf-home-rule-card h4{font-size:1.02rem;font-weight:900;color:#f1fff5;line-height:1.28;margin:0 0 .38rem}
+.uf-home-rule-card p{font-size:.89rem;line-height:1.5;color:#b2c7bb;margin:0}
+.uf-home-rules-warning{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin-top:1.35rem;padding:1rem 1.15rem;border-radius:13px;border-left:3px solid #c5e6a1;background:#1c3021}
+.uf-home-rules-warning p{font-size:.91rem;line-height:1.6;color:#d2ddce;max-width:830px;margin:0}
+.uf-home-rules-warning strong{color:#f8ffdc}
+.uf-home-rules-warning button{border:0;background:none;color:#b4f7cb;font-weight:900;text-decoration:underline;text-underline-offset:4px;white-space:nowrap;cursor:pointer;padding:.5rem}
+.uf-home-rules-warning button:hover,.uf-home-rules-warning button:focus-visible{color:white}
+@media(max-width:1023px){.uf-home-rules-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.uf-home-rules-head{align-items:start;flex-direction:column}.uf-home-rules-open{max-width:none}}
+@media(max-width:640px){.uf-home-rules{padding:1.2rem;border-radius:22px}.uf-home-rules-grid{grid-template-columns:1fr;gap:.55rem}.uf-home-rule-card{padding:.9rem}.uf-home-rules-warning{align-items:flex-start;flex-direction:column;gap:.5rem}.uf-home-rules-warning button{padding:.4rem 0;white-space:normal}.uf-hero-rules-link{width:100%}}
+
+/* PRINTABLE FIELD GRID — eight two-column dossier cards on each US Letter sheet. */
+.uf-print-presets{margin:16px 0 4px;border:1px solid #395441;border-radius:12px;padding:12px;background:#19291f;color:#eaf1eb}
+.uf-print-presets>strong{display:block;font-size:.87rem;margin-bottom:3px}
+.uf-print-presets>span{display:block;color:#afc1b6;font-size:.76rem;line-height:1.45}
+.uf-print-presets>div{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px}
+.uf-print-presets a{border:1px solid #567962;color:#9bf3bc;font-size:.79rem;padding:9px 11px;border-radius:7px;text-decoration:none}
+.uf-print-presets a:hover{color:#fff;border-color:#b7ffd3}
+@media print {
+  @page {size:letter portrait;margin:9mm 8mm}
+  #uf-print-root {padding:0!important}
+  #uf-print-root .uf-paper-grid {font-family:Arial,Helvetica,sans-serif;font-size:8pt;line-height:1.25;overflow:visible;overflow-wrap:break-word}
+  #uf-print-root .uf-grid-page {display:flex;flex-direction:column;box-sizing:border-box;width:100%;height:258mm;padding:0;break-after:page;page-break-after:always;break-inside:avoid;page-break-inside:avoid}
+  #uf-print-root .uf-grid-page:last-child {break-after:auto;page-break-after:auto}
+  #uf-print-root .uf-grid-page-header {display:flex;align-items:baseline;justify-content:space-between;gap:6mm;border-bottom:.35pt solid #777;padding:0 0 1.2mm;margin:0 0 1mm;flex:none}
+  #uf-print-root .uf-grid-title {display:flex;align-items:baseline;gap:2.5mm;font-size:11.5pt;letter-spacing:.01em}
+  #uf-print-root .uf-grid-title strong {font-weight:800}
+  #uf-print-root .uf-grid-title span {font-weight:600}
+  #uf-print-root .uf-grid-page-header p {margin:0;font-size:7.5pt;white-space:nowrap}
+  #uf-print-root .uf-grid-page-notice {margin:0 0 2mm;flex:none;font-size:7.1pt;line-height:1.3}
+  #uf-print-root .uf-grid-page-notice p {margin:0 0 .6mm}
+  #uf-print-root .uf-grid-cards {flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));column-gap:2.6mm;row-gap:2.4mm}
+  #uf-print-root .uf-grid-card {display:flex;flex-direction:column;min-height:0;border:.5pt solid #aaa;border-radius:1.6mm;overflow:hidden;break-inside:avoid;page-break-inside:avoid;box-sizing:border-box}
+  #uf-print-root .uf-grid-card-head {padding:1mm 2mm .75mm;background:#eeeeee!important;border-bottom:.45pt solid #e1e1e1;flex:none}
+  #uf-print-root .uf-grid-card-head h2 {font-size:9.1pt;line-height:1.1;margin:0!important;white-space:normal;overflow-wrap:break-word}
+  #uf-print-root .uf-grid-card-head p {font-size:7.3pt;margin:.3mm 0 0!important;font-style:italic}
+  #uf-print-root .uf-grid-card-fields {font-size:7.2pt;line-height:1.23;padding:1.7mm 2mm 0;flex:1;min-height:0;overflow:hidden}
+  #uf-print-root .uf-grid-card-fields p {margin:0 0 .7mm!important}
+  #uf-print-root .uf-grid-card-fields strong {font-weight:800}
+  #uf-print-root .uf-grid-card-link {font-size:6.2pt;letter-spacing:0;color:#777!important;text-align:right;padding:0 1.8mm .8mm;margin-top:auto;flex:none}
+  #uf-print-root .uf-grid-page-footer {display:flex;align-items:center;justify-content:space-between;gap:2mm;border-top:.35pt solid #aaa;font-size:6.8pt;line-height:1.25;margin-top:2mm;padding-top:1mm;flex:none}
+  #uf-print-root .uf-grid-page-footer span:last-child {white-space:nowrap;text-align:right}
+  #uf-print-root .uf-grid-page-footer span:first-child {flex:1}
+}
+
+
+/* 2026-11-08 responsive home CTAs and streamlined watch gallery */
+.uf-hero-actions {display:flex;flex-wrap:wrap;gap:.75rem;align-items:stretch}
+.uf-hero-actions>button {display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:56px;max-width:100%;text-align:center;line-height:1.3;white-space:normal;transition:background-color .18s,border-color .18s,transform .18s}
+.uf-hero-actions>button:focus-visible {outline:3px solid #a7f3d0;outline-offset:3px}
+.uf-hero-primary {color:#052e1b!important}
+.uf-hero-secondary {background:rgba(15,23,18,.45);border-color:#667569!important}
+.uf-hero-secondary:hover {background:rgba(34,50,39,.85)}
+.uf-cinema {overflow:hidden;min-width:0;background:#080b09;border-radius:2rem}
+.uf-cinema-header {display:flex;align-items:end;justify-content:space-between;gap:2rem;padding:clamp(1.4rem,3vw,2.35rem);border-bottom:1px solid rgba(255,255,255,.12)}
+.uf-cinema-header h3 {line-height:1.08;letter-spacing:-.04em}
+.uf-cinema-nav {display:flex;align-items:center;gap:.6rem;flex:none}
+.uf-cinema-counter {color:#a7b7ad;font-size:.82rem;font-weight:800;margin-right:.3rem;white-space:nowrap}
+.uf-cinema-arrow {width:44px;height:44px;flex:none;display:grid;place-items:center;background:#17271d;color:#c1f9d7;border:1px solid #40614b;border-radius:999px;cursor:pointer;transition:background .18s}
+.uf-cinema-arrow:hover,.uf-cinema-arrow:focus-visible {background:#29523b;outline-offset:2px}
+/* The main preview is now visible on desktop, matching Go Vegan's large watch layout. */
+.uf-cinema-featured {display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(1.25rem,3.5vw,3rem);align-items:center;width:100%;min-height:390px;padding:clamp(1.5rem,3.5vw,3.25rem);text-align:left;cursor:pointer;isolation:isolate;background:linear-gradient(120deg,#0f2116,#080d0a);border:0;}
+.uf-cinema-featured:after {content:none}
+.uf-cinema-featured-preview {position:relative;grid-column:2;grid-row:1;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:20px;border:1px solid #3a5240;box-shadow:0 18px 55px #0008;background:#142419}
+.uf-cinema-featured-preview img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transition:transform .25s ease}
+.uf-cinema-featured:hover .uf-cinema-featured-preview img,.uf-cinema-featured:focus-visible .uf-cinema-featured-preview img {transform:scale(1.035)}
+.uf-cinema-featured-play {position:absolute;left:50%;top:50%;display:grid;place-items:center;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;background:#6ee7b7;color:#052e1b;box-shadow:0 0 0 12px #6ee7b733,0 12px 35px #000a;font-size:1.5rem}
+.uf-cinema-featured-play i {margin-left:4px}
+.uf-cinema-featured-copy {position:relative;z-index:1;grid-column:1;grid-row:1;min-width:0;max-width:none}
+.uf-cinema-featured-copy h4 {font-size:clamp(1.7rem,3.1vw,3rem);line-height:1.08;letter-spacing:-.035em}
+.uf-cinema-featured-copy p {font-size:clamp(.96rem,1.25vw,1.15rem);line-height:1.55}
+.uf-cinema-featured-copy .uf-play {display:inline-flex;gap:.7rem;align-items:center;justify-content:center;width:auto;height:auto;padding:.85rem 1.25rem;border-radius:999px;font-size:1rem;box-shadow:none;font-weight:900}
+.uf-cinema-featured-watch {display:inline}
+.uf-cinema-featured:focus-visible {outline:3px solid #a7f3d0;outline-offset:-5px}
+.uf-cinema-gallery {min-width:0;padding:1.25rem clamp(1rem,3vw,2.35rem) 1.8rem}
+.uf-cinema-gallery-hint {display:flex;gap:.45rem;align-items:center;font-size:.84rem;color:#adc4b4;margin:0 0 .95rem}
+.uf-cinema-rail {display:grid;grid-auto-flow:column;grid-auto-columns:clamp(220px,27vw,305px);gap:1rem;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scroll-padding-inline:4px;padding:3px 4px 16px;scrollbar-width:thin;scrollbar-color:#5d9d78 #18251b;-webkit-overflow-scrolling:touch;min-width:0}
+.uf-cinema-rail::-webkit-scrollbar {height:7px}
+.uf-cinema-rail::-webkit-scrollbar-track {background:#18251b;border-radius:99px}
+.uf-cinema-rail::-webkit-scrollbar-thumb {background:#5d9d78;border-radius:99px}
+.uf-cinema-card {display:flex;flex-direction:column;overflow:hidden;text-align:left;width:100%;min-width:0;min-height:100%;border-radius:18px!important;scroll-snap-align:start;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+.uf-cinema-card:hover,.uf-cinema-card:focus-visible {transform:translateY(-2px);border-color:#8ceec1!important;outline:2px solid #73dca6;outline-offset:1px}
+.uf-cinema-card-image {display:block;position:relative;aspect-ratio:16/9;background:#15241b;overflow:hidden}
+.uf-cinema-card-image img {display:block;width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
+.uf-cinema-card:hover img {transform:scale(1.045)}
+.uf-cinema-card-play {position:absolute;left:12px;bottom:12px;width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#6ee7b7;color:#052e1b;box-shadow:0 5px 24px #0009}
+.uf-cinema-card-play i {margin-left:2px}
+.uf-cinema-card-copy {display:flex;flex-direction:column;align-items:start;gap:.4rem;padding:1.05rem 1.1rem 1.15rem;min-width:0;flex:1}
+.uf-cinema-card-copy small {color:#6ee7b7;font-weight:900;font-size:.7rem;letter-spacing:.1em}
+.uf-cinema-card-copy strong {color:white;font-size:1.05rem;line-height:1.35;font-weight:850;overflow-wrap:anywhere;min-height:2.7em}
+.uf-cinema-card-cta {display:flex;align-items:center;gap:.5rem;color:#a5eac4;font-size:.85rem;font-weight:850;margin-top:auto;padding-top:.4rem}
+/* Lightbox follows Go Vegan's prominent player and in-modal video switcher. */
+.uf-video-modal {z-index:20000;overflow-y:auto;padding:clamp(10px,3vw,24px);background:rgba(0,0,0,.9);backdrop-filter:blur(8px)}
+.uf-video-shell {width:min(100%,1000px);max-height:calc(100dvh - 24px);overflow-y:auto;border:1px solid #456a50;border-radius:20px;overscroll-behavior:contain}
+.uf-video-header {padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1.2rem;background:#102016}
+.uf-video-header>div {min-width:0}
+.uf-video-header small {display:block;color:#6ee7b7;letter-spacing:.1em;text-transform:uppercase;font-size:.7rem;font-weight:900;margin-bottom:.25rem}
+.uf-video-header strong {display:block;color:#fff;font-size:1.1rem;line-height:1.35;overflow-wrap:anywhere}
+.uf-video-close {flex:none;border:1px solid #41614a;padding:.55rem .9rem;border-radius:12px;color:#fff;background:#1c3324;font-weight:800;cursor:pointer}
+.uf-video-close:hover {background:#29563b}
+.uf-video-close span {font-size:1.25rem;margin-left:.3rem;vertical-align:middle}
+.uf-video-description {display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.9rem 1.2rem;color:#b6c2b9;font-size:.87rem;line-height:1.5}
+.uf-video-switcher {display:flex;gap:.55rem;overflow-x:auto;padding:.3rem 1.2rem 1.15rem;scrollbar-width:thin;scrollbar-color:#5d9d78 #142019;overscroll-behavior-inline:contain}
+.uf-video-switcher button {display:flex;flex:none;align-items:center;gap:.55rem;max-width:250px;min-height:46px;padding:.65rem .85rem;border-radius:12px;border:1px solid #354a3b;background:#16251b;color:#d5e4d8;font-size:.78rem;font-weight:750;text-align:left;cursor:pointer}
+.uf-video-switcher button.active {color:#0b2316;background:#86eeba;border-color:#86eeba}
+.uf-video-switcher button:focus-visible {outline:2px solid #c7ffe0;outline-offset:2px}
+.uf-video-switcher small {font-weight:950;opacity:.68}
+.uf-video-switcher span {overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+@media(max-width:767px){
+ .uf-hero-actions {display:grid!important;grid-template-columns:minmax(0,1fr);width:100%;gap:.7rem}
+ .uf-hero-actions>button,.uf-hero-rules-link {display:flex;width:100%;max-width:100%;min-height:57px;padding:.9rem 1rem!important;font-size:.96rem;border-radius:999px;box-sizing:border-box;gap:.65rem}
+ .uf-hero-actions>button span {min-width:0;overflow-wrap:break-word}
+ .uf-cinema-header {align-items:start;flex-direction:column;gap:1rem}
+ .uf-cinema-nav {justify-content:flex-end;width:100%}
+ .uf-cinema-counter {margin-right:auto}
+ .uf-cinema-featured {display:flex;align-items:flex-end;min-height:270px;padding:1.5rem;overflow:hidden}
+ .uf-cinema-featured:after {content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,11,9,.96),rgba(8,11,9,.2));pointer-events:none}
+ .uf-cinema-featured-preview {position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0;box-shadow:none;aspect-ratio:auto}
+ .uf-cinema-featured-preview img {opacity:.58}
+ .uf-cinema-featured-play {display:none}
+ .uf-cinema-featured-copy {width:100%;max-width:100%;position:relative;z-index:10}
+ .uf-cinema-featured-copy .uf-play {display:grid;place-items:center;width:74px;height:74px;padding:0;border-radius:50%;box-shadow:0 0 0 10px rgba(110,231,183,.12);font-size:1.5rem}
+ .uf-cinema-featured-watch {display:none}
+ .uf-cinema-featured-copy h4 {line-height:1.1}
+ .uf-cinema-gallery {padding:1.05rem 1rem 1.35rem}
+ .uf-cinema-rail {grid-auto-columns:minmax(210px,78%);gap:.8rem}
+ .uf-cinema-card-copy strong {font-size:.98rem}
+ .uf-video-shell {border-radius:15px}
+ .uf-video-header {padding:.75rem .9rem}
+ .uf-video-header strong {font-size:.95rem}
+ .uf-video-description {padding:.8rem .9rem}
+ .uf-video-switcher {padding:.3rem .9rem .9rem}
+}
+@media(max-width:390px){.uf-hero-actions>button{font-size:.88rem;padding:.8rem .65rem!important}.uf-cinema-featured{min-height:250px}.uf-cinema-rail{grid-auto-columns:minmax(200px,85%)}}
